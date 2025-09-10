@@ -23,20 +23,20 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
     }
 
     // 记录当前位置作为home位置
-    home_pose = current_position;
+    home_pose = current_pose;
     ROS_INFO("Home position recorded");
 
     // 计算起飞目标位置（在当前位置基础上升高到指定高度）
-    float takeoff_x = current_position.pose.position.x;
-    float takeoff_y = current_position.pose.position.y;
-    float takeoff_z = current_position.pose.position.z + takeoff_alt;
+    float takeoff_x = current_pose.pose.position.x;
+    float takeoff_y = current_pose.pose.position.y;
+    float takeoff_z = current_pose.pose.position.z + takeoff_alt;
     
     // 保持当前偏航角
     tf2::Quaternion quat(
-        current_position.pose.orientation.x,
-        current_position.pose.orientation.y,
-        current_position.pose.orientation.z,
-        current_position.pose.orientation.w
+        current_pose.pose.orientation.x,
+        current_pose.pose.orientation.y,
+        current_pose.pose.orientation.z,
+        current_pose.pose.orientation.w
     );
     tf2::Matrix3x3 mat(quat);
     double roll, pitch, takeoff_yaw;

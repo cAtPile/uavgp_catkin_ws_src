@@ -70,8 +70,8 @@ bool apoc::flytoPIDcorrect(float fly_pid_x, float fly_pid_y, float fly_pid_z, fl
     // 5. PID控制主循环（分步飞行直到到达目标）
     while (ros::ok()) {
         // 5.1 检查超时
-        if ((ros::Time::now() - start_time).toSec() > pid_flight_timeout ) {
-            ROS_WARN("PID flight timed out (exceed %ds)", (int)PID_FLIGHT_TIMEOUT);
+        if ((ros::Time::now() - start_time).toSec() > pid_flight_timeout_ ) {
+            ROS_WARN("PID flight timed out (exceed %ds)", (int)pid_flight_timeout_);
             return false;
         }
 
