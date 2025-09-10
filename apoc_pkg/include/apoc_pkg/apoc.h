@@ -129,9 +129,9 @@ public:
 class pidctrl{
 private:
     // PID参数
-    double k_p;          // 比例系数
-    double k_i;          // 积分系数
-    double k_d;          // 微分系数
+    double kp;          // 比例系数
+    double ki;          // 积分系数
+    double kd;          // 微分系数
     
     // 限制输出范围
     double output_min;  // 输出最小值
@@ -155,16 +155,18 @@ public:
     
     pidctrl();// 构造函数
     pidctrl(double kp,double ki,double kd, 
-            double int_min,double int_max, 
-            double out_min,double out_max);
+            double out_min,double out_max,
+            double int_min,double int_max );
     // 设置PID参数
     void setPIDctrlParams(  
         double k_p, double k_i, double k_d,  
-        double out_min, double out_max , 
-        double int_min, double int_max    );
+        double int_min, double int_max, 
+        double out_min, double out_max     );
     void setSetpoint(float sp);// 设置目标值
+    float getSetpoint();
     float getOutput();// 获取当前输出值
     void reset();// 重置PID控制器
+    float compute(float process_value, ros::Time current_time);
     float compute(float process_value);// 计算PID输出 (自动使用当前时间)
 
 };

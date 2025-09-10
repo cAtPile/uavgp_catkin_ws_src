@@ -144,6 +144,8 @@ add_library(apoc_lib
   lib/takeoff.cpp
   lib/land.cpp
   lib/hover.cpp
+  lib/callback.cpp
+  lib/pidctrl.cpp 
 )
 
 ## Add cmake target dependencies of the library

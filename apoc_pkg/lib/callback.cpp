@@ -12,5 +12,5 @@ void apoc::state_cb(const mavros_msgs::State::ConstPtr& msg){
 }
 
 void apoc::local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){
-    current_position = *msg;
+    current_pose = *msg;
 }

@@ -1,3 +1,5 @@
+#include "apoc_pkg/apoc.h"
+
 // 构造函数
 pidctrl::pidctrl(){
     
@@ -21,9 +23,9 @@ pidctrl::pidctrl(){
 }
 
 // 带完整参数的构造函数
-pidctrl::pidctrl(   float k_p, float k_i, float k_d, 
-                    float out_min, float out_max, 
-                    float int_min, float int_max) {
+pidctrl::pidctrl(   double k_p, double k_i, double k_d, 
+                    double out_min, double out_max, 
+                    double int_min, double int_max) {
     kp = k_p;
     ki = k_i;
     kd = k_d;
@@ -60,7 +62,7 @@ void pidctrl::setPIDctrlParams(  double k_p, double k_i, double k_d,
 }
 
 // 设置目标值
-void setSetpoint(float sp){
+void pidctrl::setSetpoint(float sp){
     setpoint = sp;
 }
 
