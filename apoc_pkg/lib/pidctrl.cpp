@@ -44,9 +44,9 @@ pidctrl::pidctrl(   float k_p, float k_i, float k_d,
 }
 
     // 设置PID参数
-void pidctrl::setPIDctrlParams(  float k_p, float k_i, float k_d,  
-                            float out_min, float out_max , 
-                            float int_min, float int_max){
+void pidctrl::setPIDctrlParams(  double k_p, double k_i, double k_d,  
+                            double out_min, double out_max , 
+                            double int_min, double int_max){
     kp = k_p;
     ki = k_i;
     kd = k_d;

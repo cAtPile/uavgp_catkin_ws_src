@@ -91,16 +91,16 @@ apoc::apoc(): rate(20.0){
     ROS_INFO("PID_YAW_INT_MAX: %.2f", pid_yaw_int_max_);
 
     // PID控制频率 & 飞行超时
-    nh_.param("apoc_pkg/PID_CONTROL_RATE", pid_control_rate_, 50);
-    ROS_INFO("PID_CONTROL_RATE: %d Hz", pid_control_rate_);
+    nh_.param("apoc_pkg/PID_CONTROL_RATE", pid_control_rate_, 50.0);
+    ROS_INFO("PID_CONTROL_RATE: %.1f Hz", pid_control_rate_);
     nh_.param("apoc_pkg/PID_FLIGHT_TIMEOUT", pid_flight_timeout_, 60.0);
-    ROS_INFO("PID_FLIGHT_TIMEOUT: %.1fs", pid_flight_timeout_);
+    ROS_INFO("PID_FLIGHT_TIMEOUT: %.1f s", pid_flight_timeout_);
     
     //
     nh_.param("apoc_pkg/landing_tolerance", landing_tolerance_, 0.1);
-    ROS_INFO("landing_tolerance: %d m",landing_tolerance_);
-        nh_.param("apoc_pkg/landing_timeout", landing_timeout_, 10);
-    ROS_INFO("landing_timeout: %d s", landing_timeout_);
+    ROS_INFO("landing_tolerance: %.1f m",landing_tolerance_);
+        nh_.param("apoc_pkg/landing_timeout", landing_timeout_, 10.0);
+    ROS_INFO("landing_timeout: %.1f s", landing_timeout_);
      
 
     //ros话题初始化

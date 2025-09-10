@@ -38,44 +38,47 @@ private:
     
         // -------------- PID参数变量--------------
     // X轴PID
-    float pid_x_kp_;
-    float pid_x_ki_;
-    float pid_x_kd_;
-    float pid_x_out_min_;
-    float pid_x_out_max_;
-    float pid_x_int_min_;
-    float pid_x_int_max_;
+    double pid_x_kp_;
+    double pid_x_ki_;
+    double pid_x_kd_;
+    double pid_x_out_min_;
+    double pid_x_out_max_;
+    double pid_x_int_min_;
+    double pid_x_int_max_;
 
     // Y轴PID
-    float pid_y_kp_;
-    float pid_y_ki_;
-    float pid_y_kd_;
-    float pid_y_out_min_;
-    float pid_y_out_max_;
-    float pid_y_int_min_;
-    float pid_y_int_max_;
+    double pid_y_kp_;
+    double pid_y_ki_;
+    double pid_y_kd_;
+    double pid_y_out_min_;
+    double pid_y_out_max_;
+    double pid_y_int_min_;
+    double pid_y_int_max_;
 
     // Z轴PID
-    float pid_z_kp_;
-    float pid_z_ki_;
-    float pid_z_kd_;
-    float pid_z_out_min_;
-    float pid_z_out_max_;
-    float pid_z_int_min_;
-    float pid_z_int_max_;
+    double pid_z_kp_;
+    double pid_z_ki_;
+    double pid_z_kd_;
+    double pid_z_out_min_;
+    double pid_z_out_max_;
+    double pid_z_int_min_;
+    double pid_z_int_max_;
 
     // Yaw角PID
-    float pid_yaw_kp_;
-    float pid_yaw_ki_;
-    float pid_yaw_kd_;
-    float pid_yaw_out_min_;
-    float pid_yaw_out_max_;
-    float pid_yaw_int_min_;
-    float pid_yaw_int_max_;
+    double pid_yaw_kp_;
+    double pid_yaw_ki_;
+    double pid_yaw_kd_;
+    double pid_yaw_out_min_;
+    double pid_yaw_out_max_;
+    double pid_yaw_int_min_;
+    double pid_yaw_int_max_;
 
     // PID控制频率 & 飞行超时
-    int pid_control_rate_;       // 控制频率(Hz)
+    double pid_control_rate_;       // 控制频率(Hz)
     double pid_flight_timeout_;  // 飞行超时(s)
+    
+    double landing_timeout_;
+    double landing_tolerance_;
     
     ros::NodeHandle nh_;
 
@@ -126,24 +129,24 @@ public:
 class pidctrl{
 private:
     // PID参数
-    float k_p;          // 比例系数
-    float k_i;          // 积分系数
-    float k_d;          // 微分系数
+    double k_p;          // 比例系数
+    double k_i;          // 积分系数
+    double k_d;          // 微分系数
     
     // 限制输出范围
-    float output_min;  // 输出最小值
-    float output_max;  // 输出最大值
+    double output_min;  // 输出最小值
+    double output_max;  // 输出最大值
     
     // 积分项限制，防止积分饱和
-    float integral_min; // 积分最小值
-    float integral_max; // 积分最大值
+    double integral_min; // 积分最小值
+    double integral_max; // 积分最大值
     
     // PID计算变量
-    float setpoint;    // 目标值
-    float last_error;  // 上一次误差
-    float integral;    // 积分项
-    float derivative;  // 微分项
-    float output;      // 输出值
+    double setpoint;    // 目标值
+    double last_error;  // 上一次误差
+    double integral;    // 积分项
+    double derivative;  // 微分项
+    double output;      // 输出值
     
     // 时间变量
     ros::Time last_time; // 上一次计算时间
@@ -151,11 +154,14 @@ private:
 public:
     
     pidctrl();// 构造函数
+    pidctrl(double kp,double ki,double kd, 
+            double int_min,double int_max, 
+            double out_min,double out_max);
     // 设置PID参数
     void setPIDctrlParams(  
-        float k_p, float k_i, float k_d,  
-        float out_min, float out_max , 
-        float int_min, float int_max    );
+        double k_p, double k_i, double k_d,  
+        double out_min, double out_max , 
+        double int_min, double int_max    );
     void setSetpoint(float sp);// 设置目标值
     float getOutput();// 获取当前输出值
     void reset();// 重置PID控制器

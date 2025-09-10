@@ -19,7 +19,7 @@ bool apoc::landSwitch(){
     
     float land_x = current_pose.pose.position.x;
     float land_y = current_pose.pose.position.x;
-    float land_z = LANDING_TOLERANCE;
+    float land_z = landing_tolerance_;
         
     tf2::Quaternion quat(
         current_pose.pose.orientation.x,
@@ -33,18 +33,18 @@ bool apoc::landSwitch(){
 
     ros::Time start = ros::Time::now();
 
-    while (ros::ok() && (ros::Time::now() - start).toSec() < LANDING_TIMEOUT) {
+    while (ros::ok() && (ros::Time::now() - start).toSec() < landing_timeout_) {
         flytoAbsolute(land_x,land_y,land_z,land_yaw);
         ros::spinOnce();
         rate.sleep();
 
-        if( current_pose.pose.position.z <= home_pose.pose.position.z + LANDING_TOLERANCEE){
+        if( current_pose.pose.position.z <= home_pose.pose.position.z + landing_tolerance_){
                 armSwitch(0);
             }
 
     }
 
-    if ((ros::Time::now() - start).toSec() > LANDING_TIMEOUT) {
+    if ((ros::Time::now() - start).toSec() > landing_timeout_) {
         ROS_INFO("Landing TIMEOUT,FORCE DISARM");
         armSwitch(0);
     }
