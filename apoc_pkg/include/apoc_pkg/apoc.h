@@ -38,40 +38,40 @@ private:
     
         // -------------- PID参数变量--------------
     // X轴PID
-    double pid_x_kp_;
-    double pid_x_ki_;
-    double pid_x_kd_;
-    double pid_x_out_min_;
-    double pid_x_out_max_;
-    double pid_x_int_min_;
-    double pid_x_int_max_;
+    float pid_x_kp_;
+    float pid_x_ki_;
+    float pid_x_kd_;
+    float pid_x_out_min_;
+    float pid_x_out_max_;
+    float pid_x_int_min_;
+    float pid_x_int_max_;
 
     // Y轴PID
-    double pid_y_kp_;
-    double pid_y_ki_;
-    double pid_y_kd_;
-    double pid_y_out_min_;
-    double pid_y_out_max_;
-    double pid_y_int_min_;
-    double pid_y_int_max_;
+    float pid_y_kp_;
+    float pid_y_ki_;
+    float pid_y_kd_;
+    float pid_y_out_min_;
+    float pid_y_out_max_;
+    float pid_y_int_min_;
+    float pid_y_int_max_;
 
     // Z轴PID
-    double pid_z_kp_;
-    double pid_z_ki_;
-    double pid_z_kd_;
-    double pid_z_out_min_;
-    double pid_z_out_max_;
-    double pid_z_int_min_;
-    double pid_z_int_max_;
+    float pid_z_kp_;
+    float pid_z_ki_;
+    float pid_z_kd_;
+    float pid_z_out_min_;
+    float pid_z_out_max_;
+    float pid_z_int_min_;
+    float pid_z_int_max_;
 
     // Yaw角PID
-    double pid_yaw_kp_;
-    double pid_yaw_ki_;
-    double pid_yaw_kd_;
-    double pid_yaw_out_min_;
-    double pid_yaw_out_max_;
-    double pid_yaw_int_min_;
-    double pid_yaw_int_max_;
+    float pid_yaw_kp_;
+    float pid_yaw_ki_;
+    float pid_yaw_kd_;
+    float pid_yaw_out_min_;
+    float pid_yaw_out_max_;
+    float pid_yaw_int_min_;
+    float pid_yaw_int_max_;
 
     // PID控制频率 & 飞行超时
     int pid_control_rate_;       // 控制频率(Hz)

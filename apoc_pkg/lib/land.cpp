@@ -22,10 +22,10 @@ bool apoc::landSwitch(){
     float land_z = LANDING_TOLERANCE;
         
     tf2::Quaternion quat(
-        current_position.pose.orientation.x,
-        current_position.pose.orientation.y,
-        current_position.pose.orientation.z,
-        current_position.pose.orientation.w
+        current_pose.pose.orientation.x,
+        current_pose.pose.orientation.y,
+        current_pose.pose.orientation.z,
+        current_pose.pose.orientation.w
     );
     tf2::Matrix3x3 mat(quat);
     double roll, pitch, land_yaw;

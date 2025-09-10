@@ -95,6 +95,12 @@ apoc::apoc(): rate(20.0){
     ROS_INFO("PID_CONTROL_RATE: %d Hz", pid_control_rate_);
     nh_.param("apoc_pkg/PID_FLIGHT_TIMEOUT", pid_flight_timeout_, 60.0);
     ROS_INFO("PID_FLIGHT_TIMEOUT: %.1fs", pid_flight_timeout_);
+    
+    //
+    nh_.param("apoc_pkg/landing_tolerance", landing_tolerance_, 0.1);
+    ROS_INFO("landing_tolerance: %d m",landing_tolerance_);
+        nh_.param("apoc_pkg/landing_timeout", landing_timeout_, 10);
+    ROS_INFO("landing_timeout: %d s", landing_timeout_);
      
 
     //ros话题初始化

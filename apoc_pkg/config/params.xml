@@ -6,6 +6,8 @@
   <param name="apoc_pkg/fly_ab_timeout" type="double" value="30.0" />
   <param name="apoc_pkg/reach_tolerance_distance" type="double" value="0.1" />
   <param name="apoc_pkg/reach_tolerance_angle" type="double" value="0.1" />
+  <param name="apoc_pkg/landing_tolerance" type="double" value="0.1" />
+  <param name="apoc_pkg/landing_timeout" type="double" value="10" />
 
   <!-- PID参数：X轴 -->
   <param name="apoc_pkg/PID_X_KP" type="double" value="2.5" />    <!-- 比例系数 -->
