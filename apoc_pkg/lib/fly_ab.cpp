@@ -35,7 +35,8 @@ bool apoc::flytoAbsolute(float fly_ab_x, float fly_ab_y, float fly_ab_z, float f
     target_pose.pose.position.z = fly_ab_z;
 
     // 设置目标偏航角（四元数转换）
-    // 这里仅设置偏航角，保持横滚角和俯仰角为0
+    target_pose.pose.orientation.x = 0.0;
+    target_pose.pose.orientation.y = 0.0;
     target_pose.pose.orientation.z = sin(fly_ab_yaw / 2.0);
     target_pose.pose.orientation.w = cos(fly_ab_yaw / 2.0);
 

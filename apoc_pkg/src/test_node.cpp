@@ -3,9 +3,9 @@
 #include <stdexcept>  // 用于抛出标准异常
 
 // 从参数服务器读取配置（替代硬编码，提高灵活性）
-const std::string FLIGHT_TIMEOUT_PARAM = "~flight_timeout";  // 飞行超时参数名
-const std::string REACH_TOL_DIST_PARAM = "~reach_tolerance_distance";  // 距离到达阈值
-const std::string REACH_TOL_ANGLE_PARAM = "~reach_tolerance_angle";    // 角度到达阈值
+const std::string FLIGHT_TIMEOUT_PARAM = "flight_timeout";  // 飞行超时参数名
+const std::string REACH_TOL_DIST_PARAM = "reach_tolerance_distance";  // 距离到达阈值
+const std::string REACH_TOL_ANGLE_PARAM = "reach_tolerance_angle";    // 角度到达阈值
 
 // 默认参数（参数服务器读取失败时使用）
 const float DEFAULT_FLIGHT_TIMEOUT = 30.0f;    // 默认飞行超时：30秒
@@ -14,9 +14,9 @@ const float DEFAULT_REACH_TOL_ANGLE = 0.1f;    // 默认角度阈值：0.1弧度
 
 // 测试用绝对目标坐标（可根据需求修改）
 const float TARGET_ABS_X = 5.0f;   // 目标X轴绝对坐标（单位：米，基于map坐标系）
-const float TARGET_ABS_Y = 0.0f;   // 目标Y轴绝对坐标
+const float TARGET_ABS_Y = 2.0f;   // 目标Y轴绝对坐标
 const float TARGET_ABS_Z = 2.0f;   // 目标Z轴绝对坐标（飞行高度：2米）
-const float TARGET_ABS_YAW = 0.0f; // 目标偏航角（0弧度 = 正前方，基于map坐标系）
+const float TARGET_ABS_YAW = 3.14f; // 目标偏航角（0弧度 = 正前方，基于map坐标系）
 
 int main(int argc, char **argv) {
     // 1. 初始化ROS节点（添加匿名性，避免多节点冲突）
@@ -117,7 +117,6 @@ int main(int argc, char **argv) {
 
     // -------------------------- 测试完成 --------------------------
     ROS_INFO("\n=== All Test Steps Completed Successfully! ===");
-    ROS_INFO("建议：执行紧急上锁（调用 armSwitch(0)）或降落程序");
 
     // （可选）测试后自动上锁（根据需求选择是否启用）
     // apoc_control.armSwitch(0);
