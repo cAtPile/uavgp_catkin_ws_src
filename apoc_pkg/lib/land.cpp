@@ -18,7 +18,7 @@
 bool apoc::landSwitch(){
     
     float land_x = current_pose.pose.position.x;
-    float land_y = current_pose.pose.position.x;
+    float land_y = current_pose.pose.position.y;
     float land_z = landing_tolerance_;
         
     tf2::Quaternion quat(
