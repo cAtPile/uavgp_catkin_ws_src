@@ -27,16 +27,16 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
     ROS_INFO("Home position recorded");
 
     // 计算起飞目标位置（在当前位置基础上升高到指定高度）
-    float takeoff_x = current_pose.pose.position.x;
-    float takeoff_y = current_pose.pose.position.y;
-    float takeoff_z = current_pose.pose.position.z + takeoff_alt;
+    float takeoff_x = home_pose.pose.position.x;
+    float takeoff_y = home_pose.pose.position.y;
+    float takeoff_z = home_pose.pose.position.z + takeoff_alt;
     
     // 保持当前偏航角
     tf2::Quaternion quat(
-        current_pose.pose.orientation.x,
-        current_pose.pose.orientation.y,
-        current_pose.pose.orientation.z,
-        current_pose.pose.orientation.w
+        home_pose.pose.orientation.x,
+        home_pose.pose.orientation.y,
+        home_pose.pose.orientation.z,
+        home_pose.pose.orientation.w
     );
     tf2::Matrix3x3 mat(quat);
     double roll, pitch, takeoff_yaw;
@@ -45,7 +45,7 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
     ROS_INFO_STREAM("Taking off to altitude: " << takeoff_z << "m");
 
     // 使用相对飞行函数飞到目标高度
-    if (!flytoRelative(takeoff_x, takeoff_y, takeoff_z, takeoff_yaw)) {
+    if (!flytoAbsolute(takeoff_x, takeoff_y, takeoff_z, takeoff_yaw)) {
         ROS_ERROR("Failed to execute takeoff movement");
         return false;
     }
