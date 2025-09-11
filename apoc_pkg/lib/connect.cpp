@@ -52,6 +52,13 @@ bool apoc::connectSwitch() {
             return false;
         }
     }
+    
+    // 如果连接成功
+    if (current_state.connected) {
+        local_pos_pub.publish(current_pose);
+        return true;
+    }
+
 
     // 检查ROS节点是否正常运行
     if (!ros::ok()) {

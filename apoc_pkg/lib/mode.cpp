@@ -34,7 +34,7 @@ bool apoc::modeSwitch(int mode_key) {
     // 根据输入参数确定目标模式
     std::string target_mode;
     if (mode_key == 1) {
-        target_mode = "offboard";  // mode_key=1时切换到offboard模式
+        target_mode = "OFFBOARD";  // mode_key=1时切换到offboard模式
     } else {
         target_mode = "STABILIZED"; // mode_key=0或其他值时切换到自稳模式
     }
@@ -55,7 +55,11 @@ bool apoc::modeSwitch(int mode_key) {
 
     // 循环尝试切换模式直到成功或超时
     while (ros::ok() && current_state.mode != target_mode) {
+    
+    	
+    
         mavros_msgs::SetMode mode_cmd;
+        mode_cmd.request.base_mode = 0;
         mode_cmd.request.custom_mode = target_mode;
 
         //成功退出

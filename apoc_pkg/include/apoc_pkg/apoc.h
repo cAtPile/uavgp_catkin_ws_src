@@ -79,8 +79,6 @@ private:
     
     double landing_timeout_;
     double landing_tolerance_;
-    
-    ros::NodeHandle nh_;
 
     //ros句柄
     ros::NodeHandle nh;
