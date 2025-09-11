@@ -45,7 +45,10 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
     ROS_INFO_STREAM("Taking off to altitude: " << takeoff_z << "m");
 
     // 使用相对飞行函数飞到目标高度
-    if (!flytoAbsolute(takeoff_x, takeoff_y, takeoff_z, takeoff_yaw)) {
+    if (flytoAbsolute(takeoff_x, takeoff_y, takeoff_z, takeoff_yaw)) {
+        ROS_INFO("Ttakeoff succeed");
+        return true;
+    }else{
         ROS_ERROR("Failed to execute takeoff movement");
         return false;
     }
