@@ -1,4 +1,5 @@
 #include "apoc_pkg/apoc.h"
+#include "apoc_pkg/pidctrl.h"
 #include <ros/ros.h>
 #include <stdexcept>  // 用于抛出标准异常
 

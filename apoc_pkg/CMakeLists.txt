@@ -132,20 +132,20 @@ include_directories(
 # )
 
 add_library(apoc_lib
-  lib/apoc.cpp
-  lib/connect.cpp
-  lib/mode.cpp
-  lib/arm.cpp
-  lib/reach.cpp
-  lib/fly_ab.cpp
-  lib/fly_re.cpp
-  lib/pid_flyab.cpp
-  lib/track.cpp
-  lib/takeoff.cpp
-  lib/land.cpp
-  lib/hover.cpp
-  lib/callback.cpp
-  lib/pidctrl.cpp 
+  lib/apoc/apoc.cpp
+  lib/apoc/connect.cpp
+  lib/apoc/mode.cpp
+  lib/apoc/arm.cpp
+  lib/apoc/reach.cpp
+  lib/apoc/fly_ab.cpp
+  lib/apoc/fly_re.cpp
+  lib/apoc/pid_flyab.cpp
+  lib/apoc/track.cpp
+  lib/apoc/takeoff.cpp
+  lib/apoc/land.cpp
+  lib/apoc/hover.cpp
+  lib/apoc/callback.cpp
+  lib/pidctrl/pidctrl.cpp 
 )
 
 ## Add cmake target dependencies of the library
@@ -234,7 +234,7 @@ target_link_libraries(apoc_lib
 
 # 编译测试节点
 add_executable(test_node
-  src/test_node.cpp
+  node/test_node.cpp
 )
 
 # 链接测试节点
