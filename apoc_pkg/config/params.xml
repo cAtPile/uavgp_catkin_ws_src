@@ -10,40 +10,40 @@
   <param name="apoc_pkg/landing_timeout" type="double" value="10" />
 
   <!-- PID参数：X轴 -->
-  <param name="apoc_pkg/PID_X_KP" type="float" value="2.5" />    <!-- 比例系数 -->
-  <param name="apoc_pkg/PID_X_KI" type="float" value="0.1" />    <!-- 积分系数 -->
-  <param name="apoc_pkg/PID_X_KD" type="float" value="0.05" />   <!-- 微分系数 -->
-  <param name="apoc_pkg/PID_X_OUT_MIN" type="float" value="-1.0" /> <!-- 输出最小值 -->
-  <param name="apoc_pkg/PID_X_OUT_MAX" type="float" value="1.0" />  <!-- 输出最大值 -->
-  <param name="apoc_pkg/PID_X_INT_MIN" type="float" value="-0.5" /> <!-- 积分最小值 -->
-  <param name="apoc_pkg/PID_X_INT_MAX" type="float" value="0.5" />  <!-- 积分最大值 -->
+  <param name="apoc_pkg/PID_X_KP" type="double" value="2.5" />    <!-- 比例系数 -->
+  <param name="apoc_pkg/PID_X_KI" type="double" value="0.1" />    <!-- 积分系数 -->
+  <param name="apoc_pkg/PID_X_KD" type="double" value="0.05" />   <!-- 微分系数 -->
+  <param name="apoc_pkg/PID_X_OUT_MIN" type="double" value="-1.0" /> <!-- 输出最小值 -->
+  <param name="apoc_pkg/PID_X_OUT_MAX" type="double" value="1.0" />  <!-- 输出最大值 -->
+  <param name="apoc_pkg/PID_X_INT_MIN" type="double" value="-0.5" /> <!-- 积分最小值 -->
+  <param name="apoc_pkg/PID_X_INT_MAX" type="double" value="0.5" />  <!-- 积分最大值 -->
 
   <!-- PID参数：Y轴 -->
-  <param name="apoc_pkg/PID_Y_KP" type="float" value="2.5" />
-  <param name="apoc_pkg/PID_Y_KI" type="float" value="0.1" />
-  <param name="apoc_pkg/PID_Y_KD" type="float" value="0.05" />
-  <param name="apoc_pkg/PID_Y_OUT_MIN" type="float" value="-1.0" />
-  <param name="apoc_pkg/PID_Y_OUT_MAX" type="float" value="1.0" />
-  <param name="apoc_pkg/PID_Y_INT_MIN" type="float" value="-0.5" />
-  <param name="apoc_pkg/PID_Y_INT_MAX" type="float" value="0.5" />
+  <param name="apoc_pkg/PID_Y_KP" type="double" value="2.5" />
+  <param name="apoc_pkg/PID_Y_KI" type="double" value="0.1" />
+  <param name="apoc_pkg/PID_Y_KD" type="double" value="0.05" />
+  <param name="apoc_pkg/PID_Y_OUT_MIN" type="double" value="-1.0" />
+  <param name="apoc_pkg/PID_Y_OUT_MAX" type="double" value="1.0" />
+  <param name="apoc_pkg/PID_Y_INT_MIN" type="double" value="-0.5" />
+  <param name="apoc_pkg/PID_Y_INT_MAX" type="double" value="0.5" />
 
   <!-- PID参数：Z轴 -->
-  <param name="apoc_pkg/PID_Z_KP" type="float" value="3.0" />
-  <param name="apoc_pkg/PID_Z_KI" type="float" value="0.2" />
-  <param name="apoc_pkg/PID_Z_KD" type="float" value="0.1" />
-  <param name="apoc_pkg/PID_Z_OUT_MIN" type="float" value="-0.8" />
-  <param name="apoc_pkg/PID_Z_OUT_MAX" type="float" value="0.8" />
-  <param name="apoc_pkg/PID_Z_INT_MIN" type="float" value="-0.4" />
-  <param name="apoc_pkg/PID_Z_INT_MAX" type="float" value="0.4" />
+  <param name="apoc_pkg/PID_Z_KP" type="double" value="3.0" />
+  <param name="apoc_pkg/PID_Z_KI" type="double" value="0.2" />
+  <param name="apoc_pkg/PID_Z_KD" type="double" value="0.1" />
+  <param name="apoc_pkg/PID_Z_OUT_MIN" type="double" value="-0.8" />
+  <param name="apoc_pkg/PID_Z_OUT_MAX" type="double" value="0.8" />
+  <param name="apoc_pkg/PID_Z_INT_MIN" type="double" value="-0.4" />
+  <param name="apoc_pkg/PID_Z_INT_MAX" type="double" value="0.4" />
 
   <!-- PID参数：Yaw角 -->
-  <param name="apoc_pkg/PID_YAW_KP" type="float" value="2.0" />
-  <param name="apoc_pkg/PID_YAW_KI" type="float" value="0.05" />
-  <param name="apoc_pkg/PID_YAW_KD" type="float" value="0.02" />
-  <param name="apoc_pkg/PID_YAW_OUT_MIN" type="float" value="-0.6" />
-  <param name="apoc_pkg/PID_YAW_OUT_MAX" type="float" value="0.6" />
-  <param name="apoc_pkg/PID_YAW_INT_MIN" type="float" value="-0.3" />
-  <param name="apoc_pkg/PID_YAW_INT_MAX" type="float" value="0.3" />
+  <param name="apoc_pkg/PID_YAW_KP" type="double" value="2.0" />
+  <param name="apoc_pkg/PID_YAW_KI" type="double" value="0.05" />
+  <param name="apoc_pkg/PID_YAW_KD" type="double" value="0.02" />
+  <param name="apoc_pkg/PID_YAW_OUT_MIN" type="double" value="-0.6" />
+  <param name="apoc_pkg/PID_YAW_OUT_MAX" type="double" value="0.6" />
+  <param name="apoc_pkg/PID_YAW_INT_MIN" type="double" value="-0.3" />
+  <param name="apoc_pkg/PID_YAW_INT_MAX" type="double" value="0.3" />
 
   <!-- PID控制频率 & 飞行超时 -->
   <param name="apoc_pkg/PID_CONTROL_RATE" type="int" value="50" />    <!-- 控制频率(Hz) -->
