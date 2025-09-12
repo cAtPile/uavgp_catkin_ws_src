@@ -1,7 +1,8 @@
 <!-- launch/apoc_test.launch -->
 <launch>
   <!-- 加载参数文件 -->
-  <include file="apoc_pkg/config/params.xml" />
+  <include file="$(find apoc_pkg)/config/params.xml" />
+  
   
   <!-- 启动你的节点 -->
   <node name="test_node" pkg="apoc_pkg" type="test_node" output="screen" />
