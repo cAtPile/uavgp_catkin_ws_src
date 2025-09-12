@@ -1,6 +1,6 @@
 <launch>
   <!-- 原有超时/精度参数 -->
-  <param name="apoc_pkg/connect_timeout" type="double" value="10.0" />
+  <param name="apoc_pkg/connect_timeout" type="double" value="27.7" />
   <param name="apoc_pkg/modeswitch_timeout" type="double" value="10.0" />
   <param name="apoc_pkg/armswitch_timeout" type="double" value="10.0" />
   <param name="apoc_pkg/fly_ab_timeout" type="double" value="30.0" />

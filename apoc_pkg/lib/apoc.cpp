@@ -12,7 +12,7 @@
 
 apoc::apoc(): rate(20.0){
 
-     nh.param("connect_timeout", connect_timeout_, 10.0);
+     nh.param("apoc_pkg/connect_timeout", connect_timeout_, 10.0);
      ROS_INFO("connect_timeout: %.1fs", connect_timeout_);
      nh.param("modeswitch_timeout", modeswitch_timeout_, 10.0);
      ROS_INFO("modeswitch_timeout: %.1fs", modeswitch_timeout_);
