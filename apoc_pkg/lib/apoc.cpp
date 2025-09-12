@@ -14,15 +14,15 @@ apoc::apoc(): rate(20.0){
 
      nh.param("apoc_pkg/connect_timeout", connect_timeout_, 10.0);
      ROS_INFO("connect_timeout: %.1fs", connect_timeout_);
-     nh.param("modeswitch_timeout", modeswitch_timeout_, 10.0);
+     nh.param("apoc_pkg/modeswitch_timeout", modeswitch_timeout_, 10.0);
      ROS_INFO("modeswitch_timeout: %.1fs", modeswitch_timeout_);
-     nh.param("armswitch_timeout", armswitch_timeout_, 10.0);
+     nh.param("apoc_pkg/armswitch_timeout", armswitch_timeout_, 10.0);
      ROS_INFO("armswitch_timeout: %.1fs", armswitch_timeout_);
-     nh.param("fly_ab_timeout", fly_ab_timeout_, 30.0);
+     nh.param("apoc_pkg/fly_ab_timeout", fly_ab_timeout_, 30.0);
      ROS_INFO("fly_ab_timeout: %.1fs", fly_ab_timeout_);
-     nh.param("reach_tolerance_distance", reach_tolerance_distance_, 0.1);
+     nh.param("apoc_pkg/reach_tolerance_distance", reach_tolerance_distance_, 0.1);
      ROS_INFO("reach_tolerance_distance: %.1fm", reach_tolerance_distance_);
-     nh.param("reach_tolerance_angle", reach_tolerance_angle_, 0.1);
+     nh.param("apoc_pkg/reach_tolerance_angle", reach_tolerance_angle_, 0.1);
      ROS_INFO("reach_tolerance_angle: %.1frad", reach_tolerance_angle_);
      
          // ============== PID参数获取（新增） ==============
