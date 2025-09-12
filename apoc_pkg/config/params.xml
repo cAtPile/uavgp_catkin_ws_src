@@ -1,12 +1,12 @@
 <launch>
   <!-- 原有超时/精度参数 -->
   <param name="apoc_pkg/connect_timeout" type="double" value="27.7" />
-  <param name="apoc_pkg/modeswitch_timeout" type="double" value="10.0" />
+  <param name="apoc_pkg/modeswitch_timeout" type="double" value="12.0" />
   <param name="apoc_pkg/armswitch_timeout" type="double" value="10.0" />
   <param name="apoc_pkg/fly_ab_timeout" type="double" value="30.0" />
   <param name="apoc_pkg/reach_tolerance_distance" type="double" value="0.1" />
   <param name="apoc_pkg/reach_tolerance_angle" type="double" value="0.1" />
-  <param name="apoc_pkg/landing_tolerance" type="double" value="0.1" />
+  <param name="apoc_pkg/landing_tolerance" type="double" value="0.05" />
   <param name="apoc_pkg/landing_timeout" type="double" value="10" />
 
   <!-- PID参数：X轴 -->
@@ -14,7 +14,7 @@
   <param name="apoc_pkg/PID_X_KI" type="double" value="0.1" />    <!-- 积分系数 -->
   <param name="apoc_pkg/PID_X_KD" type="double" value="0.05" />   <!-- 微分系数 -->
   <param name="apoc_pkg/PID_X_OUT_MIN" type="double" value="-1.0" /> <!-- 输出最小值 -->
-  <param name="apoc_pkg/PID_X_OUT_MAX" type="double" value="1.0" />  <!-- 输出最大值 -->
+  <param name="apoc_pkg/PID_X_OUT_MAX" type="double" value="2.0" />  <!-- 输出最大值 -->
   <param name="apoc_pkg/PID_X_INT_MIN" type="double" value="-0.5" /> <!-- 积分最小值 -->
   <param name="apoc_pkg/PID_X_INT_MAX" type="double" value="0.5" />  <!-- 积分最大值 -->
 
@@ -32,7 +32,7 @@
   <param name="apoc_pkg/PID_Z_KI" type="double" value="0.2" />
   <param name="apoc_pkg/PID_Z_KD" type="double" value="0.1" />
   <param name="apoc_pkg/PID_Z_OUT_MIN" type="double" value="-0.8" />
-  <param name="apoc_pkg/PID_Z_OUT_MAX" type="double" value="0.8" />
+  <param name="apoc_pkg/PID_Z_OUT_MAX" type="double" value="2.8" />
   <param name="apoc_pkg/PID_Z_INT_MIN" type="double" value="-0.4" />
   <param name="apoc_pkg/PID_Z_INT_MAX" type="double" value="0.4" />
 
