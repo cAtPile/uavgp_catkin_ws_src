@@ -120,13 +120,28 @@ bool apoc::flytoPIDcorrect(float fly_pid_x, float fly_pid_y, float fly_pid_z, fl
         else if (via_yaw < -M_PI) via_yaw += 2 * M_PI;
 
         // 5.7 调用绝对飞行函数，飞往中间目标点
-        if (!flytoAbsolute(via_x, via_y, via_z, via_yaw)) {
-            ROS_WARN("Failed to send intermediate target via flytoAbsolute");
-            // 短暂延迟后重试，避免频繁失败
-            ros::Duration(0.1).sleep();
-            control_rate.sleep();
-            continue;
-        }
+        // 创建位置设定点消息
+        geometry_msgs::PoseStamped setpoint;
+        setpoint.header.stamp = ros::Time::now();
+        setpoint.header.frame_id = "map"; // 使用地图坐标系
+
+        // 设置位置
+        setpoint.pose.position.x = via_x;
+        setpoint.pose.position.y = via_y;
+        setpoint.pose.position.z = via_z;
+
+        // 将偏航角转换为四元数
+        tf2::Quaternion q;
+        q.setRPY(0, 0, via_yaw); // 滚转和俯仰设为0，仅控制偏航
+        q.normalize();
+        setpoint.pose.orientation.x = q.x();
+        setpoint.pose.orientation.y = q.y();
+        setpoint.pose.orientation.z = q.z();
+        setpoint.pose.orientation.w = q.w();
+
+        // 发布位置设定点
+        local_pos_pub.publish(setpoint);
+
 
         // 5.8 打印调试信息（可选，便于监控控制过程）
         ROS_DEBUG_STREAM("PID Control: Current[X:" << current_x << ", Y:" << current_y 
