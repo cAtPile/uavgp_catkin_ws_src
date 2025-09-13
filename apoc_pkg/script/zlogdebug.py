@@ -9,180 +9,148 @@ from datetime import datetime
 
 class AltitudeLogger:
     def __init__(self):
-        # 1. 初始化双话题数据存储列表（确保时间戳与z值一一对应）
-        self.timestamps = []  # 统一时间戳（以第一个数据的时间为基准）
-        self.pose_z = []      # /mavros/local_position/pose 的 z 值
-        self.setpoint_z = []  # /mavros/setpoint_position/local 的 z 值
+        # 1. 初始化数据存储列表（仅保留pose的时间戳和Z值）
+        self.timestamps = []  # 相对时间戳（从首次记录开始计时）
+        self.pose_z = []      # /mavros/local_position/pose 的 Z 轴数据
         
-        # 2. 初始化话题数据缓存（解决双话题回调不同步问题）
-        self.last_pose_z = None    # 缓存最新的 pose z 值
-        self.last_setpoint_z = None# 缓存最新的 setpoint z 值
-        self.start_time = None     # 记录开始时间（用于相对时间计算）
+        # 2. 时间基准初始化（用于计算相对时间）
+        self.start_time = None
         
-        # 3. 【关键修复】文件状态标记：避免“闭后写”
-        self.log_file_open = False  # 初始为关闭状态，打开成功后设为True
-        self.log_file = None        # 日志文件对象（初始为None）
+        # 3. 文件状态标记（避免“闭后写”错误，保留原鲁棒性设计）
+        self.log_file_open = False
+        self.log_file = None
         
-        # 4. 创建日志文件（按要求路径和命名格式）
+        # 4. 日志文件路径配置（保持原路径格式，文件名增加“pose_only”区分）
         self.log_dir = os.path.expanduser("~/catkin_ws/src/apoc_pkg/log")
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
         self.timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.log_file_path = os.path.join(self.log_dir, f"zlog_{self.timestamp_str}.txt")
+        self.log_file_path = os.path.join(self.log_dir, f"zlog_pose_only_{self.timestamp_str}.txt")
         
-        # 尝试打开日志文件（添加异常捕获，避免文件打开失败导致崩溃）
+        # 5. 尝试打开日志文件（保留异常捕获）
         try:
             self.log_file = open(self.log_file_path, "w", encoding="utf-8")
-            self.log_file_open = True  # 打开成功，标记为True
+            self.log_file_open = True
         except Exception as e:
             rospy.logerr(f"Failed to open log file: {str(e)}")
             self.log_file_open = False
         
-        # 5. 订阅两个目标话题（设置队列大小避免数据堆积）
+        # 6. 仅订阅 /mavros/local_position/pose 话题（删除setpoint订阅）
         self.pose_sub = rospy.Subscriber(
             '/mavros/local_position/pose', 
             PoseStamped, 
             self.pose_callback,
-            queue_size=10
-        )
-        self.setpoint_sub = rospy.Subscriber(
-            '/mavros/setpoint_position/local', 
-            PoseStamped, 
-            self.setpoint_callback,
-            queue_size=10
+            queue_size=10  # 队列大小10，避免数据堆积
         )
         
-        # 6. 初始化ROS节点
-        rospy.init_node('altitude_logger', anonymous=True)
-        
-        # 7. 设置节点关闭回调（确保程序退出时安全关闭文件和生成图像）
+        # 7. ROS节点初始化与关闭回调
+        rospy.init_node('altitude_pose_logger', anonymous=True)  # 节点名改为“pose专用”
         rospy.on_shutdown(self.shutdown_callback)
         
-        # 打印初始化信息（根据文件状态调整）
+        # 8. 初始化信息打印（适配单话题逻辑）
         if self.log_file_open:
-            rospy.loginfo("Altitude logger started. Recording data...")
+            rospy.loginfo("Altitude Pose Logger started (only record /mavros/local_position/pose)")
             rospy.loginfo(f"Log file saved to: {self.log_file_path}")
         else:
-            rospy.logwarn("Altitude logger started, but log file is unavailable (no data will be saved)")
+            rospy.logwarn("Altitude Pose Logger started, but log file is unavailable (no data will be saved)")
         rospy.loginfo("Press Ctrl+C to stop recording and generate plot.")
 
     def pose_callback(self, msg):
-        """回调函数：处理/mavros/local_position/pose话题，缓存最新z值"""
-        # 【关键检查】如果文件已关闭或节点已开始关闭，直接返回（不处理数据）
+        """仅处理pose话题回调：直接记录Z值（无需同步）"""
+        # 检查文件状态，关闭则不处理
         if not self.log_file_open:
-            return
-        self.last_pose_z = msg.pose.position.z
-        self.sync_and_record_data()
-
-    def setpoint_callback(self, msg):
-        """回调函数：处理/mavros/setpoint_position/local话题，缓存最新z值"""
-        # 【关键检查】如果文件已关闭或节点已开始关闭，直接返回（不处理数据）
-        if not self.log_file_open:
-            return
-        self.last_setpoint_z = msg.pose.position.z
-        self.sync_and_record_data()
-
-    def sync_and_record_data(self):
-        """同步两个话题的z值，仅当两者都有有效数据且文件打开时记录"""
-        # 1. 先检查文件状态：关闭则直接返回
-        if not self.log_file_open:
-            rospy.logdebug_throttle(1, "Attempt to write to closed log file (ignored)")
             return
         
-        # 2. 检查是否已获取到两个话题的初始数据
-        if self.last_pose_z is None or self.last_setpoint_z is None:
-            return
-        
-        # 3. 计算相对时间并存储数据
+        # 获取当前pose的Z值
+        current_pose_z = msg.pose.position.z
+        # 记录数据（无需缓存，直接处理）
+        self.record_pose_data(current_pose_z)
+
+    def record_pose_data(self, current_z):
+        """单话题数据记录函数（替代原sync_and_record_data，简化逻辑）"""
+        # 1. 计算相对时间（首次记录时初始化时间基准）
         current_time = time.time()
         if self.start_time is None:
             self.start_time = current_time
         relative_time = current_time - self.start_time
         
+        # 2. 存储数据到列表（用于后续绘图）
         self.timestamps.append(relative_time)
-        self.pose_z.append(self.last_pose_z)
-        self.setpoint_z.append(self.last_setpoint_z)
+        self.pose_z.append(current_z)
         
-        # 4. 写入日志文件（添加异常捕获，避免写入失败导致崩溃）
+        # 3. 写入日志文件（格式简化为“相对时间:Z值”）
         try:
-            log_line = f"{relative_time:.6f}:{self.last_pose_z:.6f}_{self.last_setpoint_z:.6f}\n"
+            log_line = f"{relative_time:.6f}:{current_z:.6f}\n"  # 仅保留时间和pose.z
             self.log_file.write(log_line)
-            # 每10条数据刷新一次文件（避免数据缓存丢失）
+            # 每10条数据刷新一次缓存（避免数据丢失）
             if len(self.timestamps) % 10 == 0:
                 self.log_file.flush()
         except Exception as e:
             rospy.logerr(f"Failed to write to log file: {str(e)}")
-            self.log_file_open = False  # 写入失败后，标记文件为关闭状态
+            self.log_file_open = False  # 写入失败则标记文件关闭
 
     def shutdown_callback(self):
-        """节点关闭时的回调：安全关闭文件、生成图像（核心：确保只关闭一次）"""
-        # 1. 【关键修复】仅当文件处于打开状态时才关闭（避免重复关闭）
+        """节点关闭逻辑（简化：仅处理pose订阅和文件）"""
+        # 1. 安全关闭日志文件
         if self.log_file_open and self.log_file is not None:
             try:
-                self.log_file.flush()  # 最后一次刷新缓存，确保数据写入
-                self.log_file.close()  # 关闭文件
+                self.log_file.flush()
+                self.log_file.close()
                 rospy.loginfo(f"Recording stopped. Log saved to: {os.path.abspath(self.log_file_path)}")
             except Exception as e:
                 rospy.logerr(f"Failed to close log file: {str(e)}")
             finally:
-                self.log_file_open = False  # 无论是否成功关闭，都标记为关闭状态
-                self.log_file = None        # 置空文件对象
+                self.log_file_open = False
+                self.log_file = None
         
-        # 2. 取消订阅（避免关闭后仍接收消息触发回调）
+        # 2. 取消pose话题订阅（删除setpoint订阅取消逻辑）
         self.pose_sub.unregister()
-        self.setpoint_sub.unregister()
-        rospy.loginfo("ROS subscribers unregistered.")
+        rospy.loginfo("ROS pose subscriber unregistered.")
         
-        # 3. 生成对比图像（仅当有有效数据时）
+        # 3. 生成仅包含pose的Z轴曲线图
         if len(self.timestamps) > 0:
-            self.generate_comparison_plot()
+            self.generate_pose_plot()
         else:
-            rospy.logwarn("No valid data recorded, cannot generate plot.")
+            rospy.logwarn("No valid pose data recorded, cannot generate plot.")
 
-    def generate_comparison_plot(self):
-        """生成双z值对比图（按要求设置颜色、坐标轴、标题）"""
+    def generate_pose_plot(self):
+        """生成仅pose Z轴的曲线图（简化标题、图例）"""
         try:
-            # 创建图像（设置尺寸为10x6，分辨率300dpi）
+            # 图像配置（保持10x6尺寸和300dpi分辨率）
             plt.figure(figsize=(10, 6), dpi=300)
             
-            # 绘制两条曲线：蓝色=pose.z，红色=setpoint.z
+            # 仅绘制pose Z轴曲线（蓝色实线，线宽1.5）
             plt.plot(
                 self.timestamps, self.pose_z, 
                 'b-', linewidth=1.5, label='/mavros/local_position/pose.z'
             )
-            plt.plot(
-                self.timestamps, self.setpoint_z, 
-                'r-', linewidth=1.5, label='/mavros/setpoint_position/local.z'
-            )
             
-            # 设置图像样式
-            plt.title('Drone Z-Position Comparison (Actual vs Setpoint)', fontsize=14, pad=15)
+            # 图像样式调整（适配单曲线逻辑）
+            plt.title('Drone Z-Position (Only /mavros/local_position/pose)', fontsize=14, pad=15)
             plt.xlabel('Time (seconds)', fontsize=12, labelpad=10)
-            plt.ylabel('Distance (meters)', fontsize=12, labelpad=10)  # 纵坐标按要求设置
+            plt.ylabel('Altitude (meters)', fontsize=12, labelpad=10)  # 纵坐标改为“高度”更贴切
             
-            # 添加网格和图例
+            # 网格和图例（图例仅显示pose曲线）
             plt.grid(True, linestyle='--', alpha=0.7)
             plt.legend(fontsize=10, loc='best')
-            plt.tight_layout()  # 调整布局，避免标签被截断
+            plt.tight_layout()  # 避免标签被截断
             
-            # 保存图像
-            plot_file_path = os.path.join(self.log_dir, f"zlog_{self.timestamp_str}.png")
+            # 保存图像（文件名与日志对应，增加“pose_only”）
+            plot_file_path = os.path.join(self.log_dir, f"zlog_pose_only_{self.timestamp_str}.png")
             plt.savefig(plot_file_path, bbox_inches='tight')
-            rospy.loginfo(f"Comparison plot saved to: {os.path.abspath(plot_file_path)}")
+            rospy.loginfo(f"Pose Z-axis plot saved to: {os.path.abspath(plot_file_path)}")
             
-            # 显示图像（可选，关闭图像后程序退出）
+            # 显示图像（可选，关闭后程序退出）
             plt.show()
         except Exception as e:
-            rospy.logerr(f"Failed to generate comparison plot: {str(e)}")
+            rospy.logerr(f"Failed to generate pose Z-axis plot: {str(e)}")
 
 if __name__ == '__main__':
     try:
-        # 初始化日志器并阻塞等待回调
+        # 初始化日志器并阻塞运行
         logger = AltitudeLogger()
         rospy.spin()
     except rospy.ROSInterruptException:
-        # 捕获ROS中断异常（如Ctrl+C），确保程序优雅退出
         pass
     except Exception as e:
-        # 捕获其他未知异常，避免程序崩溃
-        rospy.logerr(f"Altitude logger crashed: {str(e)}")
+        rospy.logerr(f"Altitude Pose Logger crashed: {str(e)}")
