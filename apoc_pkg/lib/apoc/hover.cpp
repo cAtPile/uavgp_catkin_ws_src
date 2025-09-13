@@ -21,6 +21,7 @@ bool apoc::hoverSwitch(float hover_time){
 
     geometry_msgs::PoseStamped hover_pose;
 
+    hover_pose.header.frame_id = "map";
     hover_pose.pose.position.x = current_pose.pose.position.x;
     hover_pose.pose.position.y = current_pose.pose.position.y;
     hover_pose.pose.position.z = current_pose.pose.position.z;
