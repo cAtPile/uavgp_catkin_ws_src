@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
         
         // 循环检查起飞是否成功
         while (ros::ok()) {
-            takeoff_success = apoc_control.takeoffSwitch(takeoff_altitude);
+            takeoff_success = apoc_control.flytoPIDcorrect(0,0,1,0);
             
             // 检查起飞是否成功
             if (takeoff_success) {
@@ -150,43 +150,6 @@ int main(int argc, char **argv) {
             throw std::runtime_error("Hover operation failed");
         }
 
-        // -------------------------- 步骤6：执行相对飞行到(1,1,1,1.57) --------------------------
-        ROS_INFO("\n[Step 6/7] Executing relative flight to (1,1,1,1.57) (Timeout: %.1fs)...", flight_timeout);
-        
-        // 记录相对飞行开始时间
-        ros::Time relative_flight_start_time = ros::Time::now();
-        bool relative_flight_success = false;
-        
-        // 执行相对飞行
-        while (ros::ok()) {
-            relative_flight_success = apoc_control.flytoRelative(1.0f, 1.0f, 1.0f, 1.57f);
-            
-            // 检查是否到达目标位置
-            if (relative_flight_success) {
-                ROS_INFO("[Step 6/7] Successfully reached relative target position!");
-                break;
-            }
-            
-            // 检查是否超时
-            if ((ros::Time::now() - relative_flight_start_time).toSec() > flight_timeout) {
-                throw std::runtime_error("Relative flight timed out");
-            }
-            
-            ros::spinOnce();
-            main_rate.sleep();
-        }
-
-        // 在相对飞行目标位置悬停一段时间
-        ROS_INFO("\n[Step 6/7] Hovering at relative target position for %.1f seconds...", hover_time);
-        hover_start_time = ros::Time::now();
-        hover_success = apoc_control.hoverSwitch(hover_time);
-        
-        if (hover_success) {
-            ROS_INFO("[Step 6/7] Completed hover at target position! Duration: %.1fs",
-                     (ros::Time::now() - hover_start_time).toSec());
-        } else {
-            throw std::runtime_error("Hover at target position failed");
-        }
 
         // -------------------------- 步骤7：执行降落 --------------------------
         ROS_INFO("\n[Step 7/7] Starting landing sequence (Timeout: %.1fs)...", landing_timeout);
@@ -223,7 +186,7 @@ int main(int argc, char **argv) {
 
     // 确保无人机已上锁
     if (apoc_control.armSwitch(0)) {  // 检查是否仍处于解锁状态
-
+    
         ROS_INFO("Vehicle disarmed after test completion.");
     }
 
