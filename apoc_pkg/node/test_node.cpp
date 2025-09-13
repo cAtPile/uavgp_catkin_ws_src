@@ -222,8 +222,8 @@ int main(int argc, char **argv) {
     ROS_INFO("\n=== All Flight Test Steps Completed Successfully! ===");
 
     // 确保无人机已上锁
-    if (apoc_control.armSwitch(1)) {  // 检查是否仍处于解锁状态
-        apoc_control.armSwitch(0);
+    if (apoc_control.armSwitch(0)) {  // 检查是否仍处于解锁状态
+
         ROS_INFO("Vehicle disarmed after test completion.");
     }
 

@@ -39,14 +39,14 @@ bool apoc::landSwitch(){
         rate.sleep();
 
         if( current_pose.pose.position.z <= home_pose.pose.position.z + landing_tolerance_){
-                armSwitch(0);
+            return armSwitch(0);
             }
 
     }
 
     if ((ros::Time::now() - start).toSec() > landing_timeout_) {
         ROS_INFO("Landing TIMEOUT,FORCE DISARM");
-        armSwitch(0);
+        return armSwitch(0);
     }
 
     // 检查ROS节点是否正常运行
