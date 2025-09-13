@@ -13,7 +13,7 @@ const std::string LANDING_TIMEOUT_PARAM = "landing_timeout";    // 降落超时�
 // 默认参数
 const float DEFAULT_FLIGHT_TIMEOUT = 30.0f;    // 默认飞行超时：30秒
 const float DEFAULT_TAKEOFF_ALTITUDE = 1.0f;   // 默认起飞高度：1米
-const float DEFAULT_HOVER_TIME = 2.0f;        // 默认悬停时间：10秒
+const float DEFAULT_HOVER_TIME = 10.0f;        // 默认悬停时间：10秒
 const float DEFAULT_REACH_TOL_DIST = 0.1f;     // 默认距离阈值：0.1米
 const float DEFAULT_LANDING_TIMEOUT = 60.0f;   // 默认降落超时：60秒
 
