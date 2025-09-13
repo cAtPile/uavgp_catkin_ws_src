@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
         
         // 循环检查起飞是否成功
         while (ros::ok()) {
-            takeoff_success = apoc_control.flytoRelative(0,0,1,0);
+            takeoff_success = apoc_control.flytoPIDcorrect(0,0,1,0);
             
             // 检查起飞是否成功
             if (takeoff_success) {

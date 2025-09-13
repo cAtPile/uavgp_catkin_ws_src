@@ -111,6 +111,9 @@ apoc::apoc(): rate(20.0){
     //
     arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
     set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
+    
+    //
+    local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10);
 
     //变量初始化
     current_state.connected = false;

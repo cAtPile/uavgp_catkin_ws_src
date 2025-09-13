@@ -187,36 +187,27 @@ bool apoc::flytoPIDcorrect(float fly_pid_x, float fly_pid_y, float fly_pid_z, fl
         ROS_WARN("Cannot execute PID flight: Vehicle is not armed");
         return false;
     }
-    // 确保无人机处于OFFBOARD模式（速度控制需该模式支持）
-    if (current_state.mode != "OFFBOARD") {
-        set_mode_client.call(offboard_mode_srv);
-        if (!offboard_mode_srv.response.mode_sent) {
-            ROS_ERROR("Failed to switch to OFFBOARD mode for speed PID control");
-            return false;
-        }
-        ROS_INFO("Switched to OFFBOARD mode successfully");
-    }
 
     // 2. 初始化速度型PID控制器（输出限幅为速度最大值/最小值，而非位置增量）
     // 注：PID参数需重新整定（速度型与位置型参数完全不同，例如X轴速度限幅可设±1.5m/s）
     pidctrl pid_x(
         pid_x_kp_, pid_x_ki_, pid_x_kd_,  // 速度PID的Kp/Ki/Kd（需重新整定）
-        -pid_x_vel_max_, pid_x_vel_max_,  // 输出限幅：X轴最大/最小速度（如±1.5）
+        -pid_x_out_max_, pid_x_out_max_,  // 输出限幅：X轴最大/最小速度（如±1.5）
         -pid_x_int_max_, pid_x_int_max_   // 积分限幅：防止积分饱和
     );
     pidctrl pid_y(
         pid_y_kp_, pid_y_ki_, pid_y_kd_,
-        -pid_y_vel_max_, pid_y_vel_max_,
+        -pid_y_out_max_, pid_y_out_max_,
         -pid_y_int_max_, pid_y_int_max_
     );
     pidctrl pid_z(
         pid_z_kp_, pid_z_ki_, pid_z_kd_,
-        -pid_z_vel_max_, pid_z_vel_max_,  // Z轴速度建议保守（如±0.8m/s）
+        -pid_z_out_max_, pid_z_out_max_,  // Z轴速度建议保守（如±0.8m/s）
         -pid_z_int_max_, pid_z_int_max_
     );
     pidctrl pid_yaw(
         pid_yaw_kp_, pid_yaw_ki_, pid_yaw_kd_,
-        -pid_yaw_vel_max_, pid_yaw_vel_max_,  // 偏航角速度限幅（如±0.5rad/s）
+        -pid_yaw_out_max_, pid_yaw_out_max_,  // 偏航角速度限幅（如±0.5rad/s）
         -pid_yaw_int_max_, pid_yaw_int_max_
     );
 

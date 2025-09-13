@@ -24,7 +24,7 @@
 #include <vector>
 #include <cmath>
 
-//#include <geometry_msgs/TwistStamped.h>//mav速度
+#include <geometry_msgs/TwistStamped.h>//mav速度
 
 class apoc{
 private:
@@ -97,6 +97,9 @@ private:
     geometry_msgs::PoseStamped current_pose;//当前位置
     ros::Time last_request;
     ros::Rate rate;
+    
+    //
+    ros::Publisher local_vel_pub;  // 速度指令发布器（替代原位置发布器的速度版）
 
     //回调函数
     void state_cb(const mavros_msgs::State::ConstPtr& msg);
@@ -119,7 +122,7 @@ public:
         (float fly_re_x , float fly_re_y , float fly_re_z , float fly_re_yaw );//相对修正
     bool hoverSwitch(float hover_time);//悬停
     bool landSwitch();//降落
-    void publishZeroVelocity()
+    void publishZeroVelocity();
     //待定track.cpp追踪
     //bool flytoRelative()
 
