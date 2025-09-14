@@ -21,6 +21,8 @@ void apoc::trackSwitch(){
         -pid_y_out_max_, pid_y_out_max_,
         -pid_y_int_max_, pid_y_int_max_
     );
+    pid_y.reset();
+    pid_x.reset();
 
     ros::Time start = ros::Time::now();
 
@@ -36,8 +38,8 @@ void apoc::trackSwitch(){
         float local_trace_x=current_trace.trace_x * correct_ration ;
         float local_trace_y=current_trace.trace_y * correct_ration ;
 
-        pid_x.setpoint(local_trace_x);
-        pid_y.setpoint(local_trace_y);
+        pid_x.setSetpoint(local_trace_x);
+        pid_y.setSetpoint(local_trace_y);
 
         float delta_x = pid_x.compute(current_x);    // X轴步长增量
         float delta_y = pid_y.compute(current_y);    // Y轴步长增量
