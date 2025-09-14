@@ -1,77 +1,63 @@
-//
-//创建trace_data.msg
 /*
-uint16 trace_x;
-uint16 trace_y;
-uint8 trace_id;
-*/
-//track.cpp
-/*
+trace_data.msg
+uint16 trace_x;   // 目标在图像中的X坐标
+uint16 trace_y;   // 目标在图像中的Y坐标
+uint8 trace_id;   // 目标ID，用于多目标跟踪*/
 
-//创建话题kcf_trace/data
-//创建回调函数将kcf_trace/data话题消息存储为current_trace 
-trackSwitch(int track_id){
-//1.导入pid控制器
-————参考头文件————
-#include <ros/ros.h>//ros
-#include <geometry_msgs/PoseStamped.h>//mav定点
-#include <mavros_msgs/CommandBool.h>//arm
-#include <mavros_msgs/SetMode.h>//mode
-#include <mavros_msgs/State.h>//状态
-#include <tf2/LinearMath/Quaternion.h>//四元数
-#include <tf2/LinearMath/Matrix3x3.h>//rpy
-
-#include <vector>
-#include <cmath>
-
-class pidctrl{
-private:
-    // PID参数
-    double kp;          // 比例系数
-    double ki;          // 积分系数
-    double kd;          // 微分系数
-    
-    // 限制输出范围
-    double output_min;  // 输出最小值
-    double output_max;  // 输出最大值
-    
-    // 积分项限制，防止积分饱和
-    double integral_min; // 积分最小值
-    double integral_max; // 积分最大值
-    
-    // PID计算变量
-    double setpoint;    // 目标值
-    double last_error;  // 上一次误差
-    double integral;    // 积分项
-    double derivative;  // 微分项
-    double output;      // 输出值
-    
-    // 时间变量
-    ros::Time last_time; // 上一次计算时间
-    bool is_first_run;   // 是否首次运行
-public:
-    
-    pidctrl();// 构造函数
-    pidctrl(double kp,double ki,double kd, 
-            double out_min,double out_max,
-            double int_min,double int_max );
-    // 设置PID参数
-    void setPIDctrlParams(  
-        double k_p, double k_i, double k_d,  
-        double int_min, double int_max, 
-        double out_min, double out_max     );
-    void setSetpoint(float sp);// 设置目标值
-    float getSetpoint();
-    float getOutput();// 获取当前输出值
-    void reset();// 重置PID控制器
-    float compute(float process_value, ros::Time current_time);
-    float compute(float process_value);// 计算PID输出 (自动使用当前时间)
-
-};
-————参考头文件————
-
-//2.根据current_trace 控制速度
-//阈值
-//超时
+void apoc::trace_data_cb(const/*trace_data*/){
+    current_trace = *msg;
 }
-*/
+#include "apoc_pkg/apoc.h"
+void apoc::trackSwitch(){
+    float correct_ration = current_pose.pose.position.z*CAM_RATION;
+    //PID
+    pidctrl pid_x(
+        pid_x_kp_, pid_x_ki_, pid_x_kd_,  // 速度PID的Kp/Ki/Kd（需重新整定）
+        -pid_x_out_max_, pid_x_out_max_,  // 输出限幅：X轴最大/最小速度（如±1.5）
+        -pid_x_int_max_, pid_x_int_max_   // 积分限幅：防止积分饱和
+    );
+    pidctrl pid_y(
+        pid_y_kp_, pid_y_ki_, pid_y_kd_,
+        -pid_y_out_max_, pid_y_out_max_,
+        -pid_y_int_max_, pid_y_int_max_
+    );
+
+    ros::Time start = ros::Time::now();
+
+    while (ros::ok()){
+        //达到阈值退出
+        if (current_trace.trace_x <= TRACE_TOLERANCE &&
+            current_trace.trace_ <= TRACE_TOLERANCE 
+            ){
+                break;
+            }
+
+        //1.换算
+        float local_trace_x=current_trace.trace_x * correct_ration ;
+        float local_trace_y=current_trace.trace_y * correct_ration ;
+
+        pid_x.setpoint(local_trace_x);
+        pid_y.setpoint(local_trace_y);
+
+        float delta_x = pid_x.compute(current_x);    // X轴步长增量
+        float delta_y = pid_y.compute(current_y);    // Y轴步长增量
+
+        float via_x = current_pose.pose.position.x + delta_x;
+        float via_y = current_pose.pose.position.y + delta_y;
+
+        flytoRelative(via_x,via_y,SET_ALTITUDE,SET_ORIENTATION);
+
+        ros::spinOnce();
+        control_rate.sleep();
+        
+        //超时退出
+        if ((ros::Time::now() - start).toSec() >TRACE_TIMEOUT)
+        {
+            break;
+        }
+        
+
+    }
+
+}
+
