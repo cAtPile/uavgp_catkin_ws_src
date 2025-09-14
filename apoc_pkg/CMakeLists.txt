@@ -147,7 +147,10 @@ add_library(apoc_lib
   lib/apoc/callback.cpp
   lib/pidctrl/pidctrl.cpp
   lib/pidctrl/params.cpp
-  lib/pidctrl/compute.cpp    
+  lib/pidctrl/compute.cpp 
+  lib/pidctrl/output.cpp
+  lib/pidctrl/setgoal.cpp
+  lib/pidctrl/reset.cpp   
 )
 
 ## Add cmake target dependencies of the library

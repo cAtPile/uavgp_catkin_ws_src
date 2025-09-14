@@ -47,26 +47,7 @@ pidctrl::pidctrl(   double k_p, double k_i, double k_d,
 
 
 
-// 设置目标值
-void pidctrl::setSetpoint(float sp){
-    setpoint = sp;
-}
 
-float pidctrl::getSetpoint() {
-    return setpoint;
-}
 
-// 获取当前输出值
-float pidctrl::getOutput() {
-    return output;
-}
-    
-// 重置PID控制器
-void pidctrl::reset() {
-    last_error = 0.0f;
-    integral = 0.0f;
-    derivative = 0.0f;
-    output = 0.0f;
-    is_first_run = true;
-}
+
 
