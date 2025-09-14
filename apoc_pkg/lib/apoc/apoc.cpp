@@ -99,7 +99,7 @@ apoc::apoc(): rate(20.0){
     //
     nh.param("apoc_pkg/landing_tolerance", landing_tolerance_, 0.1);
     ROS_INFO("landing_tolerance: %.1f m",landing_tolerance_);
-    nh.param("apoc_pkg/landing_timeout", landing_timeout_, 10.0);
+    nh.param("apoc_pkg/landing_timeout", landing_timeout_, 3.0);
     ROS_INFO("landing_timeout: %.1f s", landing_timeout_);
      
 
