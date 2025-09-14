@@ -14,17 +14,27 @@ depend:cpp,mavros
 ## 文件结构
 
 apoc_pkg
-- config
--- params.xml           参数
-- include
--- apoc.h               头文件
-- launch
--- apoc_test.launch     启动
-- lib
--- apoc.cpp             构造函数
+- config················配置文件
+-- params.xml（参数）
+-doc····················文档
+-- readme.md（主要描述文件）
+-- params.md（待创建，参数描述）
+-- info.md（待创建，报错描述）
+- include···············头文件集
+-- apoc_pkg
+--- apoc.h（基础飞行器控制）
+--- pidctrl.h（pid控制器）
+--- track.h（视觉跟踪）
+- launch················启动文件
+-- apoc_test.launch（测试）
+- lib···················库文件
+-- apoc（apoc类）
+--- apoc.cpp（构造函数）
+--- arm.cpp（解锁函数）
+
 -- connect.cpp          连接
 -- mode.cpp             模式切换
--- arm.cpp              解锁
+
 -- reach.cpp            到达检查
 -- fly_ab.cpp           绝对飞行
 -- fly_re.cpp           相对修正

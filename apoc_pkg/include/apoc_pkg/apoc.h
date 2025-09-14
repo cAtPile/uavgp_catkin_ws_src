@@ -123,8 +123,6 @@ public:
     bool hoverSwitch(float hover_time);//悬停
     bool landSwitch();//降落
     void publishZeroVelocity();
-    //待定track.cpp追踪
-    //bool flytoRelative()
 
 };
 
