@@ -27,20 +27,17 @@ apoc::apoc(): rate(20.0){
      
          // ============== PID参数获取（新增） ==============
     // X轴PID
+    ROS_INFO("===PID params setting===");
     nh.param("apoc_pkg/PID_X_KP", pid_x_kp_, 2.5);
-    ROS_INFO("PID_X_KP: %.2f", pid_x_kp_);
     nh.param("apoc_pkg/PID_X_KI", pid_x_ki_, 0.1);
-    ROS_INFO("PID_X_KI: %.2f", pid_x_ki_);
     nh.param("apoc_pkg/PID_X_KD", pid_x_kd_, 0.05);
-    ROS_INFO("PID_X_KD: %.2f", pid_x_kd_);
     nh.param("apoc_pkg/PID_X_OUT_MIN", pid_x_out_min_, -1.0);
-    ROS_INFO("PID_X_OUT_MIN: %.2f", pid_x_out_min_);
     nh.param("apoc_pkg/PID_X_OUT_MAX", pid_x_out_max_, 1.0);
-    ROS_INFO("PID_X_OUT_MAX: %.2f", pid_x_out_max_);
     nh.param("apoc_pkg/PID_X_INT_MIN", pid_x_int_min_, -0.5);
-    ROS_INFO("PID_X_INT_MIN: %.2f", pid_x_int_min_);
     nh.param("apoc_pkg/PID_X_INT_MAX", pid_x_int_max_, 0.5);
-    ROS_INFO("PID_X_INT_MAX: %.2f", pid_x_int_max_);
+    ROS_STREAM("X : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_STREAM("X : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_STREAM("X : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Y轴PID
     nh.param("apoc_pkg/PID_Y_KP", pid_y_kp_, 2.5);
