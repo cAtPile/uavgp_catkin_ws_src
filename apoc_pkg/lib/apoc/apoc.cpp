@@ -108,12 +108,14 @@ apoc::apoc(): rate(20.0){
     local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &apoc::local_pos_cb, this);
     local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
     
-    //
+    //mavros话题
     arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
     set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
-    
-    //
     local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10);
+
+    //识别话题
+    detection_data_sub = nh.subscrib<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
+    //识别使能
 
     //变量初始化
     current_state.connected = false;

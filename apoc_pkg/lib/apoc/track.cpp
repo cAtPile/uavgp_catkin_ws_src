@@ -1,17 +1,4 @@
 #include "apoc_pkg/apoc.h"
-// 假设你已经包含了Detection消息的头文件
-#include "apoc_pkg/Detection.h"
-
-// 存储当前检测到的目标信息
-apoc_pkg::Detection current_detection;
-
-// 回调函数：接收检测到的目标信息
-void apoc::detection_data_cb(const apoc_pkg::Detection::ConstPtr& msg) {
-    current_detection = *msg;
-    ROS_INFO("Received detection: %s (ID: %d) at (%.2f, %.2f)",
-             msg->class_name.c_str(), msg->id,
-             msg->center_x, msg->center_y);
-}
 
 void apoc::trackSwitch() {
     // 计算校正系数

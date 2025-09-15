@@ -14,29 +14,33 @@
 #define APOC_H
 
 #include <ros/ros.h>//ros
-#include <geometry_msgs/PoseStamped.h>//mav定点
+#include <geometry_msgs/PoseStamped.h>//定点
 #include <mavros_msgs/CommandBool.h>//arm
 #include <mavros_msgs/SetMode.h>//mode
 #include <mavros_msgs/State.h>//状态
 #include <tf2/LinearMath/Quaternion.h>//四元数
 #include <tf2/LinearMath/Matrix3x3.h>//rpy
+#include <geometry_msgs/TwistStamped.h>//mav速度
+
+#include "apoc_pkg/Detection.h"//检测
 
 #include <vector>
 #include <cmath>
 
-#include <geometry_msgs/TwistStamped.h>//mav速度
-
 class apoc{
 private:
 
+    //------------飞行参量----------------------
     double connect_timeout_;
     double modeswitch_timeout_;
     double armswitch_timeout_;
     double fly_ab_timeout_;
     double reach_tolerance_distance_;
     double reach_tolerance_angle_;
+    double landing_timeout_;
+    double landing_tolerance_;
     
-        // -------------- PID参数变量--------------
+    // -------------- PID参数变量--------------
     // X轴PID
     double pid_x_kp_;
     double pid_x_ki_;
@@ -76,9 +80,6 @@ private:
     // PID控制频率 & 飞行超时
     double pid_control_rate_;       // 控制频率(Hz)
     double pid_flight_timeout_;  // 飞行超时(s)
-    
-    double landing_timeout_;
-    double landing_tolerance_;
 
     //ros句柄
     ros::NodeHandle nh;
@@ -89,21 +90,27 @@ private:
     ros::ServiceClient set_mode_client;
     ros::Subscriber state_sub;
     ros::Subscriber local_pos_sub;
+    ros::Publisher local_vel_pub;  // 速度指令发布器
+    //订阅识别
+    ros::Subscriber detection_data_sub;
+    //识别使能
+    //ros::Publisher detection_action_pub;
 
     //初始化消息
     mavros_msgs::State current_state;
     geometry_msgs::PoseStamped pose;
     geometry_msgs::PoseStamped home_pose;//home位置
     geometry_msgs::PoseStamped current_pose;//当前位置
+    // 存储当前检测到的目标信息
+    apoc_pkg::Detection current_detection;
+
     ros::Time last_request;
     ros::Rate rate;
-    
-    //
-    ros::Publisher local_vel_pub;  // 速度指令发布器（替代原位置发布器的速度版）
 
     //回调函数
     void state_cb(const mavros_msgs::State::ConstPtr& msg);
     void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg);
+    void detection_data_cb(const apoc_pkg::Detection::ConstPtr& msg);
 
 public:
 
@@ -122,7 +129,7 @@ public:
         (float fly_re_x , float fly_re_y , float fly_re_z , float fly_re_yaw );//相对修正
     bool hoverSwitch(float hover_time);//悬停
     bool landSwitch();//降落
-    void publishZeroVelocity();
+    void publishZeroVelocity();//0速度发布
 
 };
 
