@@ -25,7 +25,7 @@ apoc::apoc(): rate(20.0){
      nh.param("apoc_pkg/reach_tolerance_angle", reach_tolerance_angle_, 0.1);
      ROS_INFO("reach_tolerance_angle: %.1frad", reach_tolerance_angle_);
      
-         // ============== PID参数获取（新增） ==============
+    // ============== PID参数获取==============
     // X轴PID
     ROS_INFO("===PID params setting===");
     nh.param("apoc_pkg/PID_X_KP", pid_x_kp_, 2.5);
@@ -41,52 +41,40 @@ apoc::apoc(): rate(20.0){
 
     // Y轴PID
     nh.param("apoc_pkg/PID_Y_KP", pid_y_kp_, 2.5);
-    ROS_INFO("PID_Y_KP: %.2f", pid_y_kp_);
     nh.param("apoc_pkg/PID_Y_KI", pid_y_ki_, 0.1);
-    ROS_INFO("PID_Y_KI: %.2f", pid_y_ki_);
     nh.param("apoc_pkg/PID_Y_KD", pid_y_kd_, 0.05);
-    ROS_INFO("PID_Y_KD: %.2f", pid_y_kd_);
     nh.param("apoc_pkg/PID_Y_OUT_MIN", pid_y_out_min_, -1.0);
-    ROS_INFO("PID_Y_OUT_MIN: %.2f", pid_y_out_min_);
     nh.param("apoc_pkg/PID_Y_OUT_MAX", pid_y_out_max_, 1.0);
-    ROS_INFO("PID_Y_OUT_MAX: %.2f", pid_y_out_max_);
     nh.param("apoc_pkg/PID_Y_INT_MIN", pid_y_int_min_, -0.5);
-    ROS_INFO("PID_Y_INT_MIN: %.2f", pid_y_int_min_);
     nh.param("apoc_pkg/PID_Y_INT_MAX", pid_y_int_max_, 0.5);
-    ROS_INFO("PID_Y_INT_MAX: %.2f", pid_y_int_max_);
+    ROS_STREAM("Y : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_STREAM("Y : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_STREAM("Y : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Z轴PID
     nh.param("apoc_pkg/PID_Z_KP", pid_z_kp_, 3.0);
-    ROS_INFO("PID_Z_KP: %.2f", pid_z_kp_);
     nh.param("apoc_pkg/PID_Z_KI", pid_z_ki_, 0.2);
-    ROS_INFO("PID_Z_KI: %.2f", pid_z_ki_);
     nh.param("apoc_pkg/PID_Z_KD", pid_z_kd_, 0.1);
-    ROS_INFO("PID_Z_KD: %.2f", pid_z_kd_);
     nh.param("apoc_pkg/PID_Z_OUT_MIN", pid_z_out_min_, -0.8);
-    ROS_INFO("PID_Z_OUT_MIN: %.2f", pid_z_out_min_);
     nh.param("apoc_pkg/PID_Z_OUT_MAX", pid_z_out_max_, 0.8);
-    ROS_INFO("PID_Z_OUT_MAX: %.2f", pid_z_out_max_);
     nh.param("apoc_pkg/PID_Z_INT_MIN", pid_z_int_min_, -0.4);
-    ROS_INFO("PID_Z_INT_MIN: %.2f", pid_z_int_min_);
     nh.param("apoc_pkg/PID_Z_INT_MAX", pid_z_int_max_, 0.4);
-    ROS_INFO("PID_Z_INT_MAX: %.2f", pid_z_int_max_);
+    ROS_STREAM("Z : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_STREAM("Z : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_STREAM("Z : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Yaw角PID
     nh.param("apoc_pkg/PID_YAW_KP", pid_yaw_kp_, 2.0);
-    ROS_INFO("PID_YAW_KP: %.2f", pid_yaw_kp_);
     nh.param("apoc_pkg/PID_YAW_KI", pid_yaw_ki_, 0.05);
-    ROS_INFO("PID_YAW_KI: %.2f", pid_yaw_ki_);
     nh.param("apoc_pkg/PID_YAW_KD", pid_yaw_kd_, 0.02);
-    ROS_INFO("PID_YAW_KD: %.2f", pid_yaw_kd_);
     nh.param("apoc_pkg/PID_YAW_OUT_MIN", pid_yaw_out_min_, -0.6);
-    ROS_INFO("PID_YAW_OUT_MIN: %.2f", pid_yaw_out_min_);
     nh.param("apoc_pkg/PID_YAW_OUT_MAX", pid_yaw_out_max_, 0.6);
-    ROS_INFO("PID_YAW_OUT_MAX: %.2f", pid_yaw_out_max_);
     nh.param("apoc_pkg/PID_YAW_INT_MIN", pid_yaw_int_min_, -0.3);
-    ROS_INFO("PID_YAW_INT_MIN: %.2f", pid_yaw_int_min_);
     nh.param("apoc_pkg/PID_YAW_INT_MAX", pid_yaw_int_max_, 0.3);
-    ROS_INFO("PID_YAW_INT_MAX: %.2f", pid_yaw_int_max_);
-
+    ROS_STREAM("YAW : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_STREAM("YAW : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_STREAM("YAW : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
+    
     // PID控制频率 & 飞行超时
     nh.param("apoc_pkg/PID_CONTROL_RATE", pid_control_rate_, 50.0);
     ROS_INFO("PID_CONTROL_RATE: %.1f Hz", pid_control_rate_);
@@ -114,7 +102,7 @@ apoc::apoc(): rate(20.0){
     detection_data_sub = nh.subscrib<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
     //识别使能
 
-    //变量初始化
+    //current_state
     current_state.connected = false;
     current_state.armed = false;//disarm
     current_state.mode = "STABILIZED";  // 默认模式
@@ -148,6 +136,12 @@ apoc::apoc(): rate(20.0){
     current_pose.pose.orientation.y = 0.0;
     current_pose.pose.orientation.z = 0.0;
     current_pose.pose.orientation.w = 1.0;
+
+    //current_detection
+    current_detection.detection_id = 0 ;
+    current_detection.detection_x = 0 ;
+    current_detection.detection_y = 0 ;
+
 
     last_request = ros::Time::now();
 
