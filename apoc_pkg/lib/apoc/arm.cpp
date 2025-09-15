@@ -1,7 +1,7 @@
 /*
 * file:     arm.cpp
 * name：    armSwitch
-* path：    /lib
+* path：    apoc_pkg/lib/apoc
 * describe：arm/disarm
 * input：   arm_key = 0 -> disarm
 *           arm_key = 1 -> arm
@@ -31,13 +31,21 @@
 #include "apoc_pkg/apoc.h"
 
 bool apoc::armSwitch(int arm_key) {
+
     bool target_arm_state = (arm_key == 1);
     std::string action = target_arm_state ? "ARM" : "DISARM";
 
+    //处于正确状态直接退出
     if (current_state.armed == target_arm_state) {
         ROS_INFO_STREAM("Already " << action << "ED");
         return true;
     }
+
+    //未连接
+    if (current_state.connected == false){
+        /* code */
+    }
+    
 
     ros::Duration timeout_duration(armswitch_timeout_);
     ros::Time start_time = ros::Time::now();
