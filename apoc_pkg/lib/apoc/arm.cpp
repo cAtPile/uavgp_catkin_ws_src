@@ -12,7 +12,9 @@
 * function: NONE
 * vision:   1.0
 * method:   调用arm_cmd
-* info:     "CANNOT arm/disarm ! DISCONNECT to FCU"
+* info:     "Already " << action << "ED"
+*           已经处于目标状态
+"CANNOT arm/disarm ! DISCONNECT to FCU"
 *           因未连接而解锁/上锁失败
 *           
 *           "Cannot arm/disarm ! not in OFFBOARD mode"
@@ -41,15 +43,9 @@ bool apoc::armSwitch(int arm_key) {
         return true;
     }
 
-    //未连接
-    if (current_state.connected == false){
-        /* code */
-    }
-    
-
     ros::Duration timeout_duration(armswitch_timeout_);
     ros::Time start_time = ros::Time::now();
-    ros::Rate rate(2.0);  // 2Hz
+    ros::Rate rate(20);  // 2Hz
 
     while (ros::ok() && (ros::Time::now() - start_time) < timeout_duration) {
         mavros_msgs::CommandBool arm_cmd;
