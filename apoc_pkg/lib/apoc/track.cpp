@@ -1,20 +1,27 @@
-/*
-trace_data.msg
-uint16 trace_x;   // 目标在图像中的X坐标
-uint16 trace_y;   // 目标在图像中的Y坐标
-uint8 trace_id;   // 目标ID，用于多目标跟踪*/
-
-void apoc::trace_data_cb(const/*trace_data*/){
-    current_trace = *msg;
-}
 #include "apoc_pkg/apoc.h"
-void apoc::trackSwitch(){
-    float correct_ration = current_pose.pose.position.z*CAM_RATION;
-    //PID
+// 假设你已经包含了Detection消息的头文件
+#include "apoc_pkg/Detection.h"
+
+// 存储当前检测到的目标信息
+apoc_pkg::Detection current_detection;
+
+// 回调函数：接收检测到的目标信息
+void apoc::detection_data_cb(const apoc_pkg::Detection::ConstPtr& msg) {
+    current_detection = *msg;
+    ROS_INFO("Received detection: %s (ID: %d) at (%.2f, %.2f)",
+             msg->class_name.c_str(), msg->id,
+             msg->center_x, msg->center_y);
+}
+
+void apoc::trackSwitch() {
+    // 计算校正系数
+    float correct_ratio = current_pose.pose.position.z * CAM_RATIO;
+    
+    // 初始化PID控制器
     pidctrl pid_x(
-        pid_x_kp_, pid_x_ki_, pid_x_kd_,  // 速度PID的Kp/Ki/Kd（需重新整定）
-        -pid_x_out_max_, pid_x_out_max_,  // 输出限幅：X轴最大/最小速度（如±1.5）
-        -pid_x_int_max_, pid_x_int_max_   // 积分限幅：防止积分饱和
+        pid_x_kp_, pid_x_ki_, pid_x_kd_,
+        -pid_x_out_max_, pid_x_out_max_,
+        -pid_x_int_max_, pid_x_int_max_
     );
     pidctrl pid_y(
         pid_y_kp_, pid_y_ki_, pid_y_kd_,
@@ -26,40 +33,49 @@ void apoc::trackSwitch(){
 
     ros::Time start = ros::Time::now();
 
-    while (ros::ok()){
-        //达到阈值退出
-        if (current_trace.trace_x <= TRACE_TOLERANCE &&
-            current_trace.trace_ <= TRACE_TOLERANCE 
-            ){
-                break;
-            }
+    while (ros::ok()) {
+        // 检查是否有有效的检测目标
+        if (current_detection.class_name.empty()) {
+            ROS_WARN("No detection target available");
+            ros::spinOnce();
+            control_rate.sleep();
+            continue;
+        }
 
-        //1.换算
-        float local_trace_x=current_trace.trace_x * correct_ration ;
-        float local_trace_y=current_trace.trace_y * correct_ration ;
+        // 达到位置阈值时退出追踪
+        if (fabs(current_detection.center_x - TARGET_CENTER_X) <= TRACE_TOLERANCE &&
+            fabs(current_detection.center_y - TARGET_CENTER_Y) <= TRACE_TOLERANCE) {
+            ROS_INFO("Target reached within tolerance");
+            break;
+        }
 
-        pid_x.setSetpoint(local_trace_x);
-        pid_y.setSetpoint(local_trace_y);
+        // 1. 坐标转换：将检测到的目标中心转换为控制量
+        float target_offset_x = (current_detection.center_x - TARGET_CENTER_X) * correct_ratio;
+        float target_offset_y = (current_detection.center_y - TARGET_CENTER_Y) * correct_ratio;
 
+        // 设置PID目标值
+        pid_x.setSetpoint(target_offset_x);
+        pid_y.setSetpoint(target_offset_y);
+
+        // 计算控制量
         float delta_x = pid_x.compute(current_x);    // X轴步长增量
         float delta_y = pid_y.compute(current_y);    // Y轴步长增量
 
+        // 计算下一步位置
         float via_x = current_pose.pose.position.x + delta_x;
         float via_y = current_pose.pose.position.y + delta_y;
 
-        flytoRelative(via_x,via_y,SET_ALTITUDE,SET_ORIENTATION);
+        // 发送飞行指令
+        flytoRelative(via_x, via_y, SET_ALTITUDE, SET_ORIENTATION);
 
+        // 处理回调并控制循环速率
         ros::spinOnce();
         control_rate.sleep();
         
-        //超时退出
-        if ((ros::Time::now() - start).toSec() >TRACE_TIMEOUT)
-        {
+        // 超时退出
+        if ((ros::Time::now() - start).toSec() > TRACE_TIMEOUT) {
+            ROS_WARN("Tracking timed out");
             break;
         }
-        
-
     }
-
 }
-
