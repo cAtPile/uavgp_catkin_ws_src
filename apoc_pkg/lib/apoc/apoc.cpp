@@ -35,9 +35,9 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_X_OUT_MAX", pid_x_out_max_, 1.0);
     nh.param("apoc_pkg/PID_X_INT_MIN", pid_x_int_min_, -0.5);
     nh.param("apoc_pkg/PID_X_INT_MAX", pid_x_int_max_, 0.5);
-    ROS_STREAM("X : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_STREAM("X : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_STREAM("X : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
+    ROS_INFO_STREAM("X : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_INFO_STREAM("X : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_INFO_STREAM("X : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Y轴PID
     nh.param("apoc_pkg/PID_Y_KP", pid_y_kp_, 2.5);
@@ -47,9 +47,9 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_Y_OUT_MAX", pid_y_out_max_, 1.0);
     nh.param("apoc_pkg/PID_Y_INT_MIN", pid_y_int_min_, -0.5);
     nh.param("apoc_pkg/PID_Y_INT_MAX", pid_y_int_max_, 0.5);
-    ROS_STREAM("Y : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_STREAM("Y : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_STREAM("Y : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
+    ROS_INFO_STREAM("Y : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_INFO_STREAM("Y : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_INFO_STREAM("Y : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Z轴PID
     nh.param("apoc_pkg/PID_Z_KP", pid_z_kp_, 3.0);
@@ -59,9 +59,9 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_Z_OUT_MAX", pid_z_out_max_, 0.8);
     nh.param("apoc_pkg/PID_Z_INT_MIN", pid_z_int_min_, -0.4);
     nh.param("apoc_pkg/PID_Z_INT_MAX", pid_z_int_max_, 0.4);
-    ROS_STREAM("Z : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_STREAM("Z : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_STREAM("Z : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
+    ROS_INFO_STREAM("Z : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_INFO_STREAM("Z : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_INFO_STREAM("Z : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Yaw角PID
     nh.param("apoc_pkg/PID_YAW_KP", pid_yaw_kp_, 2.0);
@@ -71,9 +71,9 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_YAW_OUT_MAX", pid_yaw_out_max_, 0.6);
     nh.param("apoc_pkg/PID_YAW_INT_MIN", pid_yaw_int_min_, -0.3);
     nh.param("apoc_pkg/PID_YAW_INT_MAX", pid_yaw_int_max_, 0.3);
-    ROS_STREAM("YAW : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_STREAM("YAW : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_STREAM("YAW : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
+    ROS_INFO_STREAM("YAW : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
+    ROS_INFO_STREAM("YAW : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
+    ROS_INFO_STREAM("YAW : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
     
     // PID控制频率 & 飞行超时
     nh.param("apoc_pkg/PID_CONTROL_RATE", pid_control_rate_, 50.0);
