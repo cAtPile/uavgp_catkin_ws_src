@@ -8,6 +8,7 @@ void apoc::trackSwitch() {
 	float TARGET_CENTER_X = 320 ;
 	float TARGET_CENTER_Y = 320 ;
 	float TRACE_TOLERANCE = 20 ;
+	float TRACE_TIMEOUT = 20;
 
     // 计算校正系数
     float correct_ratio = current_pose.pose.position.z * CAM_RATIO;
@@ -61,11 +62,11 @@ void apoc::trackSwitch() {
         float via_y = current_pose.pose.position.y + delta_y;
 
         // 发送飞行指令
-        flytoRelative(via_x, via_y, 2, 0);
+        flytoRelative(via_x, via_y, 1, 0);
 
         // 处理回调并控制循环速率
         ros::spinOnce();
-        control_rate.sleep();
+        rate.sleep();
         
         // 超时退出
         if ((ros::Time::now() - start).toSec() > TRACE_TIMEOUT) {
