@@ -17,7 +17,8 @@
 // 定义逐步降落的步长，单位：米
 #define LANDING_STEP 0.1
 
-bool apoc::landSwitch(){
+void apoc::landSwitch(){
+
     // 记录当前位置作为降落的起始点
     float land_x = current_pose.pose.position.x;
     float land_y = current_pose.pose.position.y;
@@ -35,7 +36,8 @@ bool apoc::landSwitch(){
     mat.getRPY(roll, pitch, land_yaw);
 
     ros::Time total_start = ros::Time::now();
-    // 计算目标降落高度（家的位置高度加上容差）
+    
+    // 计算目标降落高度
     float target_land_z = home_pose.pose.position.z + landing_tolerance_;
     
     // 逐步降低高度，每次下降0.1m
@@ -68,22 +70,12 @@ bool apoc::landSwitch(){
         // 检查是否超时
         if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
             ROS_INFO("Landing TIMEOUT, FORCE DISARM");
-            return armSwitch(0);
+            armSwitch(0);
         }
     }
 
-    // 到达目标高度后，进行解锁
+    // 到达目标高度后，进行锁定
     if (current_pose.pose.position.z <= target_land_z) {
-        return armSwitch(0);
+        armSwitch(0);
     }
-
-    // 检查ROS节点是否正常运行
-    if (!ros::ok()) {
-        ROS_ERROR("ROS node is not running properly during land");
-        return false;
-    }
-
-    // ROS节点异常退出
-    ROS_ERROR("ROS node shutdown during land");
-    return false;
 }
