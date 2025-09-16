@@ -15,7 +15,7 @@
 #include "apoc_pkg/apoc.h"
 
 // 定义逐步降落的步长，单位：米
-#define LANDING_STEP 0.1f
+#define LANDING_STEP 0.2f
 
 void apoc::landSwitch(){
 
@@ -71,6 +71,7 @@ void apoc::landSwitch(){
         if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
             ROS_INFO("Landing TIMEOUT, FORCE DISARM");
             armSwitch(0);
+            break;
         }
     }
 
