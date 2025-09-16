@@ -15,7 +15,7 @@
 #include "apoc_pkg/apoc.h"
 
 // 定义逐步降落的步长，单位：米
-#define LANDING_STEP 0.1
+#define LANDING_STEP 0.1f
 
 void apoc::landSwitch(){
 

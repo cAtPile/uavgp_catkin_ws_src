@@ -1,6 +1,7 @@
 #include "apoc_pkg/apoc.h"
 
 void apoc::trackSwitch() {
+/*
     // 计算校正系数
     float correct_ratio = current_pose.pose.position.z * CAM_RATIO;
     
@@ -65,4 +66,5 @@ void apoc::trackSwitch() {
             break;
         }
     }
+    */
 }
