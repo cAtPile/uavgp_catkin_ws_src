@@ -99,7 +99,7 @@ apoc::apoc(): rate(20.0){
     local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10);
 
     //识别话题
-    detection_data_sub = nh.subscrib<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
+    detection_data_sub = nh.subscribe<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
     //识别使能
 
     //current_state
