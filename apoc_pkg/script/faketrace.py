@@ -13,7 +13,7 @@ def simple_publisher():
     # 3. 配置参数：目标中心 + 波动范围（可按需调整）
     TARGET_X = 320.0       # 目标基准X坐标
     TARGET_Y = 320.0       # 目标基准Y坐标
-    FLUCTUATION = 150.0     # 波动范围（±20像素，模拟检测误差，值越大波动越明显）
+    FLUCTUATION = 20.0     # 波动范围（±20像素，模拟检测误差，值越大波动越明显）
     PUB_RATE = 10          # 发布频率（10Hz，与原脚本一致）
     rate = rospy.Rate(PUB_RATE)
     
