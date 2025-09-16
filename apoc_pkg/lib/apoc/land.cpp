@@ -12,15 +12,18 @@
 * method：  记录当前位置，使用flytoAbsolute/flytoPIDcorrect到当前x/y/LANDING_TOLERANCE/yaw,然后disarm
 * info:     
 */
-
 #include "apoc_pkg/apoc.h"
 
+// 定义逐步降落的步长，单位：米
+#define LANDING_STEP 0.1
+
 bool apoc::landSwitch(){
-    
+    // 记录当前位置作为降落的起始点
     float land_x = current_pose.pose.position.x;
     float land_y = current_pose.pose.position.y;
-    float land_z = landing_tolerance_;
-        
+    float current_z = current_pose.pose.position.z;
+    
+    // 获取当前偏航角
     tf2::Quaternion quat(
         current_pose.pose.orientation.x,
         current_pose.pose.orientation.y,
@@ -31,21 +34,46 @@ bool apoc::landSwitch(){
     double roll, pitch, land_yaw;
     mat.getRPY(roll, pitch, land_yaw);
 
-    ros::Time start = ros::Time::now();
-
-    while (ros::ok() && (ros::Time::now() - start).toSec() < landing_timeout_) {
-        flytoAbsolute(land_x,land_y,land_z,land_yaw);
-        ros::spinOnce();
-        rate.sleep();
-
-        if( current_pose.pose.position.z <= home_pose.pose.position.z + landing_tolerance_){
-            return armSwitch(0);
+    ros::Time total_start = ros::Time::now();
+    // 计算目标降落高度（家的位置高度加上容差）
+    float target_land_z = home_pose.pose.position.z + landing_tolerance_;
+    
+    // 逐步降低高度，每次下降0.1m
+    while (ros::ok() && current_z > target_land_z) {
+        // 计算当前目标高度，不低于最终目标高度
+        float step_target_z = std::max(current_z - LANDING_STEP, target_land_z);
+        
+        // 飞向当前步骤的目标高度
+        ros::Time step_start = ros::Time::now();
+        bool step_reached = false;
+        
+        // 在当前步骤高度保持位置稳定
+        while (ros::ok() && !step_reached && 
+               (ros::Time::now() - total_start).toSec() < landing_timeout_) {
+            
+            flytoAbsolute(land_x, land_y, step_target_z, land_yaw);
+            ros::spinOnce();
+            rate.sleep();
+            
+            // 检查是否到达当前步骤的目标高度（考虑一定容差）
+            if (fabs(current_pose.pose.position.z - step_target_z) < 0.05) {
+                step_reached = true;
+                ROS_INFO("Reached intermediate landing altitude: %.2fm", step_target_z);
             }
-
+        }
+        
+        // 更新当前高度
+        current_z = current_pose.pose.position.z;
+        
+        // 检查是否超时
+        if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
+            ROS_INFO("Landing TIMEOUT, FORCE DISARM");
+            return armSwitch(0);
+        }
     }
 
-    if ((ros::Time::now() - start).toSec() > landing_timeout_) {
-        ROS_INFO("Landing TIMEOUT,FORCE DISARM");
+    // 到达目标高度后，进行解锁
+    if (current_pose.pose.position.z <= target_land_z) {
         return armSwitch(0);
     }
 
@@ -58,5 +86,4 @@ bool apoc::landSwitch(){
     // ROS节点异常退出
     ROS_ERROR("ROS node shutdown during land");
     return false;
-
 }
