@@ -53,15 +53,15 @@ void apoc::trackSwitch() {
         pid_y.setSetpoint(target_offset_y);
 
         // 计算控制量
-        float delta_x = pid_x.compute(current_pose.pose.position.x);    // X轴步长增量
-        float delta_y = pid_y.compute(current_pose.pose.position.y);    // Y轴步长增量
+        float delta_x = pid_x.compute(0);    // X轴步长增量
+        float delta_y = pid_y.compute(0);    // Y轴步长增量
 
         // 计算下一步位置
         float via_x = current_pose.pose.position.x + delta_x;
         float via_y = current_pose.pose.position.y + delta_y;
 
         // 发送飞行指令
-        flytoRelative(via_x, via_y, SET_ALTITUDE, SET_ORIENTATION);
+        flytoRelative(via_x, via_y, 2, 0);
 
         // 处理回调并控制循环速率
         ros::spinOnce();
