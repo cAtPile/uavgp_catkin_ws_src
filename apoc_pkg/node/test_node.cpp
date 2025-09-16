@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     ros::Time test_start_time = ros::Time::now();
 
     // 连接、解锁并切换模式
-    if (ros::ok() && apoc_control.connectSwitch(1) && 
+    if (ros::ok() && apoc_control.connectSwitch() && 
         apoc_control.armSwitch(1) && apoc_control.modeSwitch(1)) {
         ROS_INFO("System initialized successfully, starting mission...");
         
