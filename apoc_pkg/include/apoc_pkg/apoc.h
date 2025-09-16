@@ -123,8 +123,6 @@ public:
         (float check_x , float check_y , float check_z , float check_yaw );//到达检查
     bool flytoAbsolute
         (float fly_ab_x , float fly_ab_y , float fly_ab_z , float fly_ab_yaw ); //绝对飞行
-    bool flytoPIDcorrect
-        (float fly_pid_x , float fly_pid_y , float fly_pid_z , float fly_pid_yaw );//pid修正
     bool flytoRelative
         (float fly_re_x , float fly_re_y , float fly_re_z , float fly_re_yaw );//相对修正
     bool hoverSwitch(float hover_time);//悬停
