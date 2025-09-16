@@ -102,7 +102,7 @@ private:
     geometry_msgs::PoseStamped home_pose;//home位置
     geometry_msgs::PoseStamped current_pose;//当前位置
     // 存储当前检测到的目标信息
-    apoc_pkg::Detection current_detection;
+    apoc_pkg::detection_data current_detection;
 
     ros::Time last_request;
     ros::Rate rate;
