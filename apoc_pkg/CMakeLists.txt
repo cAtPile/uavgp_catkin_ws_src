@@ -139,7 +139,6 @@ add_library(apoc_lib
   lib/apoc/reach.cpp
   lib/apoc/fly_ab.cpp
   lib/apoc/fly_re.cpp
-  lib/apoc/pid_flyab.cpp
   lib/apoc/track.cpp
   lib/apoc/takeoff.cpp
   lib/apoc/land.cpp
