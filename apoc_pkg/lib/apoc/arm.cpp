@@ -14,20 +14,22 @@
 * method:   调用arm_cmd
 * info:     "Already " << action << "ED"
 *           已经处于目标状态
-"CANNOT arm/disarm ! DISCONNECT to FCU"
-*           因未连接而解锁/上锁失败
 *           
-*           "Cannot arm/disarm ! not in OFFBOARD mode"
-*           因未offboard而解锁/上锁失败
+*           action << " command accepted by FCU"
+*           解锁被接受
+*           
+*           action << " command rejected by FCU"
+*           解锁被拒绝
+*           
+*           Failed to call arming service
+*           服务调用失败
 *
-*           "Arm/disarm TIMEOUT during"
-*           解锁/上锁超时
+*           "Vehicle " << action << "ED successfully"
+*           已经处于目标状态
+*       
+*           "Timeout while trying to " << action
+*           状态切换超时
 *
-*           "Arm/disarm failed UNKUNOWN reason unexpectedly!"
-*           未知原因失败
-*   
-*           "ROS node is not running ,during arm/disarm"
-*           ROS非正常
 */
 
 #include "apoc_pkg/apoc.h"
@@ -45,7 +47,7 @@ bool apoc::armSwitch(int arm_key) {
 
     ros::Duration timeout_duration(armswitch_timeout_);
     ros::Time start_time = ros::Time::now();
-    ros::Rate rate(20);  // 2Hz
+    ros::Rate rate(20);  // 20Hz
 
     while (ros::ok() && (ros::Time::now() - start_time) < timeout_duration) {
         mavros_msgs::CommandBool arm_cmd;
