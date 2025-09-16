@@ -5,6 +5,9 @@ void apoc::trackSwitch() {
 
 	//
 	float CAM_RATIO = 10 ;
+	float TARGET_CENTER_X = 320 ;
+	float TARGET_CENTER_Y = 320 ;
+	float TRACE_TOLERANCE = 20 ;
 
     // 计算校正系数
     float correct_ratio = current_pose.pose.position.z * CAM_RATIO;
@@ -27,31 +30,31 @@ void apoc::trackSwitch() {
 
     while (ros::ok()) {
         // 检查是否有有效的检测目标
-        if (current_detection.class_name.empty()) {
+        if (current_detection.detection_id == 0) {
             ROS_WARN("No detection target available");
             ros::spinOnce();
-            control_rate.sleep();
+            rate.sleep();
             continue;
         }
 
         // 达到位置阈值时退出追踪
-        if (fabs(current_detection.center_x - TARGET_CENTER_X) <= TRACE_TOLERANCE &&
-            fabs(current_detection.center_y - TARGET_CENTER_Y) <= TRACE_TOLERANCE) {
+        if (fabs(current_detection.detection_x - TARGET_CENTER_X) <= TRACE_TOLERANCE &&
+            fabs(current_detection.detection_y - TARGET_CENTER_Y) <= TRACE_TOLERANCE) {
             ROS_INFO("Target reached within tolerance");
             break;
         }
 
         // 1. 坐标转换：将检测到的目标中心转换为控制量
-        float target_offset_x = (current_detection.center_x - TARGET_CENTER_X) * correct_ratio;
-        float target_offset_y = (current_detection.center_y - TARGET_CENTER_Y) * correct_ratio;
+        float target_offset_x = (current_detection.detection_x - TARGET_CENTER_X) * correct_ratio;
+        float target_offset_y = (current_detection.detection_y - TARGET_CENTER_Y) * correct_ratio;
 
         // 设置PID目标值
         pid_x.setSetpoint(target_offset_x);
         pid_y.setSetpoint(target_offset_y);
 
         // 计算控制量
-        float delta_x = pid_x.compute(current_x);    // X轴步长增量
-        float delta_y = pid_y.compute(current_y);    // Y轴步长增量
+        float delta_x = pid_x.compute(current_pose.pose.position.x);    // X轴步长增量
+        float delta_y = pid_y.compute(current_pose.pose.position.y);    // Y轴步长增量
 
         // 计算下一步位置
         float via_x = current_pose.pose.position.x + delta_x;
