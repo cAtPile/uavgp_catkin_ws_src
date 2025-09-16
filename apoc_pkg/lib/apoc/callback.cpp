@@ -16,5 +16,6 @@ void apoc::local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){
 }
 
 // 回调函数：接收检测到的目标信息
-void apoc::detection_data_cb(const apoc_pkg::Detection::ConstPtr& msg) {current_detection = *msg;}
-
+void apoc::detection_data_cb(const apoc_pkg::Detection::ConstPtr& msg){
+    current_detection = *msg;
+}
