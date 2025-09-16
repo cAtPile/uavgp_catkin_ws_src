@@ -128,6 +128,7 @@ public:
     bool hoverSwitch(float hover_time);//悬停
     void landSwitch();//降落
     void publishZeroVelocity();//0速度发布
+    void trackSwitch();
 
 };
 
