@@ -7,7 +7,9 @@ void missionPlanner(apoc& apoc_control) {
     //已经包含连接，解锁，模式切换
     apoc_control.takeoffSwitch(1);
     apoc_control.flytoRelative(1, 0, 1, 0);
-    apoc_control.hoverSwitch(3);
+    apoc_control.hoverSwitch(1);
+    apoc_control.trackSwitch();
+    apoc_control.hoverSwitch(1);
     apoc_control.landSwitch();
 }
 
@@ -32,7 +34,7 @@ int main(int argc, char **argv) {
         
         // 执行任务规划
         missionPlanner(apoc_control);
-        
+
     } else {
         ROS_ERROR("Failed to initialize system properly");
     }
