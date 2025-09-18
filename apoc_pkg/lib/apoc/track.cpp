@@ -8,7 +8,7 @@ void apoc::trackSwitch() {
     float TARGET_CENTER_X = 320.0f;  // 图像中心X（如640x640分辨率）
     float TARGET_CENTER_Y = 320.0f;  // 图像中心Y
     float TRACE_TOLERANCE = 20.0f;   // 追踪容差（20像素）
-    float TRACE_TIMEOUT = 20.0f;     // 超时时间（20秒）
+    float TRACE_TIMEOUT = 60.0f;     // 超时时间（20秒）
     ros::Rate rate(20);              // 循环频率20Hz（50ms/次）
     float init_x = current_pose.pose.position.x;  // 初始追踪X位置（基准）
     float init_y = current_pose.pose.position.y;  // 初始追踪Y位置（基准）
