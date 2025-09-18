@@ -10,8 +10,15 @@ void apoc::trackSwitch() {
     float TRACE_TOLERANCE = 20.0f;   // 追踪容差（20像素）
     float TRACE_TIMEOUT = 60.0f;     // 超时时间（20秒）
     ros::Rate rate(20);              // 循环频率20Hz（50ms/次）
-    //float init_x = current_pose.pose.position.x;  // 初始追踪X位置（基准）
-    //float init_y = current_pose.pose.position.y;  // 初始追踪Y位置（基准）
+
+    //
+    geometry_msgs::PoseStamped trace_pose;
+    trace_pose.header.frame_id = "map"; 
+    trace_pose.pose.position.z = 1;
+    trace_pose.pose.orientation.x = 0.0;
+    trace_pose.pose.orientation.y = 0.0;
+    trace_pose.pose.orientation.z = 0.0;
+    trace_pose.pose.orientation.w = 1.0;
 
     // 计算校正系数
     float correct_ratio = current_pose.pose.position.z * CAM_RATIO;
@@ -53,8 +60,6 @@ void apoc::trackSwitch() {
         float target_offset_y = (current_detection.detection_y - TARGET_CENTER_Y) * correct_ratio + current_pose.pose.position.y ;
 
         // 8. PID控制：设置目标偏差，计算控制量（输入=当前实际偏差）
-        //float current_offset_x = current_pose.pose.position.x - init_x;  // 当前实际X偏差
-        //float current_offset_y = current_pose.pose.position.y - init_y;  // 当前实际Y偏差
         pid_x.setSetpoint(target_offset_x);  // PID期望偏差=目标偏差
         pid_y.setSetpoint(target_offset_y);
         float delta_x = pid_x.compute(current_pose.pose.position.x);  // 计算X轴增量
@@ -65,8 +70,12 @@ void apoc::trackSwitch() {
         float via_y = current_pose.pose.position.y + delta_y;
 
         // 发送飞行指令
-        flytoRelative(via_x, via_y, 1, 0);
+        trace_pose.pose.position.x = via_x;
+        trace_pose.pose.position.y = via_y;
 
+        //发布定点
+        local_pos_pub.publish(trace_pose);
+        
         // 处理回调并控制循环速率
         ros::spinOnce();
         rate.sleep();
