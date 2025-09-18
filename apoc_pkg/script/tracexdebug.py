@@ -1,9 +1,10 @@
-'''
-向'/detection/data'持续发布
-'''
 #!/usr/bin/env python3
 import rospy
 from apoc_pkg.msg import detection_data
+
+'''
+向'/detection/data'持续发布
+'''
 
 def simple_publisher():
     rospy.init_node('simple_detection_pub')

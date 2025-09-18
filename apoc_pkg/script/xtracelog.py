@@ -1,19 +1,3 @@
-'''
-用于trace功能调整
-记录mavros/setpoint_position/local.x
-和mavros/local_position/pose.x
-到~/catkin_ws/src/apoc_pkg/log/trace_x_log_<时间戳用来区分>.txt
-格式为
-时间-mavros/setpoint_position/local.x-mavros/local_position/pose.x
-例如
-21.0767-1.0032-2.0045
-并作一张图
-到到~/catkin_ws/src/apoc_pkg/log/trace_x_log_<时间戳用来区分>.png
-横轴时间
-纵轴距离
-红色曲线mavros/setpoint_position/local.x
-蓝色曲线mavros/local_position/pose.x
-'''
 #!/usr/bin/env python3
 import rospy
 import matplotlib.pyplot as plt
@@ -161,3 +145,20 @@ if __name__ == '__main__':
         rospy.spin()
     except rospy.ROSInterruptException:
         pass
+        
+        '''
+用于trace功能调整
+记录mavros/setpoint_position/local.x
+和mavros/local_position/pose.x
+到~/catkin_ws/src/apoc_pkg/log/trace_x_log_<时间戳用来区分>.txt
+格式为
+时间-mavros/setpoint_position/local.x-mavros/local_position/pose.x
+例如
+21.0767-1.0032-2.0045
+并作一张图
+到到~/catkin_ws/src/apoc_pkg/log/trace_x_log_<时间戳用来区分>.png
+横轴时间
+纵轴距离
+红色曲线mavros/setpoint_position/local.x
+蓝色曲线mavros/local_position/pose.x
+'''

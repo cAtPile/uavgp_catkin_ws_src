@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-import random  # 导入随机数模块，用于生成波动
+import random  
 from apoc_pkg.msg import detection_data
 
 def simple_publisher():
