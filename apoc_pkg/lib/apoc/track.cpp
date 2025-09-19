@@ -2,15 +2,7 @@
 #include "apoc_pkg/pidctrl.h"
 
 void apoc::trackSwitch() {
-
-    // 1. 初始化参数（修正CAM_RATIO，添加初始位置记录）
-    float TRACE_CAM_RATIO = 0.005f;        // 校准后的像素→米转换系数（5mm/像素）
-    float TRACE_TARGET_CENTER_X = 320.0f;  // 图像中心X（如640x640分辨率）
-    float TRACE_TARGET_CENTER_Y = 320.0f;  // 图像中心Y
-    float TRACE_TOLERANCE = 20.0f;   // 追踪容差（20像素）
-    float TRACE_TIMEOUT = 60.0f;     // 超时时间（20秒）
-    ros::Rate rate(20);              // 循环频率20Hz（50ms/次）
-
+    
     //
     geometry_msgs::PoseStamped trace_pose;
     trace_pose.header.frame_id = "map"; 
@@ -21,7 +13,7 @@ void apoc::trackSwitch() {
     trace_pose.pose.orientation.w = 1.0;
 
     // 计算校正系数
-    float correct_ratio = current_pose.pose.position.z * TRACE_CAM_RATIO;
+    float correct_ratio = current_pose.pose.position.z * trace_cam_ratio_;
     
     // 初始化PID控制器
     pidctrl pid_x(
@@ -49,15 +41,15 @@ void apoc::trackSwitch() {
         }
 
         // 达到位置阈值时退出追踪
-        if (fabs(current_detection.detection_x - TRACE_TARGET_CENTER_X) <= TRACE_TOLERANCE &&
-            fabs(current_detection.detection_y - TRACE_TARGET_CENTER_Y) <= TRACE_TOLERANCE) {
+        if (fabs(current_detection.detection_x - trace_target_center_x_) <= trace_tolerance_ &&
+            fabs(current_detection.detection_y - trace_target_center_y_) <= trace_tolerance_) {
             ROS_INFO("Target reached within tolerance");
             break;
         }
         
         // 1. 坐标转换：将检测到的目标中心转换为控制量
-        float target_offset_x = (current_detection.detection_x - TARGET_CENTER_X) * correct_ratio + current_pose.pose.position.x ;
-        float target_offset_y = (current_detection.detection_y - TARGET_CENTER_Y) * correct_ratio + current_pose.pose.position.y ;
+        float target_offset_x = (current_detection.detection_x - trace_target_center_x_) * correct_ratio + current_pose.pose.position.x ;
+        float target_offset_y = (current_detection.detection_y - trace_target_center_y_) * correct_ratio + current_pose.pose.position.y ;
 
         // 8. PID控制：设置目标偏差，计算控制量（输入=当前实际偏差）
         pid_x.setSetpoint(target_offset_x);  // PID期望偏差=目标偏差
@@ -81,7 +73,7 @@ void apoc::trackSwitch() {
         rate.sleep();
         
         // 超时退出
-        if ((ros::Time::now() - start).toSec() > TRACE_TIMEOUT) {
+        if ((ros::Time::now() - start).toSec() > trace_timeout_) {
             ROS_WARN("Tracking timed out");
             break;
         }
