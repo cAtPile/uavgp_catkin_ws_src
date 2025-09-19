@@ -39,6 +39,11 @@ private:
     double reach_tolerance_angle_;
     double landing_timeout_;
     double landing_tolerance_;
+    double trace_cam_ratio_;
+    double trace_target_center_x_;
+    double trace_target_center_y_;
+    double trace_tolerance_;
+    double trace_timeout_;
     double TRACE_CAM_RATIO;
     double TRACE_TARGET_CENTER_X;
     double TRACE_TARGET_CENTER_Y;
