@@ -12,22 +12,23 @@
 
 apoc::apoc(): rate(20.0){
 
-     nh.param("apoc_pkg/connect_timeout", connect_timeout_, 10.0);
-     ROS_INFO("connect_timeout: %.1fs", connect_timeout_);
-     nh.param("apoc_pkg/modeswitch_timeout", modeswitch_timeout_, 10.0);
-     ROS_INFO("modeswitch_timeout: %.1fs", modeswitch_timeout_);
-     nh.param("apoc_pkg/armswitch_timeout", armswitch_timeout_, 10.0);
-     ROS_INFO("armswitch_timeout: %.1fs", armswitch_timeout_);
-     nh.param("apoc_pkg/fly_ab_timeout", fly_ab_timeout_, 30.0);
-     ROS_INFO("fly_ab_timeout: %.1fs", fly_ab_timeout_);
-     nh.param("apoc_pkg/reach_tolerance_distance", reach_tolerance_distance_, 0.1);
-     ROS_INFO("reach_tolerance_distance: %.1fm", reach_tolerance_distance_);
-     nh.param("apoc_pkg/reach_tolerance_angle", reach_tolerance_angle_, 0.1);
-     ROS_INFO("reach_tolerance_angle: %.1frad", reach_tolerance_angle_);
+    // ============== 参数获取==============
+    nh.param("apoc_pkg/connect_timeout", connect_timeout_, 10.0);
+    nh.param("apoc_pkg/modeswitch_timeout", modeswitch_timeout_, 10.0);
+    nh.param("apoc_pkg/armswitch_timeout", armswitch_timeout_, 10.0);
+    nh.param("apoc_pkg/fly_ab_timeout", fly_ab_timeout_, 30.0);
+    nh.param("apoc_pkg/reach_tolerance_distance", reach_tolerance_distance_, 0.1);
+    nh.param("apoc_pkg/reach_tolerance_angle", reach_tolerance_angle_, 0.1);
+    nh.param("apoc_pkg/landing_tolerance", landing_tolerance_, 0.1);
+    nh.param("apoc_pkg/landing_timeout", landing_timeout_, 3.0);
+    nh.param("apoc_pkg/trace_cam_ratio", trace_cam_ratio_, 0.005);
+    nh.param("apoc_pkg/trace_target_center_x", trace_target_center_x_, 320.0);
+    nh.param("apoc_pkg/trace_target_center_y", trace_target_center_y_, 320.0);
+    nh.param("apoc_pkg/trace_tolerance", trace_tolerance_, 20.0);
+    nh.param("apoc_pkg/trace_timeout", trace_timeout_, 60.0);
      
     // ============== PID参数获取==============
     // X轴PID
-    ROS_INFO("===PID params setting===");
     nh.param("apoc_pkg/PID_X_KP", pid_x_kp_, 2.5);
     nh.param("apoc_pkg/PID_X_KI", pid_x_ki_, 0.1);
     nh.param("apoc_pkg/PID_X_KD", pid_x_kd_, 0.05);
@@ -35,9 +36,6 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_X_OUT_MAX", pid_x_out_max_, 1.0);
     nh.param("apoc_pkg/PID_X_INT_MIN", pid_x_int_min_, -0.5);
     nh.param("apoc_pkg/PID_X_INT_MAX", pid_x_int_max_, 0.5);
-    ROS_INFO_STREAM("X : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_INFO_STREAM("X : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_INFO_STREAM("X : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Y轴PID
     nh.param("apoc_pkg/PID_Y_KP", pid_y_kp_, 2.5);
@@ -47,9 +45,6 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_Y_OUT_MAX", pid_y_out_max_, 1.0);
     nh.param("apoc_pkg/PID_Y_INT_MIN", pid_y_int_min_, -0.5);
     nh.param("apoc_pkg/PID_Y_INT_MAX", pid_y_int_max_, 0.5);
-    ROS_INFO_STREAM("Y : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_INFO_STREAM("Y : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_INFO_STREAM("Y : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Z轴PID
     nh.param("apoc_pkg/PID_Z_KP", pid_z_kp_, 3.0);
@@ -59,9 +54,6 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_Z_OUT_MAX", pid_z_out_max_, 0.8);
     nh.param("apoc_pkg/PID_Z_INT_MIN", pid_z_int_min_, -0.4);
     nh.param("apoc_pkg/PID_Z_INT_MAX", pid_z_int_max_, 0.4);
-    ROS_INFO_STREAM("Z : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_INFO_STREAM("Z : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_INFO_STREAM("Z : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
 
     // Yaw角PID
     nh.param("apoc_pkg/PID_YAW_KP", pid_yaw_kp_, 2.0);
@@ -71,23 +63,11 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_YAW_OUT_MAX", pid_yaw_out_max_, 0.6);
     nh.param("apoc_pkg/PID_YAW_INT_MIN", pid_yaw_int_min_, -0.3);
     nh.param("apoc_pkg/PID_YAW_INT_MAX", pid_yaw_int_max_, 0.3);
-    ROS_INFO_STREAM("YAW : K_P = "<< pid_x_kp_ << " , K_I = "<<pid_x_ki_<<" , K_D = "<< pid_x_kd_<<";");
-    ROS_INFO_STREAM("YAW : OUT_MIN = "<< pid_x_out_min_ << " , OUT_MAX = "<< pid_x_out_max_ <<";");
-    ROS_INFO_STREAM("YAW : INT_MIN = "<< pid_x_int_min_ << " , INT_MAX = "<<pid_x_int_max_<<";");
     
     // PID控制频率 & 飞行超时
     nh.param("apoc_pkg/PID_CONTROL_RATE", pid_control_rate_, 50.0);
-    ROS_INFO("PID_CONTROL_RATE: %.1f Hz", pid_control_rate_);
     nh.param("apoc_pkg/PID_FLIGHT_TIMEOUT", pid_flight_timeout_, 60.0);
-    ROS_INFO("PID_FLIGHT_TIMEOUT: %.1f s", pid_flight_timeout_);
     
-    //
-    nh.param("apoc_pkg/landing_tolerance", landing_tolerance_, 0.1);
-    ROS_INFO("landing_tolerance: %.1f m",landing_tolerance_);
-    nh.param("apoc_pkg/landing_timeout", landing_timeout_, 3.0);
-    ROS_INFO("landing_timeout: %.1f s", landing_timeout_);
-     
-
     //ros话题初始化
     state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 10, &apoc::state_cb, this);
     local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &apoc::local_pos_cb, this);
@@ -141,7 +121,6 @@ apoc::apoc(): rate(20.0){
     current_detection.detection_id = 0 ;
     current_detection.detection_x = 0 ;
     current_detection.detection_y = 0 ;
-
 
     last_request = ros::Time::now();
 

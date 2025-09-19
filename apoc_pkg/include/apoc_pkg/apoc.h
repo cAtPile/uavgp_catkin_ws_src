@@ -39,6 +39,11 @@ private:
     double reach_tolerance_angle_;
     double landing_timeout_;
     double landing_tolerance_;
+    double TRACE_CAM_RATIO;
+    double TRACE_TARGET_CENTER_X;
+    double TRACE_TARGET_CENTER_Y;
+    double TRACE_TOLERANCE;
+    double TRACE_TIMEOUT;
     
     // -------------- PID参数变量--------------
     // X轴PID
