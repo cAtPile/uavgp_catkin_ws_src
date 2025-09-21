@@ -38,29 +38,10 @@ bool apoc::avoidGoal(float goal_x,float goal_y,float goal_z){
     //
     ros::Time start_time = ros::Time::now();
     const ros::Duration timeout(GOAL_TIMEOUT);  // 30秒超时时间
+/*
+执行ego_cmd 的命令
+到达检测
 
-    while (ros::ok()) {
-
-        // 更新消息时间戳
-        goal_pose.header.stamp = ros::Time::now();
-
-        // 发布目标位置
-        goal_pub.publish(goal_pose);
-
-        // 检查是否到达目标位置
-        if ((reachCheck(goal_x, goal_y, goal_z, 0)) {
-            return true;
-        }
-
-        // 检查是否超时
-        if ((ros::Time::now() - start_time) > timeout) {
-            ROS_WARN_STREAM("Timeout while flying to avoid goal position. Time elapsed: " 
-                          << (ros::Time::now() - start_time).toSec() << "s");
-            return false;
-        }
-
-        ros::spinOnce();
-        rate.sleep();
-    }
+*/
 
 }
