@@ -94,17 +94,16 @@ private:
     //ros句柄
     ros::NodeHandle nh;
 
-    //声明订阅
+    /*声明订阅*/
     ros::Publisher local_pos_pub;
+    ros::Publisher local_vel_pub;  // 速度指令发布器
+    ros::Publisher detection_action_pub;//识别使能
+
     ros::ServiceClient arming_client;
     ros::ServiceClient set_mode_client;
     ros::Subscriber state_sub;
     ros::Subscriber local_pos_sub;
-    ros::Publisher local_vel_pub;  // 速度指令发布器
-    //订阅识别
-    ros::Subscriber detection_data_sub;
-    //识别使能
-    //ros::Publisher detection_action_pub;
+    ros::Subscriber detection_data_sub; //订阅识别
 
     //初始化消息
     mavros_msgs::State current_state;
