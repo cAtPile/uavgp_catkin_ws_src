@@ -68,19 +68,21 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/PID_CONTROL_RATE", pid_control_rate_, 50.0);
     nh.param("apoc_pkg/PID_FLIGHT_TIMEOUT", pid_flight_timeout_, 60.0);
     
-    //ros话题初始化
+    /*****sub订阅初始化*****/
     state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 10, &apoc::state_cb, this);
     local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &apoc::local_pos_cb, this);
+        //识别话题
+    detection_data_sub = nh.subscribe<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
+
+    /*****pub发布初始化*****/
     local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
+    local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10);  
+        //识别使能
+    detection_action_pub = nh.advertise<std_msgs::Bool>("/tracker_action", 1);  
     
-    //mavros话题
+    /*****clinet服务初始化*****/    
     arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
     set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
-    local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10);
-
-    //识别话题
-    detection_data_sub = nh.subscribe<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
-    //识别使能
 
     //current_state
     current_state.connected = false;
@@ -122,6 +124,10 @@ apoc::apoc(): rate(20.0){
     current_detection.detection_x = 0 ;
     current_detection.detection_y = 0 ;
 
+    //
+    detection_action.data = false;
+
+    //
     last_request = ros::Time::now();
 
 }

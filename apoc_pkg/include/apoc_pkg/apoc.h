@@ -112,6 +112,7 @@ private:
     geometry_msgs::PoseStamped current_pose;//当前位置
     // 存储当前检测到的目标信息
     apoc_pkg::detection_data current_detection;
+    std_msgs::Bool detection_action;
 
     ros::Time last_request;
     ros::Rate rate;

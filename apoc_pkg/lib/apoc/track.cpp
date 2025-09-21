@@ -31,7 +31,16 @@ void apoc::trackSwitch() {
 
     ros::Time start = ros::Time::now();
 
+    //
+    ROS_INFO("Start trace");
+    
+
     while (ros::ok()) {
+        
+        //
+        detection_action.data = true;
+        detection_action_pub.publish(detection_action);
+
         // 检查是否有有效的检测目标
         if (current_detection.detection_id == 0) {
             ROS_WARN("No detection target available");
@@ -78,4 +87,10 @@ void apoc::trackSwitch() {
             break;
         }
     }
+
+    //
+    detection_action.data = false;
+    detection_action_pub.publish(detection_action);
+    ROS_INFO("Finsh trace");
+
 }

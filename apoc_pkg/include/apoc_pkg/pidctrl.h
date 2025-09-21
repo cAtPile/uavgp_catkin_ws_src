@@ -37,6 +37,7 @@ private:
     // 时间变量
     ros::Time last_time; // 上一次计算时间
     bool is_first_run;   // 是否首次运行
+    
 public:
     
     pidctrl();// 构造函数
