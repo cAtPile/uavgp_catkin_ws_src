@@ -139,6 +139,7 @@ public:
     void landSwitch();//降落
     void publishZeroVelocity();//0速度发布
     void trackSwitch();
+    //void plannerSwitch();
 
 };
 

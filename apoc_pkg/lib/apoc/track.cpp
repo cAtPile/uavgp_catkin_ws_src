@@ -33,7 +33,6 @@ void apoc::trackSwitch() {
 
     //
     ROS_INFO("Start trace");
-    
 
     while (ros::ok()) {
         
