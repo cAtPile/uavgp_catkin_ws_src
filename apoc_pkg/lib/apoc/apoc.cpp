@@ -73,12 +73,18 @@ apoc::apoc(): rate(20.0){
     local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &apoc::local_pos_cb, this);
         //识别话题
     detection_data_sub = nh.subscribe<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
+    lp_setvel_sub = nh_.advertise<geometry_msgs::Twist>("apoc/setpoint_velocity/cmd_vel_unstamped", 10, lp_setvel_cb,this);
+    lp_setpose_sub = nh_.advertise<geometry_msgs::PoseStamped>("apoc/setpoint_position/local", 10, lp_setpose_cb,this);
+    lp_trajectory_sub = nh_.advertise<mavros_msgs::Trajectory>("apoc/trajectory/generated", 10,lp_trajectory_cb,this);
+    lp_obstacle_sub = nh_.advertise<sensor_msgs::LaserScan>("apoc/obstacle/send", 10,lp_obstacle_cb,this);
 
     /*****pub发布初始化*****/
     local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
     local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10);  
         //识别使能
-    detection_action_pub = nh.advertise<std_msgs::Bool>("/tracker_action", 1);  
+    detection_action_pub = nh.advertise<std_msgs::Bool>("/tracker_action", 1);
+    mav_trajectory_pub = nh_.advertise<mavros_msgs::Trajectory>("mavros/trajectory/generated", 10);
+    mav_obstacle_pub = nh_.advertise<sensor_msgs::LaserScan>("mavros/obstacle/send", 10);  
     
     /*****clinet服务初始化*****/    
     arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");

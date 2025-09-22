@@ -98,12 +98,21 @@ private:
     ros::Publisher local_pos_pub;
     ros::Publisher local_vel_pub;  // 速度指令发布器
     ros::Publisher detection_action_pub;//识别使能
+    ros::Publisher goal_pub;
+    ros::Publisher local_pos_pub;
+    ros::Publisher local_vel_pub;
+    ros::Publisher mav_trajectory_sub;
+    ros::Publisher mav_obstacle_sub;
 
     ros::ServiceClient arming_client;
     ros::ServiceClient set_mode_client;
     ros::Subscriber state_sub;
     ros::Subscriber local_pos_sub;
     ros::Subscriber detection_data_sub; //订阅识别
+    ros::Subscriber lp_setpose_sub;
+    ros::Subscriber lp_setvel_sub;
+    ros::Subscriber lp_trajectory_sub;
+    ros::Subscriber lp_obstacle_sub;
 
     //初始化消息
     mavros_msgs::State current_state;
@@ -113,6 +122,10 @@ private:
     // 存储当前检测到的目标信息
     apoc_pkg::detection_data current_detection;
     std_msgs::Bool detection_action;
+    geometry_msgs::Twist current_lp_sv;
+    geometry_msgs::PoseStamped current_lp_sp;
+    mavros_msgs::Trajectory current_lp_trajectory;
+    sensor_msgs::LaserScan current_lp_obstacle;
 
     ros::Time last_request;
     ros::Rate rate;
