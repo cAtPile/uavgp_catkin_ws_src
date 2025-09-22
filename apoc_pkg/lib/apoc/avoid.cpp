@@ -6,22 +6,33 @@
 #include "apoc_pkg/apoc.h"
 
 //声明
-ros::Publisher goal_pub
+ros::Publisher goal_pub;
+ros::Publisher local_pos_pub;
+ros::Publisher local_vel_pub;
+ros::Publisher mav_trajectory_sub;
+ros::Publisher mav_obstacle_sub;
 
-ros::ros::Subscriber lp_setpoint_sub;
+ros::ros::Subscriber lp_setpose_sub;
+ros::ros::Subscriber lp_setvel_sub;
 ros::ros::Subscriber lp_trajectory_sub;
+ros::ros::Subscriber lp_obstacle_sub;
 
-lp_setpoint_sub = nh.subscribe</*msg_type*/>("/*topic_name*/", 10, /*subscribe_callback_name*/);
-lp_trajectory_sub = nh.subscribe</*msg_type*/>("/*topic_name*/", 10, /*subscribe_callback_name*/);
-
+lp_setvel_sub = nh_.advertise<geometry_msgs::Twist>("apoc/setpoint_velocity/cmd_vel_unstamped", 10, lp_setvel_cb);
+lp_setpose_sub = nh_.advertise<geometry_msgs::PoseStamped>("apoc/setpoint_position/local", 10, lp_setpose_cb);
+lp_trajectory_sub = nh_.advertise<mavros_msgs::Trajectory>("apoc/trajectory/generated", 10,lp_trajectory_cb) ;
+lp_obstacle_sub = nh_.advertise<sensor_msgs::LaserScan>("apoc/obstacle/send", 10,lp_obstacle_cb);
 
 // 发布目标点给Local Planner
-ros::Publisher goal_pub = nh.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 10);
+goal_pub = nh.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 10);
+local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
+local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10); 
+mav_trajectory_pub = ;
+mav_obstacle_pub = ;
 
-void apoc::egocmd_cb(){
-
-    local_pos_pub.publish(
-}
+void lp_setvel_cb(){}
+void lp_setpose_cb(){}
+void lp_trajectory_cb(){}
+void lp_obstacle_cb(){}
 
 bool apoc::avoidGoal(float goal_x,float goal_y,float goal_z){
     
