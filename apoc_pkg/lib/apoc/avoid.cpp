@@ -7,12 +7,16 @@
 
 //声明
 ros::Publisher goal_pub
-ros::ros::Subscriber ego_cmd;
-ego_cmd = nh.subscribe</*msg_type*/>("/*topic_name*/", 10, /*subscribe_callback_name*/);
+
+ros::ros::Subscriber lp_setpoint_sub;
+ros::ros::Subscriber lp_trajectory_sub;
+
+lp_setpoint_sub = nh.subscribe</*msg_type*/>("/*topic_name*/", 10, /*subscribe_callback_name*/);
+lp_trajectory_sub = nh.subscribe</*msg_type*/>("/*topic_name*/", 10, /*subscribe_callback_name*/);
 
 
 // 发布目标点给Local Planner
-ros::Publisher goal_pub = nh.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 10);
+ros::Publisher goal_pub = nh.advertise<geometry_msgs::PoseStamped>("move_base_simple/goal", 10);
 
 void apoc::egocmd_cb(){
 
