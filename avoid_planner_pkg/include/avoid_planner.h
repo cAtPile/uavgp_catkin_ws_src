@@ -35,7 +35,7 @@ private:
     // 回调函数
     void goalDataCallback(const apoc_msgs::apoc_setgoal_pose::ConstPtr& msg);
     void goalActionCallback(const std_msgs::Bool::ConstPtr& msg);
-
+    
     // 路径规划执行函数
     void executePlanner();
 
@@ -52,6 +52,7 @@ private:
     // 内部状态
     LocalPlanner local_planner_;       // 复用已有本地规划器
     Eigen::Vector3f current_goal_;     // 当前目标点
+    geometry_msgs::PoseStamped current_pose;//当前位置
     bool has_new_goal_ = false;        // 是否有新目标点
     bool start_planning_ = false;      // 是否开始规划（由action触发）
 };
