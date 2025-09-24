@@ -10,7 +10,7 @@
   <param name="apoc_pkg/landing_timeout" type="double" value="10" />
 
   <!--追踪参数-->
-  <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.005" />
+  <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.0025" />
   <param name="apoc_pkg/trace_target_center_x" type="double" value="320.0" />
   <param name="apoc_pkg/trace_target_center_y" type="double" value="320.0" />
   <param name="apoc_pkg/trace_tolerance" type="double" value="20.0" />
