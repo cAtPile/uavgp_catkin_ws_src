@@ -18,14 +18,19 @@
 #include <mavros_msgs/CommandBool.h>//arm
 #include <mavros_msgs/SetMode.h>//mode
 #include <mavros_msgs/State.h>//状态
+#include <mavros_msgs/Trajectory.h>
 #include <tf2/LinearMath/Quaternion.h>//四元数
 #include <tf2/LinearMath/Matrix3x3.h>//rpy
 #include <geometry_msgs/TwistStamped.h>//mav速度
+
+#include <sensor_msgs/LaserScan.h>
 
 #include <apoc_pkg/detection_data.h>//检测
 
 #include <vector>
 #include <cmath>
+
+#include <std_msgs/Bool.h>
 
 class apoc{
 private:
@@ -99,8 +104,7 @@ private:
     ros::Publisher local_vel_pub;  // 速度指令发布器
     ros::Publisher detection_action_pub;//识别使能
     ros::Publisher goal_pub;
-    ros::Publisher local_pos_pub;
-    ros::Publisher local_vel_pub;
+
     ros::Publisher mav_trajectory_sub;
     ros::Publisher mav_obstacle_sub;
 
