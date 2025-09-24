@@ -12,8 +12,8 @@
   <!--追踪参数-->
   <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.005" />
   <param name="apoc_pkg/trace_target_center_x" type="double" value="320.0" />
-  <param name="apoc_pkg/trace_target_center_y" type="double" value="320.0" />
-  <param name="apoc_pkg/trace_tolerance" type="double" value="20.0" />
+  <param name="apoc_pkg/trace_target_center_y" type="double" value="240.0" />
+  <param name="apoc_pkg/trace_tolerance" type="double" value="00.0" />
   <param name="apoc_pkg/trace_timeout" type="double" value="60.0" />
 
   <!-- PID参数：X轴 -->
