@@ -8,28 +8,37 @@ CostCalculator::CostCalculator() :
     histogram_updated_(false), is_updated_(false),safety_distance_(1.0), 
     max_sensor_range_(50.0),obstacle_weight_(0.5), goal_weight_(0.3),  
     smoothness_weight_(0.2),goal_azimuth_(0.0), goal_elevation_(0.0) {
+}
 
-    }
-
+//设置直方图
 void CostCalculator::setHistogram(const PolarHistogram& histogram){
+    
     std::lock_guardstd::mutex lock (data_mutex_);
     histogram_ = histogram;
     histogram_updated_ = true;
+    
     // 同步成本矩阵与直方图的网格尺寸
     cost_matrix_.num_azimuth_bins = histogram.num_azimuth_bins;
     cost_matrix_.num_elevation_bins = histogram.num_elevation_bins;
     cost_matrix_.data.resize (histogram.num_azimuth_bins,std::vector<double>(histogram.num_elevation_bins, 0.0));
+    
     // 更新最大感知距离（与直方图匹配）
     max_sensor_range_ = histogram_.data [0][0] == INFINITY ? 50.0 : max_sensor_range_;
+
 }
 
+//设置目标点
 void CostCalculator::setGoal(const Eigen::Vector3d& goal) {
+    
     std::lock_guardstd::mutex lock(data_mutex_);goal_ = goal;
+    
     // 计算目标相对于机体坐标系的方向角（需结合当前位置）
     Eigen::Vector3d goal_dir = goal_ - robot_position_;
+    
+    // 目标过近时无需计算方向
     if (goal_dir.norm () < 1e-3) { 
-        // 目标过近时无需计算方向
-        goal_azimuth_ = 0.0;goal_elevation_ = 0.0;return;
+        goal_azimuth_ = 0.0;goal_elevation_ = 0.0;
+        return;
     }
 
     // 计算方位角（绕 z 轴，x 正方向为 0，逆时针为正）
@@ -39,16 +48,21 @@ void CostCalculator::setGoal(const Eigen::Vector3d& goal) {
     // 计算仰角（与 xy 平面的夹角，向上为正）
     double horizontal_dist = std::sqrt (goal_dir.x ()*goal_dir.x () + goal_dir.y ()*goal_dir.y ());
     goal_elevation_ = std::atan2 (goal_dir.z (), horizontal_dist);
-    +// 裁剪仰角到直方图范围（防止目标超出传感器视场）
+    
+    // 裁剪仰角到直方图范围（防止目标超出传感器视场）
     goal_elevation_ = std::max (histogram_.min_elevation,std::min (histogram_.max_elevation, goal_elevation_));
 }
 
+//机体速度和位置
 void CostCalculator::setRobotState(const Eigen::Vector3d& position, const Eigen::Vector3d& velocity) {
     std::lock_guardstd::mutex lock(data_mutex_);
     robot_position_ = position;
     robot_velocity_ = velocity;
 }
+
+//计算成本
 bool CostCalculator::computeCostMatrix() {
+   
     std::lock_guardstd::mutex lock(data_mutex_);
 
     // 检查输入数据有效性
@@ -86,21 +100,25 @@ bool CostCalculator::computeCostMatrix() {
     return true;
 }
 
+//只读成本矩阵
 const CostMatrix& CostCalculator::getCostMatrix() const {
     std::lock_guardstd::mutex lock(data_mutex_);
     return cost_matrix_;
 }
 
+//更新
 bool CostCalculator::isUpdated() const {
     std::lock_guardstd::mutex lock(update_mutex_);
     return is_updated_;
 }
 
+//重置更新
 void CostCalculator::resetUpdatedFlag() {
     std::lock_guardstd::mutex lock(update_mutex_);
     is_updated_ = false;
 }
 
+//
 void CostCalculator::setParameters(double safety_distance, double obstacle_weight,
     double goal_weight, double smoothness_weight) {
         std::lock_guardstd::mutex lock (data_mutex_);

@@ -15,13 +15,13 @@ PointcloudProcessor::PointcloudProcessor(ros::NodeHandle& nh) :
     nh_.param<double>("max_sensor_range", max_sensor_range_, 50.0);//最大探测范围
     nh_.param<double>("min_sensor_range", min_sensor_range_, 0.5);//最小探测范围
     nh_.param<double>("voxel_grid_size", voxel_grid_size_, 0.1);
-    nh_.param<int>("statistical_filter_mean_k", statistical_filter_mean_k_, 10);
-    nh_.param<double>("statistical_filter_std_dev", statistical_filter_std_dev_, 0.1);
+    nh_.param<int>("statistical_filter_mean_k", statistical_filter_mean_k_, 10);//统计滤波的邻域点数量
+    nh_.param<double>("statistical_filter_std_dev", statistical_filter_std_dev_, 0.1);//统计滤波标准差阈值
     nh_.param<std::string>("lidar_frame_id", lidar_frame_id_, "mid360_link");
     nh_.param<std::string>("body_frame_id", body_frame_id_, "base_link");
     
     // 订阅点云话题
-    pointcloud_sub_ = nh_.subscribe("/mid360/points", 10, //WRAN
+    pointcloud_sub_ = nh_.subscribe("/mid360/points", 10, //待修改
                                    &PointcloudProcessor::pointcloudCallback, this);
     
     ROS_INFO("PointcloudProcessor initialized with parameters:");
@@ -32,26 +32,32 @@ PointcloudProcessor::PointcloudProcessor(ros::NodeHandle& nh) :
     ROS_INFO("  body_frame_id: %s", body_frame_id_.c_str());
 }
 
+//直方图只读
 const PolarHistogram& PointcloudProcessor::getHistogram() const {
     std::lock_guard<std::mutex> lock(histogram_mutex_);
     return histogram_;
 }
 
+//更新检测
 bool PointcloudProcessor::isUpdated() const {
     std::lock_guard<std::mutex> lock(updated_mutex_);
     return is_updated_;
 }
 
+//重置直方图更新
 void PointcloudProcessor::resetUpdatedFlag() {
     std::lock_guard<std::mutex> lock(updated_mutex_);
     is_updated_ = false;
 }
 
+//点云回调
 void PointcloudProcessor::pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
+    
     // 将ROS点云消息转换为PCL点云
     pcl::PointCloud<pcl::PointXYZ> raw_cloud;
     pcl::fromROSMsg(*msg, raw_cloud);
     
+    //是否为空殿宇
     if (raw_cloud.empty()) {
         ROS_WARN_THROTTLE(1.0, "Received empty pointcloud");
         return;
@@ -61,6 +67,7 @@ void PointcloudProcessor::pointcloudCallback(const sensor_msgs::PointCloud2::Con
     pcl::PointCloud<pcl::PointXYZ> filtered_cloud;
     filterPointcloud(raw_cloud, filtered_cloud);
     
+    //过滤后是否为空
     if (filtered_cloud.empty()) {
         ROS_DEBUG_THROTTLE(1.0, "Filtered pointcloud is empty");
         return;
@@ -73,6 +80,7 @@ void PointcloudProcessor::pointcloudCallback(const sensor_msgs::PointCloud2::Con
         return;
     }
     
+    //机体坐标系点云是否为空
     if (body_cloud.empty()) {
         ROS_DEBUG_THROTTLE(1.0, "Pointcloud is empty after transformation");
         return;
@@ -93,8 +101,10 @@ void PointcloudProcessor::pointcloudCallback(const sensor_msgs::PointCloud2::Con
     }
 }
 
+//点云过滤
 void PointcloudProcessor::filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& input, 
                                           pcl::PointCloud<pcl::PointXYZ>& output) {
+    
     pcl::PointCloud<pcl::PointXYZ> temp_cloud;
     
     // 1. 距离滤波 - 移除超出传感器范围的点
@@ -104,6 +114,7 @@ void PointcloudProcessor::filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>&
     pass_filter.setFilterLimits(-max_sensor_range_, max_sensor_range_);
     pass_filter.filter(temp_cloud);
     
+    //是否空
     if (temp_cloud.empty()) {
         output = temp_cloud;
         return;
@@ -115,6 +126,7 @@ void PointcloudProcessor::filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>&
     voxel_filter.setLeafSize(voxel_grid_size_, voxel_grid_size_, voxel_grid_size_);
     voxel_filter.filter(temp_cloud);
     
+    //
     if (temp_cloud.empty()) {
         output = temp_cloud;
         return;
@@ -128,6 +140,7 @@ void PointcloudProcessor::filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>&
     stat_filter.filter(output);
 }
 
+//坐标系转换
 bool PointcloudProcessor::transformToBodyFrame(const pcl::PointCloud<pcl::PointXYZ>& input, 
                                              pcl::PointCloud<pcl::PointXYZ>& output) {
     try {
@@ -149,7 +162,9 @@ bool PointcloudProcessor::transformToBodyFrame(const pcl::PointCloud<pcl::PointX
     }
 }
 
+//创建直方图
 void PointcloudProcessor::generatePolarHistogram(const pcl::PointCloud<pcl::PointXYZ>& cloud) {
+    
     std::lock_guard<std::mutex> lock(histogram_mutex_);
     
     // 重置直方图数据为无穷大(表示无障碍物)
@@ -175,6 +190,7 @@ void PointcloudProcessor::generatePolarHistogram(const pcl::PointCloud<pcl::Poin
     }
 }
 
+//逐点更新直方图
 void PointcloudProcessor::updateHistogramFromPoint(double x, double y, double z) {
     // 计算距离
     double distance = std::sqrt(x*x + y*y + z*z);
@@ -203,6 +219,7 @@ void PointcloudProcessor::updateHistogramFromPoint(double x, double y, double z)
     }
 }
 
+//映射直方图
 int PointcloudProcessor::angleToBinIndex(double angle, double min_angle, 
                                         double max_angle, size_t num_bins) {
     // 确保角度在范围内
