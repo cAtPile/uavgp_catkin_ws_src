@@ -118,34 +118,37 @@ void CostCalculator::resetUpdatedFlag() {
     is_updated_ = false;
 }
 
-//
+//权重设置
 void CostCalculator::setParameters(double safety_distance, double obstacle_weight,
-    double goal_weight, double smoothness_weight) {
-        std::lock_guardstd::mutex lock (data_mutex_);
-        safety_distance_ = std::max (0.1, safety_distance); 
-        // 安全距离最小
-        0.1mobstacle_weight_ = std::max (0.0, std::min (1.0, obstacle_weight));
-        goal_weight_ = std::max (0.0, std::min (1.0, goal_weight));
-        smoothness_weight_ = std::max (0.0, std::min (1.0, smoothness_weight));
+    double goal_weight, double smoothness_weight) 
+    {
+    std::lock_guardstd::mutex lock (data_mutex_);
+    safety_distance_ = std::max (0.1, safety_distance); 
+        
+    // 安全距离最小0.1m
+    obstacle_weight_ = std::max (0.0, std::min (1.0, obstacle_weight));
+    goal_weight_ = std::max (0.0, std::min (1.0, goal_weight));
+    smoothness_weight_ = std::max (0.0, std::min (1.0, smoothness_weight));
 
-        // 确保权重和为 1（归一化）
-        double total_weight = obstacle_weight_ + goal_weight_ + smoothness_weight_;
-        if (total_weight < 1e-3) {
-            obstacle_weight_ = 1.0;
-            goal_weight_ = 0.0;
-            smoothness_weight_ = 0.0;
-            ROS_WARN ("Cost weights sum to zero, resetting to obstacle-only weight");
-        } else {
-            obstacle_weight_ /= total_weight;
-            goal_weight_ /= total_weight;
-            smoothness_weight_ /= total_weight;
-        }
-
-        ROS_INFO("Cost calculator parameters updated:");
-        ROS_INFO(" safety_distance: %.2f m", safety_distance_);
-        ROS_INFO(" weights (obstacle: %.2f, goal: %.2f, smoothness: %.2f)",obstacle_weight_, goal_weight_, smoothness_weight_);
+    // 确保权重和为 1（归一化）
+    double total_weight = obstacle_weight_ + goal_weight_ + smoothness_weight_;
+    if (total_weight < 1e-3) {
+        obstacle_weight_ = 1.0;
+        goal_weight_ = 0.0;
+        smoothness_weight_ = 0.0;
+        ROS_WARN ("Cost weights sum to zero, resetting to obstacle-only weight");
+    } else {
+        obstacle_weight_ /= total_weight;
+        goal_weight_ /= total_weight;
+        smoothness_weight_ /= total_weight;
     }
 
+    ROS_INFO("Cost calculator parameters updated:");
+    ROS_INFO(" safety_distance: %.2f m", safety_distance_);
+    ROS_INFO(" weights (obstacle: %.2f, goal: %.2f, smoothness: %.2f)",obstacle_weight_, goal_weight_, smoothness_weight_);
+}
+
+//导航成本
 double CostCalculator::calculateDirectionCost (double azimuth, double elevation,size_t bin_az, size_t bin_el) {
     
     // 1. 计算障碍物距离成本
@@ -163,6 +166,7 @@ double CostCalculator::calculateDirectionCost (double azimuth, double elevation,
     return total_cost;
 }
 
+//障碍物成本
 double CostCalculator::obstacleDistanceCost (double distance) {
     if (distance == INFINITY || distance > max_sensor_range_) {
         // 无障碍物或超出感知范围，成本为 0
@@ -177,6 +181,7 @@ double CostCalculator::obstacleDistanceCost (double distance) {
     return std::max (0.0, std::min (1.0, cost));
 }
 
+//目标成本
 double CostCalculator::goalDirectionCost (double azimuth, double elevation) {
     // 计算当前方向与目标方向的角度差（方位角 + 仰角）
     double az_diff = std::abs (normalizeAngle (azimuth - goal_azimuth_));
@@ -194,6 +199,7 @@ double CostCalculator::goalDirectionCost (double azimuth, double elevation) {
     return std::max (0.0, std::min (1.0, goal_cost));
 }
 
+//平滑成本
 double CostCalculator::smoothnessCost (double azimuth, double elevation) {
     // 若当前速度过小，平滑性成本为 0（无需考虑运动连续性）
     if (robot_velocity_.norm () < 0.1) {
@@ -214,6 +220,7 @@ double CostCalculator::smoothnessCost (double azimuth, double elevation) {
     return std::max(0.0, std::min(1.0, smooth_cost));
 }
 
+//平滑成本矩阵
 void CostCalculator::smoothCostMatrix () {
     // 3x3 滑动窗口平滑（忽略边界网格，避免越界）
     const int window_size = 3;
@@ -246,6 +253,7 @@ void CostCalculator::smoothCostMatrix () {
     }
 }
 
+//？
 Eigen::Vector3d CostCalculator::anglesToDirectionVector (double azimuth, double elevation) {
     Eigen::Vector3d dir;
     // 极坐标转笛卡尔坐标（机体坐标系：x 前，y 右，z 上）
