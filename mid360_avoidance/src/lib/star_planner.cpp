@@ -108,7 +108,7 @@ PathResult StarPlanner::searchPath() {
         StarNode current_node = search_tree_[current_idx];
         
         // 检查是否到达目标
-        if (is接近Goal(current_node.position)) {
+        if (isreachGoal(current_node.position)) {
             goal_node_index = current_idx;
             goal_found = true;
             break;
@@ -167,7 +167,7 @@ PathResult StarPlanner::searchPath() {
             }
             
             // 检查子节点是否到达目标
-            if (is接近Goal(child_pos)) {
+            if (isreachGoal(child_pos)) {
                 goal_node_index = child_idx;
                 goal_found = true;
                 break;
@@ -348,7 +348,7 @@ std::vector<Eigen::Vector3d> StarPlanner::backtrackPath(size_t goal_node_index) 
     return path;
 }
 
-bool StarPlanner::is接近Goal(const Eigen::Vector3d& node_position) {
+bool StarPlanner::isreachGoal(const Eigen::Vector3d& node_position) {
     double distance = calculateDistance(node_position, goal_position_);
     return distance <= goal_tolerance_;
 }
