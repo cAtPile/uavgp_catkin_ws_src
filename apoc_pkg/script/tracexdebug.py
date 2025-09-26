@@ -1,37 +1,49 @@
 #!/usr/bin/env python3
 import rospy
-import math  # 用于计算圆坐标
+import math  
 from apoc_pkg.msg import detection_data
+from geometry_msgs.msg import PoseStamped  # 导入位置消息类型
 
 '''
-向'/detection/data'持续发布
-目标沿以(320, 320)为中心、半径21像素的圆运动
+向'/detection/data'发布
+一个虚拟的目标点（1,1）相对无人机的位置信息
 '''
+
+# 全局变量存储当前位置和比例系数
+current_x = 0.0
+current_y = 0.0
+vl_ratio = 1.0  # 比例系数，可根据需要调整
+
+def pose_callback(pose_msg):
+    """位置回调函数，更新无人机当前位置"""
+    global current_x, current_y
+    current_x = pose_msg.pose.position.x
+    current_y = pose_msg.pose.position.y
 
 def simple_publisher():
     rospy.init_node('circular_detection_pub')
+    # 订阅无人机本地位置话题
+    rospy.Subscriber("/mavros/local_position/pose", PoseStamped, pose_callback)
     pub = rospy.Publisher('/detection/data', detection_data, queue_size=10)
     rate = rospy.Rate(10)  # 10Hz发布频率
     
-    # 圆参数配置
-    center_x = 320.0       # 圆心X坐标
-    center_y = 320.0       # 圆心Y坐标
-    radius = 21.0          # 圆半径（像素）
-    angle = 0.0            # 初始角度（弧度）
-    angle_step = 0.1       # 每次循环的角度增量（控制移动速度，值越大越快）
+    # 虚拟目标参数配置
+    fake_goal_x = 1.0
+    fake_goal_y = 1.0
+    
+    # 初始化角度相关变量（如果不需要可以删除）
+    angle = 0.0
+    angle_step = 0.1  # 角度步长，控制变化速度
     
     while not rospy.is_shutdown():
         msg = detection_data()
         msg.detection_id = 1  # 强制有目标
-        
-        # 计算圆上的坐标
-        msg.detection_x = center_x + radius * math.cos(angle)
-        msg.detection_y = center_y + radius * math.sin(angle)
-        
-        # 更新角度
-        angle += angle_step
-        if angle >= 2 * math.pi:
-            angle = 0.0
+
+        # 计算相对目标位置并乘以比例系数
+        v_x = fake_goal_x - current_x
+        v_y = fake_goal_y - current_y
+        msg.detection_x = v_x * vl_ratio
+        msg.detection_y = v_y * vl_ratio
         
         # 发布消息并打印日志
         pub.publish(msg)
