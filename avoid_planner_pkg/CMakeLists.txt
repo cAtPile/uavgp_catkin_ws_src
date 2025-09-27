@@ -102,9 +102,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES avoid_planner_pkg
-#  CATKIN_DEPENDS roscpp rospy
+  INCLUDE_DIRS include
+  LIBRARIES avoid_planner_lib
+  CATKIN_DEPENDS roscpp rospy
 #  DEPENDS system_lib
 )
 
@@ -115,14 +115,19 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+ include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/avoid_planner_pkg.cpp
-# )
+add_library(avoid_planner_lib
+  src/lib/cost_calculator.cpp
+  src/lib/local_planner.cpp
+  src/lib/mavros_interface.cpp
+  src/lib/pointcloude_processor.cpp
+  src/lib/star_planner.cpp
+  src/lib/utils.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -203,3 +208,16 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+target_link_libraries(avoid_planner_lib
+  ${catkin_LIBRARIES}
+)
+
+add_executable(test_node
+  src/pc_test.cpp
+)
+
+target_link_libraries(test_node
+  avoid_planner_lib
+  ${catkin_LIBRARIES}
+)
