@@ -8,10 +8,10 @@
 #include <Eigen/Dense>
 #include <memory>
 #include <mutex>
-#include "mid360_avoidance/pointcloud_processor.h"
-#include "mid360_avoidance/cost_calculator.h"
-#include "mid360_avoidance/star_planner.h"
-#include "mid360_avoidance/mavros_interface.h"
+#include "avoid_planner_pkg/pointcloud_processor.h"
+#include "avoid_planner_pkg/cost_calculator.h"
+#include "avoid_planner_pkg/star_planner.h"
+#include "avoid_planner_pkg/mavros_interface.h"
 
 namespace mid360_avoidance {
 

@@ -10,6 +10,8 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  geometry_msgs  
+  pcl_ros        
 )
 
 ## System dependencies are found with CMake's conventions

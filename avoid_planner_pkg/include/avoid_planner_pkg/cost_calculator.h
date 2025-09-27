@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>
 #include <mutex>
-#include "mid360_avoidance/pointcloud_processor.h"
+#include "avoid_planner_pkg/pointcloud_processor.h"
 
 namespace mid360_avoidance {
 
