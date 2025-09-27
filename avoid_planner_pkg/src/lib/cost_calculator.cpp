@@ -1,5 +1,5 @@
-#include "mid360_avoidance/cost_calculator.h" 
-#include "mid360_avoidance/utils.h" 
+#include "avoid_planner_pkg/cost_calculator.h" 
+#include "avoid_planner_pkg/utils.h" 
 #include <mutex>          // 用于线程同步的互斥锁
 #include <ros/ros.h>      // ROS相关功能
 #include <Eigen/Dense>    // Eigen矩阵矩阵运算

@@ -213,11 +213,11 @@ target_link_libraries(avoid_planner_lib
   ${catkin_LIBRARIES}
 )
 
-add_executable(test_node
-  src/pc_test.cpp
+add_executable(pcp_test_node
+  src/test/pc_test.cpp
 )
 
-target_link_libraries(test_node
+target_link_libraries(pcp_test_node
   avoid_planner_lib
   ${catkin_LIBRARIES}
 )

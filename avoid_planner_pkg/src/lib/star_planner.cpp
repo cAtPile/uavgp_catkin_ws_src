@@ -1,5 +1,5 @@
-#include "mid360_avoidance/star_planner.h"
-#include "mid360_avoidance/utils.h"
+#include "avoid_planner_pkg/star_planner.h"
+#include "avoid_planner_pkg/utils.h"
 #include <cmath>
 #include <queue>
 #include <algorithm>

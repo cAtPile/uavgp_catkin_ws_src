@@ -1,5 +1,5 @@
-#include "mid360_avoidance/local_planner.h"
-#include "mid360_avoidance/utils.h"
+#include "avoid_planner_pkg/local_planner.h"
+#include "avoid_planner_pkg/utils.h"
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <nav_msgs/Path.h>

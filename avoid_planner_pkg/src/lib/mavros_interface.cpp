@@ -1,5 +1,5 @@
-#include "mid360_avoidance/mavros_interface.h"
-#include "mid360_avoidance/utils.h"
+#include "avoid_planner_pkg/mavros_interface.h"
+#include "avoid_planner_pkg/utils.h"
 #include <tf2/LinearMath/Quaternion.h>
 #include <mavros_msgs/CommandBool.h>
 #include <std_msgs/Float64.h>
