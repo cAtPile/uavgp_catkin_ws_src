@@ -12,6 +12,7 @@
 #include "avoid_planner_pkg/cost_calculator.h"
 #include "avoid_planner_pkg/star_planner.h"
 #include "avoid_planner_pkg/mavros_interface.h"
+#include <ros/timer.h>  // 让编译器认识 ros::TimerEvent 类型
 
 namespace mid360_avoidance {
 
@@ -83,7 +84,7 @@ private:
     /**
      * @brief 规划器主循环函数
      */
-    void plannerLoop();
+    void plannerLoop(const ros::TimerEvent& event);
     
     /**
      * @brief 从全局路径中获取局部目标点

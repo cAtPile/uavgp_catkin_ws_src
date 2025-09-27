@@ -151,7 +151,7 @@ private:
      * @param node_position 节点位置
      * @return 若接近目标返回true
      */
-    bool is接近Goal(const Eigen::Vector3d& node_position);
+    bool isreachGoal(const Eigen::Vector3d& node_position);
     
     /**
      * @brief 平滑路径，减少抖动

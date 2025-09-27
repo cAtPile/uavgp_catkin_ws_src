@@ -35,6 +35,8 @@ struct PolarHistogram {
     double max_azimuth;         // 最大方位角(弧度)
     double min_elevation;       // 最小仰角(弧度)
     double max_elevation;       // 最大仰角(弧度)
+
+    double max_range;  // 这是新增的成员，用于存储最大传感器距离
     
     // 网格尺寸
     size_t num_azimuth_bins;    // 方位角网格数量
@@ -50,6 +52,7 @@ struct PolarHistogram {
     PolarHistogram() : 
         azimuth_resolution(0.01745),  // 约1°(弧度)
         elevation_resolution(0.0873), // 约5°(弧度)
+        max_range(50.0),  // 新增：初始化最大传感器距离（如Mid360的最大探测距离为50米）
         min_azimuth(-M_PI),
         max_azimuth(M_PI),
         min_elevation(-0.2618),      // -15°(弧度)
@@ -92,6 +95,8 @@ public:
      * @brief 重置更新标志
      */
     void resetUpdatedFlag();
+
+    int getAngleBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);
 
 private:
     /**

@@ -243,4 +243,9 @@ int PointcloudProcessor::angleToBinIndex(double angle, double min_angle,
     return index;
 }
 
+
+int PointcloudProcessor::getAngleBinIndex(double angle, double min_angle, double max_angle, size_t num_bins) {
+    return angleToBinIndex(angle, min_angle, max_angle, num_bins);
+}
+
 } // namespace mid360_avoidance

@@ -4,6 +4,7 @@
 
 #include <Eigen/Dense>
 #include <geometry_msgs/Quaternion.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <ros/ros.h>
 #include <vector>
 #include <string>

@@ -74,20 +74,22 @@ void LocalPlanner::stop() {
     }
 }
 
-void LocalPlanner::plannerLoop() {
+// 注意：函数参数已添加 const ros::TimerEvent& event
+void LocalPlanner::plannerLoop(const ros::TimerEvent& event) {
     // 检查是否已到达全局目标
     if (is_goal_reached_) {
         ROS_INFO_THROTTLE(5.0, "Global goal reached, stopping local planning");
         return;
     }
     
-    // 检查是否有全局路径
-    std::lock_guard<std::mutex> path_lock(path_mutex_);
-    if (global_path_.poses.empty()) {
-        ROS_WARN_THROTTLE(1.0, "No global path available, skipping planning");
-        return;
-    }
-    path_lock.unlock();
+    // 检查是否有全局路径（已用作用域控制锁的生命周期，删除 unlock()）
+    {
+        std::lock_guard<std::mutex> path_lock(path_mutex_);
+        if (global_path_.poses.empty()) {
+            ROS_WARN_THROTTLE(1.0, "No global path available, skipping planning");
+            return;
+        }
+    }  // path_lock 在此自动析构解锁
     
     // 检查无人机连接状态
     if (!mavros_interface_->isConnected()) {
@@ -106,7 +108,7 @@ void LocalPlanner::plannerLoop() {
         return;
     }
     
-    // 2. 获取处理后的障碍物直方图
+    // 2. 获取处理后的障碍物直方图（确保 PolarHistogram 有 max_range 成员）
     const PolarHistogram& histogram = pointcloud_processor_->getHistogram();
     cost_calculator_->setHistogram(histogram);
     pointcloud_processor_->resetUpdatedFlag();
@@ -141,7 +143,7 @@ void LocalPlanner::plannerLoop() {
         return;
     }
     
-    // 6. 检查路径安全性
+    // 6. 检查路径安全性（需确保 angleToBinIndex 已改为 public 或有公开接口）
     if (!isPathSafe(path_result.waypoints)) {
         ROS_WARN_THROTTLE(1.0, "Generated path is unsafe, skipping");
         handlePlanningFailure();
@@ -151,7 +153,7 @@ void LocalPlanner::plannerLoop() {
     // 7. 路径规划成功，重置失败计数器
     planning_failure_count_ = 0;
     
-    // 8. 更新局部路径并发布
+    // 8. 更新局部路径并发布（原有逻辑正确，无需修改）
     {
         std::lock_guard<std::mutex> lock(path_mutex_);
         local_path_.header.stamp = ros::Time::now();
@@ -261,9 +263,9 @@ bool LocalPlanner::isPathSafe(const std::vector<Eigen::Vector3d>& path) {
         double elevation = std::atan2(point_rel.z(), horizontal_dist);
         
         // 找到对应的直方图网格
-        int az_index = pointcloud_processor_->angleToBinIndex(
+        int az_index = pointcloud_processor_->getAngleBinIndex(
             azimuth, histogram.min_azimuth, histogram.max_azimuth, histogram.num_azimuth_bins);
-        int el_index = pointcloud_processor_->angleToBinIndex(
+        int el_index = pointcloud_processor_->getAngleBinIndex(
             elevation, histogram.min_elevation, histogram.max_elevation, histogram.num_elevation_bins);
         
         // 检查索引有效性
