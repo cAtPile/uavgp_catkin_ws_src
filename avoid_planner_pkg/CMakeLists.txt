@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
 )
 find_package(Eigen3 REQUIRED)  # 先查找 Eigen3
 find_package(OpenCV REQUIRED)  # 后查找 OpenCV
-find_package(PCL REQUIRED)     # 若使用 PCL，需添加
 
 # 2. 声明 catkin 包信息
 catkin_package(
