@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 #include <opencv2/opencv.hpp>  // OpenCV库，用于生成与保存直方图图像
 #include <opencv2/core/eigen.hpp>  // OpenCV与Eigen数据转换
-#include "mid360_avoidance/pointcloud_processor.h"  // 引入点云处理器类
+#include "avoid_planner_pkg/pointcloud_processor.h"  // 引入点云处理器类
 #include <chrono>  // 用于控制图像保存频率
 #include <iostream>
 
