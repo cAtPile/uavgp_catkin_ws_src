@@ -13,7 +13,105 @@ mid360_avoidance::PointcloudProcessor* processor_ptr = nullptr;
  * @param save_path 图像保存路径（默认保存在当前工作目录）
  * @return 布尔值：true表示图像生成并保存成功，false表示失败
  */
-bool visualizeHistogram(const std::string& save_path = "./histogram_visualization.png") {
+bool visualizeHistogram(const std:#include "avoid_planner_pkg/pointcloud_processor.h"
+#include "avoid_planner_pkg/utils.h"
+#include <ros/ros.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <cmath>
+#include <limits>
+#include <iomanip>
+
+// 测试函数：打印直方图统计信息
+void printHistogramStats(const mid360_avoidance::PolarHistogram& hist) {
+    int obstacle_count = 0;
+    double min_dist = std::numeric_limits<double>::infinity();
+    double max_dist = 0.0;
+    double total_dist = 0.0;
+
+    // 遍历直方图统计障碍物信息
+    for (const auto& az_bin : hist.data) {
+        for (double dist : az_bin) {
+            if (dist != std::numeric_limits<double>::infinity()) {
+                obstacle_count++;
+                total_dist += dist;
+                if (dist < min_dist) min_dist = dist;
+                if (dist > max_dist) max_dist = dist;
+            }
+        }
+    }
+
+    ROS_INFO_STREAM("Histogram statistics:");
+    ROS_INFO_STREAM("  Bins: " << hist.num_azimuth_bins << " (azimuth) x " 
+                   << hist.num_elevation_bins << " (elevation)");
+    ROS_INFO_STREAM("  Angle range: Azimuth [" << hist.min_azimuth << ", " << hist.max_azimuth 
+                   << "], Elevation [" << hist.min_elevation << ", " << hist.max_elevation << "]");
+    ROS_INFO_STREAM("  Detected obstacles: " << obstacle_count);
+    
+    if (obstacle_count > 0) {
+        ROS_INFO_STREAM("  Distance stats - Min: " << std::fixed << std::setprecision(2) << min_dist 
+                       << "m, Max: " << max_dist << "m, Avg: " << (total_dist/obstacle_count) << "m");
+    }
+}
+
+// 主函数
+int main(int argc, char**argv) {
+    // 初始化ROS节点
+    ros::init(argc, argv, "pcp_test_node");
+    ros::NodeHandle nh("~");
+    
+    try {
+        // 创建PointcloudProcessor实例
+        mid360_avoidance::PointcloudProcessor processor(nh);
+        ROS_INFO("Successfully created PointcloudProcessor instance");
+
+        // 等待点云数据更新
+        ROS_INFO("Waiting for pointcloud data... (timeout after 30 seconds)");
+        ros::Time start_time = ros::Time::now();
+        bool received_data = false;
+        
+        while (ros::ok() && (ros::Time::now() - start_time).toSec() < 30.0) {
+            if (processor.isUpdated()) {
+                received_data = true;
+                ROS_INFO("Received and processed pointcloud data");
+                
+                // 获取并打印直方图统计信息
+                const auto& histogram = processor.getHistogram();
+                printHistogramStats(histogram);
+                
+                // 重置更新标志
+                processor.resetUpdatedFlag();
+                break;
+            }
+            ros::spinOnce();
+            ros::Duration(0.1).sleep();
+        }
+        
+        if (!received_data) {
+            ROS_WARN("Timeout waiting for pointcloud data");
+        }
+        
+        // 保持节点运行以继续接收数据
+        ROS_INFO("Entering main loop. Press Ctrl+C to exit.");
+        ros::Rate rate(10); // 10Hz
+        while (ros::ok()) {
+            if (processor.isUpdated()) {
+                ROS_INFO("Pointcloud updated");
+                processor.resetUpdatedFlag();
+            }
+            ros::spinOnce();
+            rate.sleep();
+        }
+        
+    } catch (const std::exception& e) {
+        ROS_ERROR_STREAM("Error in pointcloud processor test: " << e.what());
+        return 1;
+    }
+    
+    ROS_INFO("Exiting pointcloud processor test node");
+    return 0;
+}
+:string& save_path = "./histogram_visualization.png") {
     if (processor_ptr == nullptr) {
         ROS_ERROR("PointcloudProcessor pointer is null!");
         return false;
