@@ -136,7 +136,10 @@ void CostCalculator::resetUpdatedFlag() {
 }
 
 // 设置成本计算参数（权重和安全距离）
-void CostCalculator::setParameters(double safety_distance, double obstacle_weight,
+void CostCalculator::set
+
+
+eters(double safety_distance, double obstacle_weight,
                                  double goal_weight, double smoothness_weight) {
     std::lock_guard<std::mutex> lock(data_mutex_);
     // 安全距离最小为0.1米（防止过小值）

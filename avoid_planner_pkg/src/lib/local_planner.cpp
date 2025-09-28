@@ -318,26 +318,36 @@ void LocalPlanner::loadParameters() {
     config_.path_safety_threshold = std::max(0.2, config_.path_safety_threshold);
     config_.max_failure_count = std::max(1, config_.max_failure_count);
     
-    // 配置子模块参数
-    Params params;
-    if (loadParameters(nh_, params)) {
-        // 配置成本计算器
-        cost_calculator_->setParameters(
-            params.safety_distance,
-            params.obstacle_weight,
-            params.goal_weight,
-            params.smoothness_weight
-        );
-        
-        // 配置星形规划器
-        star_planner_->setParameters(
-            params.star_max_depth,
-            params.star_max_nodes,
-            params.star_step_size,
-            params.star_goal_tolerance,
-            params.star_heuristic_weight
-        );
-    }
-}
+    // 配置子模块参数 - 使用临时变量存储
+    double safety_distance, obstacle_weight, goal_weight, smoothness_weight;
+    nh_.param<double>("safety_distance", safety_distance, 1.0);  // 添加了默认值的正确类型
+    nh_.param<double>("obstacle_weight", obstacle_weight, 0.5);
+    nh_.param<double>("goal_weight", goal_weight, 0.3);
+    nh_.param<double>("smoothness_weight", smoothness_weight, 0.2);
+
+    int star_max_depth, star_max_nodes;  // 这些应该是整数类型
+    double star_step_size, star_goal_tolerance, star_heuristic_weight;
+    nh_.param<int>("star_max_depth", star_max_depth, 5);         // 修正了参数类型
+    nh_.param<int>("star_max_nodes", star_max_nodes, 50);        // 修正了参数类型
+    nh_.param<double>("star_step_size", star_step_size, 0.5);
+    nh_.param<double>("star_goal_tolerance", star_goal_tolerance, 0.3);
+    nh_.param<double>("star_heuristic_weight", star_heuristic_weight, 1.0);
+
+
+    cost_calculator_->setParameters(
+        safety_distance,
+        obstacle_weight,
+        goal_weight,
+        smoothness_weight
+    );
+
+    star_planner_->setParameters(
+        star_max_depth,
+        star_max_nodes,
+        star_step_size,
+        star_goal_tolerance,
+        star_heuristic_weight
+    );
+} 
 
 } // namespace mid360_avoidance
