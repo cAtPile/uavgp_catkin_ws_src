@@ -139,7 +139,7 @@ void CostCalculator::resetUpdatedFlag() {
 void CostCalculator::set
 
 
-eters(double safety_distance, double obstacle_weight,
+setParameters(double safety_distance, double obstacle_weight,
                                  double goal_weight, double smoothness_weight) {
     std::lock_guard<std::mutex> lock(data_mutex_);
     // 安全距离最小为0.1米（防止过小值）
