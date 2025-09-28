@@ -47,4 +47,5 @@ target_link_libraries(pcp_test_node
   avoid_planner_lib
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES}
+  ${EIGEN3_LIBS}
 )
