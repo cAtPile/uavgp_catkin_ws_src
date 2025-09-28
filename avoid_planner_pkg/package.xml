@@ -57,7 +57,8 @@
   <exec_depend>rospy</exec_depend>
   <build_depend>geometry_msgs</build_depend>
   <exec_depend>geometry_msgs</exec_depend>
-
+  <build_depend>pcl_ros</build_depend>
+  <exec_depend>pcl_ros</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
