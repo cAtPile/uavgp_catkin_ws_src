@@ -46,5 +46,5 @@ add_executable(pcp_test_node
 target_link_libraries(pcp_test_node
   avoid_planner_lib
   ${catkin_LIBRARIES}
-    ${OpenCV_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
