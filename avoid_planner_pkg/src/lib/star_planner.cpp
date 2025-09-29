@@ -20,6 +20,7 @@ struct NodePriorityCompare {
     }
 };
 
+//构造函数
 StarPlanner::StarPlanner() : 
     has_valid_cost_matrix_(false),
     max_depth_(5), max_nodes_(50), step_size_(0.5),
@@ -27,23 +28,27 @@ StarPlanner::StarPlanner() :
     min_azimuth_(-M_PI), max_azimuth_(M_PI),
     min_elevation_(-0.2618), max_elevation_(0.2618) {}
 
+//构造成本矩阵
 void StarPlanner::setCostMatrix(const CostMatrix& cost_matrix) {
     std::lock_guard<std::mutex> lock(result_mutex_);
     cost_matrix_ = cost_matrix;
     has_valid_cost_matrix_ = true;
 }
 
+//定义起终
 void StarPlanner::setStartAndGoal(const Eigen::Vector3d& start, const Eigen::Vector3d& goal) {
     std::lock_guard<std::mutex> lock(result_mutex_);
     start_position_ = start;
     goal_position_ = goal;
 }
 
+//设置当前速度
 void StarPlanner::setCurrentVelocity(const Eigen::Vector3d& velocity) {
     std::lock_guard<std::mutex> lock(result_mutex_);
     current_velocity_ = velocity;
 }
 
+//寻找路径
 PathResult StarPlanner::searchPath() {
     std::lock_guard<std::mutex> lock(result_mutex_);
     PathResult result;
@@ -200,6 +205,7 @@ PathResult StarPlanner::searchPath() {
     return result;
 }
 
+//设置星形规划期参数
 void StarPlanner::setParameters(size_t max_depth, size_t max_nodes, double step_size,
                                double goal_tolerance, double heuristic_weight) {
     std::lock_guard<std::mutex> lock(result_mutex_);
@@ -215,16 +221,19 @@ void StarPlanner::setParameters(size_t max_depth, size_t max_nodes, double step_
     ROS_INFO("  heuristic_weight: %.2f", heuristic_weight_);
 }
 
+//获取最新路径
 const PathResult& StarPlanner::getLastPath() const {
     std::lock_guard<std::mutex> lock(result_mutex_);
     return last_path_;
 }
 
+//启发成本
 double StarPlanner::calculateHeuristic(const Eigen::Vector3d& node_position) {
     // 使用欧氏距离作为启发式成本（到目标点的直线距离）
     return calculateDistance(node_position, goal_position_);
 }
 
+//？
 bool StarPlanner::directionToCostIndices(const Eigen::Vector3d& direction,
                                         size_t& az_index, size_t& el_index) {
     // 计算方向向量的方位角和仰角
@@ -256,6 +265,7 @@ bool StarPlanner::directionToCostIndices(const Eigen::Vector3d& direction,
     return true;
 }
 
+//？
 void StarPlanner::directionToAngles(const Eigen::Vector3d& direction,
                                    double& azimuth, double& elevation) {
     // 归一化方向向量
@@ -274,6 +284,7 @@ void StarPlanner::directionToAngles(const Eigen::Vector3d& direction,
     }
 }
 
+//？
 std::vector<Eigen::Vector3d> StarPlanner::generateChildDirections(const Eigen::Vector3d& parent_direction) {
     std::vector<Eigen::Vector3d> directions;
     
@@ -332,6 +343,7 @@ std::vector<Eigen::Vector3d> StarPlanner::generateChildDirections(const Eigen::V
     return directions;
 }
 
+//？
 std::vector<Eigen::Vector3d> StarPlanner::backtrackPath(size_t goal_node_index) {
     std::vector<Eigen::Vector3d> path;
     
@@ -348,11 +360,13 @@ std::vector<Eigen::Vector3d> StarPlanner::backtrackPath(size_t goal_node_index) 
     return path;
 }
 
+//是否到达目的地
 bool StarPlanner::isreachGoal(const Eigen::Vector3d& node_position) {
     double distance = calculateDistance(node_position, goal_position_);
     return distance <= goal_tolerance_;
 }
 
+//平滑路径
 std::vector<Eigen::Vector3d> StarPlanner::smoothPath(const std::vector<Eigen::Vector3d>& path) {
     if (path.size() <= 2) {
         return path;  // 路径太短，无需平滑
