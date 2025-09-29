@@ -7,6 +7,7 @@
 
 namespace mid360_avoidance {
 
+//rpy
 Eigen::Vector3d quaternionToYaw(const geometry_msgs::Quaternion& quat) {
     // 从四元数提取RPY角
     tf2::Quaternion q(
@@ -26,11 +27,13 @@ Eigen::Vector3d quaternionToYaw(const geometry_msgs::Quaternion& quat) {
     return Eigen::Vector3d(0.0, 0.0, yaw);
 }
 
+//欧式距离
 double calculateDistance(const Eigen::Vector3d& a, const Eigen::Vector3d& b) {
     // 计算欧氏距离
     return (a - b).norm();
 }
 
+//平滑路径
 void smoothPath(std::vector<Eigen::Vector3d>& path, size_t window_size) {
     if (path.size() <= 2 || window_size < 3) {
         return;  // 路径太短或窗口太小，无需平滑
@@ -63,6 +66,7 @@ void smoothPath(std::vector<Eigen::Vector3d>& path, size_t window_size) {
     }
 }
 
+//加载参数
 bool loadParameters(ros::NodeHandle& nh, Params& params) {
     bool all_loaded = true;
     
@@ -180,6 +184,7 @@ bool loadParameters(ros::NodeHandle& nh, Params& params) {
     return all_loaded;
 }
 
+//归一化角度
 double normalizeAngle(double angle) {
     // 将角度归一化到[-π, π]范围
     while (angle > M_PI) {
@@ -191,6 +196,7 @@ double normalizeAngle(double angle) {
     return angle;
 }
 
+//设置位姿
 geometry_msgs::PoseStamped vectorToPoseStamped(const Eigen::Vector3d& position,
                                               const std::string& frame_id) {
     geometry_msgs::PoseStamped pose;
