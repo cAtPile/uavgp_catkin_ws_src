@@ -1,10 +1,11 @@
-/*
-
-
-*/
 
 #include "apoc_pkg/apoc.h"
 
+/**
+ * 带重构
+ * @brief 
+ * @details 
+ */
 bool apoc::avoidGoal(float goal_x,float goal_y,float goal_z){
     
     //临时参数
