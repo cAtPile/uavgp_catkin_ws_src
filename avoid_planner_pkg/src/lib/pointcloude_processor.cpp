@@ -45,7 +45,7 @@ bool PointcloudProcessor::isUpdated() const {
 }
 
 //重置直方图更新
-void PointcloudProcessor::resetUpdatedFlag() {
+void PointcloudProcessor::resetUpdatedFlag() const  {
     std::lock_guard<std::mutex> lock(updated_mutex_);
     is_updated_ = false;
 }
