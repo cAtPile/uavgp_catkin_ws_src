@@ -1,20 +1,25 @@
 <launch>
-  <!-- 精度参数 -->
-  <param name="apoc_pkg/connect_timeout" type="double" value="27.7" />
-  <param name="apoc_pkg/modeswitch_timeout" type="double" value="12.0" />
-  <param name="apoc_pkg/armswitch_timeout" type="double" value="10.0" />
-  <param name="apoc_pkg/fly_ab_timeout" type="double" value="30.0" />
-  <param name="apoc_pkg/reach_tolerance_distance" type="double" value="0.1" />
-  <param name="apoc_pkg/reach_tolerance_angle" type="double" value="0.1" />
-  <param name="apoc_pkg/landing_tolerance" type="double" value="0.03" />
-  <param name="apoc_pkg/landing_timeout" type="double" value="10" />
+  <!--超时参数-->
+  <param name="apoc_pkg/connect_timeout" type="double" value="27.7" />    <!--连接超时(单位：s)-->
+  <param name="apoc_pkg/modeswitch_timeout" type="double" value="12.0" /> <!--模式切换超时(单位：s)-->
+  <param name="apoc_pkg/armswitch_timeout" type="double" value="10.0" />  <!--arm/disarm超时(单位：s)-->
+  <param name="apoc_pkg/fly_ab_timeout" type="double" value="30.0" />     <!--绝对飞行超时(单位：s)-->
+  <param name="apoc_pkg/landing_timeout" type="double" value="10" />      <!--着陆超时(单位：s)--> 
+  <param name="apoc_pkg/trace_timeout" type="double" value="60.0" />      <!--追踪飞行超时(单位：s)-->
+  <param name="apoc_pkg/PID_FLIGHT_TIMEOUT" type="double" value="60.0" /> <!--PID飞行超时(单位：s) -->
+
+  <!-- 容忍值参数 -->
+  <param name="apoc_pkg/reach_tolerance_distance" type="double" value="0.1" />  <!--到达检测距离容忍值(单位：m)-->
+  <param name="apoc_pkg/reach_tolerance_angle" type="double" value="0.1" />     <!--到达检测角度容忍值(单位：弧度？待确定)-->
+  <param name="apoc_pkg/landing_tolerance" type="double" value="0.03" />        <!--着陆容忍值(单位：m)-->
+  <param name="apoc_pkg/trace_tolerance" type="double" value="20.0" />          <!--追踪容忍值(单位：像素)-->
 
   <!--追踪参数-->
-  <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.0025" />
-  <param name="apoc_pkg/trace_target_center_x" type="double" value="320.0" />
-  <param name="apoc_pkg/trace_target_center_y" type="double" value="240.0" />
-  <param name="apoc_pkg/trace_tolerance" type="double" value="00.0" />
-  <param name="apoc_pkg/trace_timeout" type="double" value="60.0" />
+  <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.0025" /><!--像素比例参数-->
+  <param name="apoc_pkg/trace_target_center_x" type="double" value="320.0" /><!--像素目标中心x-->
+  <param name="apoc_pkg/trace_target_center_y" type="double" value="240.0" /><!--像素目标中心y-->
+  <!--  <param name="apoc_pkg/trace_tolerance" type="double" value="00.0" /> 在 容忍值参数 规定-->
+  <!--  <param name="apoc_pkg/trace_timeout" type="double" value="60.0" />   在 超时参数   规定-->
 
   <!-- PID参数：X轴 -->
   <param name="apoc_pkg/PID_X_KP" type="double" value="1.0" />    <!-- 比例系数 -->
@@ -54,5 +59,6 @@
 
   <!-- PID控制频率 & 飞行超时 -->
   <param name="apoc_pkg/PID_CONTROL_RATE" type="int" value="50" />    <!-- 控制频率(Hz) -->
-  <param name="apoc_pkg/PID_FLIGHT_TIMEOUT" type="double" value="60.0" /> <!-- 飞行超时(s) -->
+  <!--  <param name="apoc_pkg/PID_FLIGHT_TIMEOUT" type="double" value="60.0" />  在 超时参数   规定 -->
+  
 </launch>
