@@ -98,6 +98,10 @@ public:
 
     int getAngleBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);
 
+    // 添加智能指针类型定义
+    typedef boost::shared_ptr<PointcloudProcessor> Ptr;
+    typedef boost::shared_ptr<const PointcloudProcessor> ConstPtr;
+
 private:
     /**
      * @brief 点云消息回调函数
