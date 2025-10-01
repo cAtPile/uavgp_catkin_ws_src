@@ -2,9 +2,6 @@
 #include "apoc_pkg/pidctrl.h"
 
 void apoc::trackSwitch() {
-    
-    //临时参数
-    float waiting_detection_timeout = 12 ;
 
     //追踪初始化
     geometry_msgs::PoseStamped trace_pose;
@@ -43,23 +40,9 @@ void apoc::trackSwitch() {
         detection_action.data = true;
         detection_action_pub.publish(detection_action);
 
-        //等待current_detection
-        if(current_detection.empty()){
-            if ((ros::Time::now() - start).toSec() < waitting_detection_timeout){
-                ROS_INFO_THROTTLE(1, "Waiting for detection data...");  // 每秒打印一次等待信息
-                continue;
-            }else{
-                ROS_WARN("Wait detection data timeout");
-                detection_action.data = false;
-                etection_action_pub.publish(detection_action);
-                break;
-            }
-            
-        }
-
         // 检查是否有有效的检测目标
         if (current_detection.detection_id == 0) {
-            ROS_WARN("No detection target available");
+            ROS_INFO_THROTTLE(1, "Waiting for detection data...");  // 每秒打印一次等待信息
             ros::spinOnce();
             rate.sleep();
             continue;
@@ -107,7 +90,6 @@ void apoc::trackSwitch() {
     //停止追踪
     detection_action.data = false;
     detection_action_pub.publish(detection_action);
-    ROS_INFO("Finsh trace");
-
+    ROS_INFO("Finish trace");
 
 }

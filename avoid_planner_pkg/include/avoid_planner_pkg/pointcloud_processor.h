@@ -94,7 +94,7 @@ public:
     /**
      * @brief 重置更新标志
      */
-    void resetUpdatedFlag() const;
+    void resetUpdatedFlag();
 
     int getAngleBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);
 

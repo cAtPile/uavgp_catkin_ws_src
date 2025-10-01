@@ -15,7 +15,7 @@
   <param name="apoc_pkg/trace_tolerance" type="double" value="10.0" />          <!--追踪容忍值(单位：像素)-->
 
   <!--追踪参数-->
-  <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.0025" /><!--像素比例参数-->
+  <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.00125" /><!--像素比例参数-->
   <param name="apoc_pkg/trace_target_center_x" type="double" value="320.0" /><!--像素目标中心x-->
   <param name="apoc_pkg/trace_target_center_y" type="double" value="240.0" /><!--像素目标中心y-->
   <!--  <param name="apoc_pkg/trace_tolerance" type="double" value="00.0" /> 在 容忍值参数 规定-->
