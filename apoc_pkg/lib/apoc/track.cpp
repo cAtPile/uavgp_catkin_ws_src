@@ -46,6 +46,7 @@ void apoc::trackSwitch() {
         //等待current_detection
         if(current_detection.empty()){
             if ((ros::Time::now() - start).toSec() < waitting_detection_timeout){
+                ROS_INFO_THROTTLE(1, "Waiting for detection data...");  // 每秒打印一次等待信息
                 continue;
             }else{
                 ROS_WARN("Wait detection data timeout");
