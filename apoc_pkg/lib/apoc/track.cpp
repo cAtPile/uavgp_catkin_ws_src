@@ -3,7 +3,10 @@
 
 void apoc::trackSwitch() {
     
-    //
+    //临时参数
+    float waiting_detection_timeout = 12 ;
+
+    //追踪初始化
     geometry_msgs::PoseStamped trace_pose;
     trace_pose.header.frame_id = "map"; 
     trace_pose.pose.position.z = 1;
@@ -29,16 +32,29 @@ void apoc::trackSwitch() {
     pid_y.reset();
     pid_x.reset();
 
-    ros::Time start = ros::Time::now();
-
-    //
+    //开始追踪
     ROS_INFO("Start trace");
+
+    ros::Time start = ros::Time::now();
 
     while (ros::ok()) {
         
-        //
+        //追踪使能
         detection_action.data = true;
         detection_action_pub.publish(detection_action);
+
+        //等待current_detection
+        if(current_detection.empty()){
+            if ((ros::Time::now() - start).toSec() < waitting_detection_timeout){
+                continue;
+            }else{
+                ROS_WARN("Wait detection data timeout");
+                detection_action.data = false;
+                etection_action_pub.publish(detection_action);
+                break;
+            }
+            
+        }
 
         // 检查是否有有效的检测目标
         if (current_detection.detection_id == 0) {
@@ -87,9 +103,10 @@ void apoc::trackSwitch() {
         }
     }
 
-    //
+    //停止追踪
     detection_action.data = false;
     detection_action_pub.publish(detection_action);
     ROS_INFO("Finsh trace");
+
 
 }
