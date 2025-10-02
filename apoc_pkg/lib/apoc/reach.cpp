@@ -1,26 +1,6 @@
-
-/*
-* file:     rach.cpp
-* name：    reachCheck
-* path：    /lib
-* describe：检查是否到达目标check_x/y/z/yaw
-* input：   check_x/y/z/yaw
-* output:   true    ->  到达
-*           false   ->  未到达
-* param:    REACH_TOLERANCE_DISTANCE,REACH_TOLERANCE_ANGLE
-* value：   
-* depend:   ros-noetic,cpp,mavros,px4,ununtu20.04,apoc.h
-* function: NONE
-* vision:   1.0
-* method:
-* info:
-*/
-
 #include "apoc_pkg/apoc.h"
 
 bool apoc::reachCheck(float check_x, float check_y, float check_z, float check_yaw) {
-
-    //互斥锁
 
     // 距离检查（位置误差）
     float dx = std::abs(current_pose.pose.position.x - check_x);
