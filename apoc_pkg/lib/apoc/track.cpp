@@ -46,10 +46,17 @@ void apoc::trackSwitch() {
             break;
         }
 
+        //读互斥锁
+        geometry_msgs::PoseStamped current_pose_copy;
+        {
+            std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
+            current_pose_copy = current_pose; // 拷贝到局部变量
+        }
+
         // 检查是否有有效的检测目标
         if (current_detection.detection_id == 0 && (ros::Time::now() - start).toSec() < trace_timeout_) {
             ROS_INFO_THROTTLE(1, "Waiting for detection data...");  // 每秒打印一次等待信息
-            local_pos_pub.publish(current_pose);
+            local_pos_pub.publish(current_pose_copy);
             ros::spinOnce();
             rate.sleep();
             continue;
@@ -94,4 +101,4 @@ void apoc::trackSwitch() {
     detection_action_pub.publish(detection_action);
     ROS_INFO("Finish trace");
 
-}
+}   

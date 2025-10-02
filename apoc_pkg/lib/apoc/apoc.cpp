@@ -116,15 +116,19 @@ apoc::apoc(): rate(20.0){
     home_pose.pose.orientation.w = 1.0;
 
     //current_pose
-    current_pose.header.frame_id = "map";
-    current_pose.pose.position.x = 0;
-    current_pose.pose.position.y = 0;
-    current_pose.pose.position.z = 0;
-    current_pose.pose.orientation.x = 0.0;
-    current_pose.pose.orientation.y = 0.0;
-    current_pose.pose.orientation.z = 0.0;
-    current_pose.pose.orientation.w = 1.0;
-
+    {
+        std::lock_guard<std::mutex> lock(current_pose_mutex_); // 写操作加锁
+        current_pose.header.frame_id = "map";
+        current_pose.pose.position.x = 0.0;
+        current_pose.pose.position.y = 0.0;
+        current_pose.pose.position.z = 0.0;
+        current_pose.pose.orientation.x = 0.0;
+        current_pose.pose.orientation.y = 0.0;
+        current_pose.pose.orientation.z = 0.0;
+        current_pose.pose.orientation.w = 1.0;
+        current_pose.header.stamp = ros::Time::now(); 
+    }
+    
     //current_detection
     current_detection.detection_id = 0 ;
     current_detection.detection_x = 0 ;

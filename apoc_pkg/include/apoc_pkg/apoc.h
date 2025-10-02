@@ -123,6 +123,7 @@ private:
     geometry_msgs::PoseStamped pose;
     geometry_msgs::PoseStamped home_pose;//home位置
     geometry_msgs::PoseStamped current_pose;//当前位置
+
     // 存储当前检测到的目标信息
     apoc_pkg::detection_data current_detection;
     std_msgs::Bool detection_action;
@@ -133,6 +134,9 @@ private:
 
     ros::Time last_request;
     ros::Rate rate;
+
+    //线程互斥锁
+    mutable std::mutex current_pose_mutex_;
 
     //回调函数
     void state_cb(const mavros_msgs::State::ConstPtr& msg);
