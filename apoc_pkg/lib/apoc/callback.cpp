@@ -8,7 +8,7 @@
 #include "apoc_pkg/apoc.h"
 
 void apoc::state_cb(const mavros_msgs::State::ConstPtr& msg){current_state = *msg;}
-void apoc::local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){current_pose = *msg;}
+/*void apoc::local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){current_pose = *msg;}*/
 void apoc::local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg) {
     std::lock_guard<std::mutex> lock(current_pose_mutex_);
     current_pose = *msg; 
