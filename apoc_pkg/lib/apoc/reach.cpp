@@ -19,6 +19,9 @@
 #include "apoc_pkg/apoc.h"
 
 bool apoc::reachCheck(float check_x, float check_y, float check_z, float check_yaw) {
+
+    //互斥锁
+
     // 距离检查（位置误差）
     float dx = std::abs(current_pose.pose.position.x - check_x);
     float dy = std::abs(current_pose.pose.position.y - check_y);

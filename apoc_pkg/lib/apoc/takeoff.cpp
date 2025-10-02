@@ -22,8 +22,15 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
         return false;
     }
 
+    //互斥锁
+    geometry_msgs::PoseStamped current_pose_copy;
+    {
+        std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
+        current_pose_copy = current_pose; // 拷贝到局部变量
+    }
+
     // 记录当前位置作为home位置
-    home_pose = current_pose;
+    home_pose = current_pose_copy;
     ROS_INFO("Home position recorded");
 
     // 计算起飞目标位置（在当前位置基础上升高到指定高度）

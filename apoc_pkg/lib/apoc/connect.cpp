@@ -31,9 +31,16 @@
 
 bool apoc::connectSwitch() {
 
+    //互斥锁
+    geometry_msgs::PoseStamped current_pose_copy;
+    {
+        std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
+        current_pose_copy = current_pose; // 拷贝到局部变量
+    }
+
     // 如果连接成功
     if (current_state.connected) {
-        local_pos_pub.publish(current_pose);
+        local_pos_pub.publish(current_pose_copy);
         return true;
     }
 
@@ -55,7 +62,7 @@ bool apoc::connectSwitch() {
     
     // 如果连接成功
     if (current_state.connected) {
-        local_pos_pub.publish(current_pose);
+        local_pos_pub.publish(current_pose_copy);
         return true;
     }
 

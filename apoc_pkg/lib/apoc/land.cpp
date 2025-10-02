@@ -19,17 +19,24 @@
 
 void apoc::landSwitch(){
 
+    //读互斥锁
+    geometry_msgs::PoseStamped current_pose_copy;
+    {
+        std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
+        current_pose_copy = current_pose; // 拷贝到局部变量
+    }
+
     // 记录当前位置作为降落的起始点
-    float land_x = current_pose.pose.position.x;
-    float land_y = current_pose.pose.position.y;
-    float current_z = current_pose.pose.position.z;
+    float land_x = current_pose_copy.pose.position.x;
+    float land_y = current_pose_copy.pose.position.y;
+    float current_z = current_pose_copy.pose.position.z;
     
     // 获取当前偏航角
     tf2::Quaternion quat(
-        current_pose.pose.orientation.x,
-        current_pose.pose.orientation.y,
-        current_pose.pose.orientation.z,
-        current_pose.pose.orientation.w
+        current_pose_copy.pose.orientation.x,
+        current_pose_copy.pose.orientation.y,
+        current_pose_copy.pose.orientation.z,
+        current_pose_copy.pose.orientation.w
     );
     tf2::Matrix3x3 mat(quat);
     double roll, pitch, land_yaw;
@@ -58,14 +65,14 @@ void apoc::landSwitch(){
             rate.sleep();
             
             // 检查是否到达当前步骤的目标高度（考虑一定容差）
-            if (fabs(current_pose.pose.position.z - step_target_z) < 0.05) {
+            if (fabs(current_pose_copy.pose.position.z - step_target_z) < 0.05) {
                 step_reached = true;
                 ROS_INFO("Reached intermediate landing altitude: %.2fm", step_target_z);
             }
         }
         
         // 更新当前高度
-        current_z = current_pose.pose.position.z;
+        current_z = current_pose_copy.pose.position.z;
         
         // 检查是否超时
         if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
@@ -76,7 +83,7 @@ void apoc::landSwitch(){
     }
 
     // 到达目标高度后，进行锁定
-    if (current_pose.pose.position.z <= target_land_z) {
+    if (current_pose_copy.pose.position.z <= target_land_z) {
         armSwitch(0);
     }
 }
