@@ -75,7 +75,7 @@ void apoc::loadParams() {
     在超时参数部分
     */
 
-    ROS_INFO("\n==================== Timeout Params Loaded ====================");、\
+    ROS_INFO("\n==================== Timeout Params Loaded ====================");
     ROS_INFO("connect_timeout: %.1f s", connect_timeout_);
     ROS_INFO("modeswitch_timeout: %.1f s", modeswitch_timeout_);
     ROS_INFO("armswitch_timeout: %.1f s", armswitch_timeout_);
