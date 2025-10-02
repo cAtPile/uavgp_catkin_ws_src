@@ -57,7 +57,7 @@ void apoc::landSwitch() {
     }
     */
     // 计算目标降落高度
-    target_land_z = home_pose.pose.position.z + landing_tolerance_;
+    folat target_land_z = home_pose.pose.position.z + landing_tolerance_;
 
     // 目标高度有效性校验
     if (target_land_z < 0.0f) {
