@@ -40,9 +40,16 @@ void apoc::trackSwitch() {
         detection_action.data = true;
         detection_action_pub.publish(detection_action);
 
+        // 超时退出
+        if ((ros::Time::now() - start).toSec() >= trace_timeout_) {
+            ROS_WARN("Tracking timed out");
+            break;
+        }
+
         // 检查是否有有效的检测目标
-        if (current_detection.detection_id == 0) {
+        if (current_detection.detection_id == 0 && (ros::Time::now() - start).toSec() < trace_timeout_) {
             ROS_INFO_THROTTLE(1, "Waiting for detection data...");  // 每秒打印一次等待信息
+            local_pos_pub.publish(current_pose);
             ros::spinOnce();
             rate.sleep();
             continue;
@@ -79,12 +86,7 @@ void apoc::trackSwitch() {
         // 处理回调并控制循环速率
         ros::spinOnce();
         rate.sleep();
-        
-        // 超时退出
-        if ((ros::Time::now() - start).toSec() > trace_timeout_) {
-            ROS_WARN("Tracking timed out");
-            break;
-        }
+
     }
 
     //停止追踪
