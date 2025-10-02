@@ -63,16 +63,30 @@ void apoc::landSwitch(){
             flytoAbsolute(land_x, land_y, step_target_z, land_yaw);
             ros::spinOnce();
             rate.sleep();
+
+            //读互斥锁
+            geometry_msgs::PoseStamped current_pose_check;
+            {
+                std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
+                current_pose_check = current_pose; // 拷贝到局部变量
+            }
             
             // 检查是否到达当前步骤的目标高度（考虑一定容差）
-            if (fabs(current_pose_copy.pose.position.z - step_target_z) < 0.05) {
+            if (fabs(current_pose_check.pose.position.z - step_target_z) < 0.05) {
                 step_reached = true;
                 ROS_INFO("Reached intermediate landing altitude: %.2fm", step_target_z);
             }
         }
+            
+        //读互斥锁
+        geometry_msgs::PoseStamped current_pose_update;
+        {
+            std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
+            current_pose_update = current_pose; // 拷贝到局部变量
+        }
         
         // 更新当前高度
-        current_z = current_pose_copy.pose.position.z;
+        current_z = current_pose_update.pose.position.z;
         
         // 检查是否超时
         if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
@@ -82,8 +96,15 @@ void apoc::landSwitch(){
         }
     }
 
+    //读互斥锁
+    geometry_msgs::PoseStamped current_pose_disarm;
+    {
+        std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
+        current_pose_disarm = current_pose; // 拷贝到局部变量
+    }
+
     // 到达目标高度后，进行锁定
-    if (current_pose_copy.pose.position.z <= target_land_z) {
+    if (current_pose_disarm.pose.position.z <= target_land_z) {
         armSwitch(0);
     }
 }
