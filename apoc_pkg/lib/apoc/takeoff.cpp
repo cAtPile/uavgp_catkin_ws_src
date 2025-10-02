@@ -1,18 +1,4 @@
-/*
-* name：    takeoffSwitch
-* file:     takeoff.cpp
-* path:     /lib
-* describe：起飞，并记录home位置
-* input：   takeoff_alt
-* output:   true    ->  起飞
-*           false   ->  无法起飞
-* param:    NONE
-* depend:   ros-noetic,cpp,mavros,px4,ununtu20.04,apoc.h
-* function: reachCheck，flytoAbsolute/flytoPIDcorrect
-* vision:   1.0
-* method：  记录起飞前位置和home位置，加上起飞高度，使用flytoRelative到目的地
-* info:     
-*/
+
 #include "apoc_pkg/apoc.h"
 
 bool apoc::takeoffSwitch(float takeoff_alt) {
@@ -34,22 +20,19 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
         std::lock_guard<std::mutex> lock(current_pose_mutex_);
         home_pose = current_pose_copy;
     }
-
-    // 记录当前位置作为home位置
-    home_pose = current_pose_copy;
     ROS_INFO("Home position recorded");
 
     // 计算起飞目标位置（在当前位置基础上升高到指定高度）
-    float takeoff_x = home_pose.pose.position.x;
-    float takeoff_y = home_pose.pose.position.y;
-    float takeoff_z = home_pose.pose.position.z + takeoff_alt;
+    float takeoff_x = current_pose_copy.pose.position.x;
+    float takeoff_y = current_pose_copy.pose.position.y;
+    float takeoff_z = current_pose_copy.pose.position.z + takeoff_alt;
     
     // 保持当前偏航角
     tf2::Quaternion quat(
-        home_pose.pose.orientation.x,
-        home_pose.pose.orientation.y,
-        home_pose.pose.orientation.z,
-        home_pose.pose.orientation.w
+        current_pose_copy.pose.orientation.x,
+        current_pose_copy.pose.orientation.y,
+        current_pose_copy.pose.orientation.z,
+        current_pose_copy.pose.orientation.w
     );
     tf2::Matrix3x3 mat(quat);
     double roll, pitch, takeoff_yaw;
