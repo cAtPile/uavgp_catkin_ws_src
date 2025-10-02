@@ -1,31 +1,6 @@
-
-/*
-* file：    fly_ab.cpp
-* name：    flytoAbsolute
-* path：    /lib
-* describe：飞行到绝对坐标fly_ab_x/y/z/yaw
-* input：   fly_ab_x/y/z/yaw
-* output:   true    ->  到达
-*           false   ->  未到达
-* param:    FLY_AB_TIMEOUT
-* depend:   ros-noetic,cpp,mavros,px4,ununtu20.04,apoc.h
-* function: reachCheck
-* vision:   1.0
-* method：  定点发布坐标，然后reachCheck检查到达
-* info:     "ROS node is not running properly"
-*           ROS非正常
-*
-*           "Timeout while flying to target position. Time elapsed: " 
-*           飞行超时
-*
-*           "ROS node shutdown during flight"
-*           飞行中异常退出循环
-*/
-
 #include "apoc_pkg/apoc.h"
 
 bool apoc::flytoAbsolute(float fly_ab_x, float fly_ab_y, float fly_ab_z, float fly_ab_yaw) {
-
 
     // 初始化目标位置消息
     geometry_msgs::PoseStamped target_pose;

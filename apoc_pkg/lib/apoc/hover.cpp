@@ -21,21 +21,14 @@ bool apoc::hoverSwitch(float hover_time){
 
     geometry_msgs::PoseStamped hover_pose;
 
-    //互斥锁
-    geometry_msgs::PoseStamped current_pose_copy;
-    {
-        std::lock_guard<std::mutex> lock(current_pose_mutex_); // 读操作加锁
-        current_pose_copy = current_pose; // 拷贝到局部变量
-    }
-
     hover_pose.header.frame_id = "map";
-    hover_pose.pose.position.x = current_pose_copy.pose.position.x;
-    hover_pose.pose.position.y = current_pose_copy.pose.position.y;
-    hover_pose.pose.position.z = current_pose_copy.pose.position.z;
-    hover_pose.pose.orientation.x = current_pose_copy.pose.orientation.x;
-    hover_pose.pose.orientation.y = current_pose_copy.pose.orientation.y;
-    hover_pose.pose.orientation.z = current_pose_copy.pose.orientation.z;
-    hover_pose.pose.orientation.w = current_pose_copy.pose.orientation.w;
+    hover_pose.pose.position.x = current_pose.pose.position.x;
+    hover_pose.pose.position.y = current_pose.pose.position.y;
+    hover_pose.pose.position.z = current_pose.pose.position.z;
+    hover_pose.pose.orientation.x = current_pose.pose.orientation.x;
+    hover_pose.pose.orientation.y = current_pose.pose.orientation.y;
+    hover_pose.pose.orientation.z = current_pose.pose.orientation.z;
+    hover_pose.pose.orientation.w = current_pose.pose.orientation.w;
 
     ros::Time start = ros::Time::now();
 

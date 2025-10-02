@@ -1,17 +1,3 @@
-/*
-* file:     land.cpp
-* name：    landSwitch
-* describe：降落
-* input：   NONE
-* output:   true    ->  降落成功
-*           false   ->  降落失败
-* param:    LANDING_TIMEOUT,LANDING_TOLERANCE
-* depend:   ros-noetic,cpp,mavros,px4,ununtu20.04,apoc.h
-* function: armSwitch
-* vision:   1.0
-* method：  记录当前位置，使用flytoAbsolute/flytoPIDcorrect到当前x/y/LANDING_TOLERANCE/yaw,然后disarm
-* info:     
-*/
 #include "apoc_pkg/apoc.h"
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
@@ -20,26 +6,20 @@
 
 // 1. 定义全局可用的常量（放在函数外或函数最顶部，确保所有循环都能访问）
 #define LANDING_STEP 0.2f          // 逐步降落步长
-const int CMD_RETRY_COUNT = 3;     // 指令重试次数（全局作用域，所有地方可访问）
+const int CMD_RETRY_COUNT = 3;     // 指令重试次数
 const double STEP_TIMEOUT = 5.0;   // 单步降落超时时间
 const double FINAL_STEP_TIMEOUT = 8.0; // 最后一步（飞回Home高度）超时时间
 const float FINAL_HEIGHT_TOL = 0.03f;  // 最后一步高度容差
-const float HEIGHT_PRECISION = 0.01f;  // 通用高度精度（解决浮点数比较问题）
+const float HEIGHT_PRECISION = 0.01f;  // 通用高度精度
 
 void apoc::landSwitch() {
-    // 读取当前位置（加锁保护，避免数据竞争）
-    geometry_msgs::PoseStamped current_pose_copy;
-    {
-        std::lock_guard<std::mutex> lock(current_pose_mutex_); 
-        current_pose_copy = current_pose; 
-    }
 
-    // 记录降落起始点（x/y固定，确保降落过程中位置不偏移）
-    float land_x = current_pose_copy.pose.position.x;
-    float land_y = current_pose_copy.pose.position.y;
-    float current_z = current_pose_copy.pose.position.z;
+    // 记录降落起始点
+    float land_x = current_pose.pose.position.x;
+    float land_y = current_pose.pose.position.y;
+    float current_z = current_pose.pose.position.z;
     
-    // 解析当前偏航角（保持降落过程中朝向不变）
+    // 解析当前偏航角
     tf2::Quaternion quat(
         current_pose_copy.pose.orientation.x,
         current_pose_copy.pose.orientation.y,
@@ -53,23 +33,18 @@ void apoc::landSwitch() {
     // 初始化总降落计时器
     ros::Time total_start = ros::Time::now();
 
-    // 计算目标降落高度（加锁读取home_pose，避免数据竞争）
-    float target_land_z;
-    float home_base_z; // 单独存储Home基准高度，用于最后一步精准降落
-    {
-        std::lock_guard<std::mutex> lock(home_pose_mutex_); // 需在apoc类头文件声明该锁
-        home_base_z = home_pose.pose.position.z;
-        target_land_z = home_base_z + landing_tolerance_;
-    }
+    // 计算目标降落高度
+    float target_land_z = home_base_z + landing_tolerance_;
+    float home_base_z = home_pose.pose.position.z; // 单独存储Home基准高度，用于最后一步精准降落
 
-    // 目标高度有效性校验（避免负高度导致逻辑错误）
+    //高度有效性校验
     if (target_land_z < 0.0f) {
         ROS_WARN("Invalid target landing height (%.2fm), reset to 0.0m", target_land_z);
         target_land_z = 0.0f;
         home_base_z = 0.0f; // 同步重置Home基准高度，确保一致性
     }
 
-    // 1. 逐步降落主循环（基于高度差值判断，解决浮点数精度问题）
+    // 1. 逐步降落主循环
     while (ros::ok() && (current_z - target_land_z) > HEIGHT_PRECISION) {
         // 计算当前步骤目标高度（确保不低于最终容忍高度）
         float step_target_z = std::max(current_z - LANDING_STEP, target_land_z);

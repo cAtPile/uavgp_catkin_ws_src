@@ -20,24 +20,16 @@
 
 bool apoc::flytoRelative(float fly_re_x , float fly_re_y , float fly_re_z , float fly_re_yaw ){
 
-    //互斥锁
-    geometry_msgs::PoseStamped home_pose_copy;
-    {
-        std::lock_guard<std::mutex> lock(home_pose_mutex_); // 读操作加锁
-        home_pose_copy = home_pose; // 拷贝到局部变量
-    }
-
-    
-    float ab_x = fly_re_x + home_pose_copy.pose.position.x;
-    float ab_y = fly_re_y + home_pose_copy.pose.position.y;
-    float ab_z = fly_re_z + home_pose_copy.pose.position.z;
+    float ab_x = fly_re_x + home_pose.pose.position.x;
+    float ab_y = fly_re_y + home_pose.pose.position.y;
+    float ab_z = fly_re_z + home_pose.pose.position.z;
 
     // 从home位置的四元数计算偏航角(弧度)
     tf2::Quaternion q(
-        home_pose_copy.pose.orientation.x,
-        home_pose_copy.pose.orientation.y,
-        home_pose_copy.pose.orientation.z,
-        home_pose_copy.pose.orientation.w
+        home_pose.pose.orientation.x,
+        home_pose.pose.orientation.y,
+        home_pose.pose.orientation.z,
+        home_pose.pose.orientation.w
     );
     tf2::Matrix3x3 m(q);
     double roll, pitch, home_yaw;

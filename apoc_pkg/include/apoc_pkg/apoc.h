@@ -137,11 +137,6 @@ private:
     ros::Time last_request;
     ros::Rate rate;
 
-    //线程互斥锁
-    mutable std::mutex current_pose_mutex_;
-    mutable std::mutex home_pose_mutex_;
-    mutable std::mutex current_detection_mutex_;
-
     //回调函数
     void state_cb(const mavros_msgs::State::ConstPtr& msg);
     void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg);

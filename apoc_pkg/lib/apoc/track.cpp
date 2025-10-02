@@ -46,50 +46,36 @@ void apoc::trackSwitch() {
             break;
         }
 
-        //读互斥锁
-        geometry_msgs::PoseStamped current_pose_copy;
-        {
-            std::lock_guard<std::mutex> lock(current_pose_mutex_); 
-            current_pose_copy = current_pose;
-        }
-
-        //读互斥锁
-        apoc_pkg::detection_data current_detection_copy;
-        {
-            std::lock_guard<std::mutex> lock(current_detection_mutex_); 
-            current_detection_copy = current_detection; 
-        }
-
         // 检查是否有有效的检测目标
-        if (current_detection_copy.detection_id == 0 && (ros::Time::now() - start).toSec() < trace_timeout_) {
+        if (current_detection.detection_id == 0 && (ros::Time::now() - start).toSec() < trace_timeout_) {
             ROS_INFO_THROTTLE(1, "Waiting for detection data...");  
-            local_pos_pub.publish(current_pose_copy);
+            local_pos_pub.publish(current_pose);
             ros::spinOnce();
             rate.sleep();
             continue;
         }
 
         // 达到位置阈值时退出追踪
-        if (fabs(current_detection_copy.detection_x - trace_target_center_x_) <= trace_tolerance_ &&
-            fabs(current_detection_copy.detection_y - trace_target_center_y_) <= trace_tolerance_) {
+        if (fabs(current_detection.detection_x - trace_target_center_x_) <= trace_tolerance_ &&
+            fabs(current_detection.detection_y - trace_target_center_y_) <= trace_tolerance_) {
             ROS_INFO("Target reached within tolerance");
             break;
         }
         
         // 1. 坐标转换：将检测到的目标中心转换为控制量
         //修正
-        float target_offset_y = (current_detection_copy.detection_x - trace_target_center_x_) * correct_ratio + current_pose_copy.pose.position.y ;
-        float target_offset_x = (current_detection_copy.detection_y - trace_target_center_y_) * correct_ratio + current_pose_copy.pose.position.x ;
+        float target_offset_y = (current_detection.detection_x - trace_target_center_x_) * correct_ratio + current_pose.pose.position.y ;
+        float target_offset_x = (current_detection.detection_y - trace_target_center_y_) * correct_ratio + current_pose.pose.position.x ;
 
         // 8. PID控制：设置目标偏差，计算控制量（输入=当前实际偏差）
         pid_x.setSetpoint(target_offset_x);  // PID期望偏差=目标偏差
         pid_y.setSetpoint(target_offset_y);
-        float delta_x = pid_x.compute(current_pose_cpoy.pose.position.x);  // 计算X轴增量
-        float delta_y = pid_y.compute(current_pose_copy.pose.position.y);  // 计算Y轴增量
+        float delta_x = pid_x.compute(current_pose.pose.position.x);  // 计算X轴增量
+        float delta_y = pid_y.compute(current_pose.pose.position.y);  // 计算Y轴增量
 
         // 计算下一步位置
-        float via_x = current_pose_copy.pose.position.x + delta_x;
-        float via_y = current_pose_copy.pose.position.y + delta_y;
+        float via_x = current_pose.pose.position.x + delta_x;
+        float via_y = current_pose.pose.position.y + delta_y;
 
         // 发送飞行指令
         trace_pose.pose.position.x = via_x;
