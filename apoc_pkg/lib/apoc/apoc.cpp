@@ -135,6 +135,13 @@ apoc::apoc(): rate(20.0){
         current_pose.header.stamp = ros::Time::now(); 
     }
     
+    {
+        std::lock_guard<std::mutex> lock(current_detection_mutex_); // 写操作加锁
+        current_detection.detection_id = 0 ;
+        current_detection.detection_x = 0 ;
+        current_detection.detection_y = 0 ;
+    }
+    
     //current_detection
     current_detection.detection_id = 0 ;
     current_detection.detection_x = 0 ;
