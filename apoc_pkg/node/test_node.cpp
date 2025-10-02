@@ -7,7 +7,7 @@ void missionPlanner(apoc& apoc_control) {
     //已经包含连接，解锁，模式切换
     apoc_control.takeoffSwitch(1);
     apoc_control.trackSwitch();
-    apoc_control.flytoRelative(1,1,1,0);
+    //apoc_control.flytoRelative(1,1,1,0);
     apoc_control.hoverSwitch(1.0);
     apoc_control.landSwitch();
 }
