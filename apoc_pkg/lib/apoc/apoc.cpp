@@ -11,7 +11,7 @@
 #include "apoc_pkg/apoc.h"
 
 apoc::apoc(): rate(20.0){
-
+/*
     // ============== 参数获取==============
     nh.param("apoc_pkg/connect_timeout", connect_timeout_, 10.0);
     nh.param("apoc_pkg/modeswitch_timeout", modeswitch_timeout_, 10.0);
@@ -67,6 +67,9 @@ apoc::apoc(): rate(20.0){
     // PID控制频率 & 飞行超时
     nh.param("apoc_pkg/PID_CONTROL_RATE", pid_control_rate_, 50.0);
     nh.param("apoc_pkg/PID_FLIGHT_TIMEOUT", pid_flight_timeout_, 60.0);
+    */
+
+    loadParams();
     
     /*****sub订阅初始化*****/
     state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 10, &apoc::state_cb, this);

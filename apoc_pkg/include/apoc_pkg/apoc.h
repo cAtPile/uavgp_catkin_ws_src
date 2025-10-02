@@ -146,6 +146,9 @@ private:
     void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void detection_data_cb(const apoc_pkg::detection_data::ConstPtr& msg);
 
+    //
+    void apoc::loadParams();
+
 public:
 
     apoc();//构造函数

@@ -134,23 +134,25 @@ include_directories(
 
 add_library(apoc_lib
   lib/apoc/apoc.cpp
-  lib/apoc/connect.cpp
-  lib/apoc/mode.cpp
   lib/apoc/arm.cpp
-  lib/apoc/reach.cpp
+#lib/apoc/avoid.cpp
+  lib/apoc/callback.cpp
+  lib/apoc/connect.cpp
   lib/apoc/fly_ab.cpp
   lib/apoc/fly_re.cpp
-  lib/apoc/track.cpp
-  lib/apoc/takeoff.cpp
-  lib/apoc/land.cpp
   lib/apoc/hover.cpp
-  lib/apoc/callback.cpp
-  lib/pidctrl/pidctrl.cpp
-  lib/pidctrl/params.cpp
+  lib/apoc/land.cpp
+  lib/apoc/load_params.cpp
+  lib/apoc/mode.cpp
+  lib/apoc/reach.cpp
+  lib/apoc/takeoff.cpp
+  lib/apoc/track.cpp
   lib/pidctrl/compute.cpp 
   lib/pidctrl/output.cpp
-  lib/pidctrl/setgoal.cpp
+  lib/pidctrl/params.cpp
+  lib/pidctrl/pidctrl.cpp
   lib/pidctrl/reset.cpp   
+  lib/pidctrl/setgoal.cpp
 )
 
 ## Add cmake target dependencies of the library
