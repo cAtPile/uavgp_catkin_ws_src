@@ -8,7 +8,7 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
         return false;
     }
 
-    home_pose = current_pose_copy;
+    home_pose = current_pose;
     ROS_INFO("Home position recorded");
 
     float takeoff_x = current_pose.pose.position.x;
