@@ -24,7 +24,7 @@ void apoc::landSwitch() {
         //
         local_pos_pub.publish(land_pose);
 
-        if (current_pose.pose.z<=home_pose.pose.position.z + landing_tolerance_){
+        if (current_pose.pose.position.z<=home_pose.pose.position.z + landing_tolerance_){
             armSwitch(0);
             ROS_INFO("land successful");
             break;
