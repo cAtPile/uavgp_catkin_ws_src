@@ -149,7 +149,7 @@ void apoc::landSwitch() {
         if (fabs(current_pose.pose.position.z - home_base_z) < FINAL_HEIGHT_TOL) {
             home_height_reached = true;
             ROS_INFO("Reached home base height: %.2fm (current: %.2fm)", 
-                     home_base_z, current_pose_final.pose.position.z);
+                     home_base_z, current_pose.pose.position.z);
         }
     }
 
