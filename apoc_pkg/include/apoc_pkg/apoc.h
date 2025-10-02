@@ -147,7 +147,7 @@ private:
     void detection_data_cb(const apoc_pkg::detection_data::ConstPtr& msg);
 
     //
-    void apoc::loadParams();
+    void loadParams();
 
 public:
 
