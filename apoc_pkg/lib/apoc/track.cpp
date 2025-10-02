@@ -55,7 +55,7 @@ void apoc::trackSwitch() {
 
         // 检查是否有有效的检测目标
         if (current_detection.detection_id == 0 && (ros::Time::now() - start).toSec() < trace_timeout_) {
-            ROS_INFO_THROTTLE(1, "Waiting for detection data...");  // 每秒打印一次等待信息
+            ROS_INFO_THROTTLE(1, "Waiting for detection data...");  
             local_pos_pub.publish(current_pose_copy);
             ros::spinOnce();
             rate.sleep();

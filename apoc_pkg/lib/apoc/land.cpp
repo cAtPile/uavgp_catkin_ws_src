@@ -1,17 +1,4 @@
-/*
-* file:     land.cpp
-* name：    landSwitch
-* describe：降落
-* input：   NONE
-* output:   true    ->  降落成功
-*           false   ->  降落失败
-* param:    LANDING_TIMEOUT,LANDING_TOLERANCE
-* depend:   ros-noetic,cpp,mavros,px4,ununtu20.04,apoc.h
-* function: armSwitch
-* vision:   1.0
-* method：  记录当前位置，使用flytoAbsolute/flytoPIDcorrect到当前x/y/LANDING_TOLERANCE/yaw,然后disarm
-* info:     
-*/
+
 #include "apoc_pkg/apoc.h"
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
@@ -19,7 +6,7 @@
 #include <thread>
 
 //逐步降落的步长，单位：米
-#define LANDING_STEP 0.2f
+#define LANDING_STEP 0.25f
 
 void apoc::landSwitch() {
     // 读取当前位置
@@ -34,7 +21,7 @@ void apoc::landSwitch() {
     float land_y = current_pose_copy.pose.position.y;
     float current_z = current_pose_copy.pose.position.z;
     
-    //解析当前偏航角
+    // 解析当前偏航角
     tf2::Quaternion quat(
         current_pose_copy.pose.orientation.x,
         current_pose_copy.pose.orientation.y,
@@ -47,92 +34,83 @@ void apoc::landSwitch() {
 
     // 初始化总降落计时器
     ros::Time total_start = ros::Time::now();
-    
-    /*
-    // 3. 计算目标降落高度（加home_pose互斥锁，避免数据竞争）
-    float target_land_z;
-    {
-        std::lock_guard<std::mutex> lock(home_pose_mutex_); // 需在apoc类头文件中声明该锁
-        target_land_z = home_pose.pose.position.z + landing_tolerance_;
-    }
-    */
-    // 计算目标降落高度
-    float target_land_z = home_pose.pose.position.z + landing_tolerance_;
 
+    // 计算目标降落高度
+    float target_land_z;
+    float home_base_z =  home_pose.pose.position.z; // 单独存储Home基准高度，用于最后一步精准降落
+    
     // 目标高度有效性校验
     if (target_land_z < 0.0f) {
         ROS_WARN("Invalid target landing height (%.2fm), reset to 0.0m", target_land_z);
         target_land_z = 0.0f;
+        home_base_z = 0.0f; // 同步重置Home基准高度，确保一致性
     }
 
-    // 4. 逐步降落主循环
+    // 1. 逐步降落主循环
     while (ros::ok() && (current_z - target_land_z) > 0.01f) {
-
-        // 计算当前步骤目标高度
+        // 计算当前步骤目标高度（确保不低于最终容忍高度）
         float step_target_z = std::max(current_z - LANDING_STEP, target_land_z);
         
         // 初始化单步降落状态
         ros::Time step_start = ros::Time::now();
         bool step_reached = false;
-        const int CMD_RETRY_COUNT = 3; // 指令重试次数（固定值，不新增宏）
-        const double STEP_TIMEOUT = 5.0; // 单步超时时间（5秒，避免卡在某一高度）
+        const int CMD_RETRY_COUNT = 3;  // 指令重试次数
+        const double STEP_TIMEOUT = 5.0;// 单步超时时间
         
-        // 5. 单步高度稳定循环（确保到达当前步骤高度后再继续下降）
+        // 2. 单步高度稳定循环
         while (ros::ok() && !step_reached) {
-            // 5.1 检查单步超时（优先处理，避免长时间等待）
+            // 2.1 检查单步超时
             if ((ros::Time::now() - step_start).toSec() >= STEP_TIMEOUT) {
                 ROS_WARN("Step landing timeout (target: %.2fm), skip to next step", step_target_z);
                 break;
             }
-            // 5.2 检查总降落超时（超过设定时间强制结束）
+            // 2.2 检查总降落超时
             if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
                 ROS_ERROR("Total landing timeout (%.1fs), force disarm", landing_timeout_);
                 armSwitch(0);
-                return; // 直接退出函数，避免后续无效逻辑
+                return;
             }
             
-            // 5.3 发送飞控指令（带重试机制，确保指令发送成功）
+            // 2.3 发送飞控指令
             bool cmd_sent = false;
             for (int retry = 0; retry < CMD_RETRY_COUNT; ++retry) {
                 if (flytoAbsolute(land_x, land_y, step_target_z, land_yaw)) {
                     cmd_sent = true;
-                    break; // 指令发送成功，退出重试
+                    break;
                 }
                 ROS_WARN("Flyto command failed (retry %d/%d), wait 500ms", retry + 1, CMD_RETRY_COUNT);
-                std::this_thread::sleep_for(std::chrono::milliseconds(500)); // 重试间隔
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
-            // 指令重试多次失败，强制解锁
             if (!cmd_sent) {
                 ROS_ERROR("Flyto command failed after %d retries, force disarm", CMD_RETRY_COUNT);
                 armSwitch(0);
                 return;
             }
 
-            // 处理ROS回调（更新位置、状态等），控制循环频率
+            // 处理回调并控制循环频率
             ros::spinOnce();
             rate.sleep();
 
-            // 5.4 检查是否到达当前步骤高度（加锁读取最新位置）
+            // 2.4 检查是否到达当前步骤高度（加锁读取最新位置）
             geometry_msgs::PoseStamped current_pose_check;
             {
                 std::lock_guard<std::mutex> lock(current_pose_mutex_);
                 current_pose_check = current_pose;
             }
-            // 高度容差0.05m（与原有逻辑一致，确保稳定后再进入下一步）
             if (fabs(current_pose_check.pose.position.z - step_target_z) < 0.05f) {
                 step_reached = true;
-                ROS_INFO("Reached intermediate landing altitude: %.2fm (current: %.2fm)", 
+                ROS_INFO("Reached intermediate altitude: %.2fm (current: %.2fm)", 
                          step_target_z, current_pose_check.pose.position.z);
             }
         }
             
-        // 6. 更新当前高度（加锁读取最新值，避免使用旧数据）
+        // 3. 更新当前高度（加锁读取最新值，避免使用旧数据）
         {
             std::lock_guard<std::mutex> lock(current_pose_mutex_);
             current_z = current_pose.pose.position.z;
         }
         
-        // 再次检查总超时（双重保障，避免循环内超时未触发）
+        // 再次检查总超时（双重保障）
         if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
             ROS_ERROR("Total landing timeout, force disarm");
             armSwitch(0);
@@ -140,20 +118,78 @@ void apoc::landSwitch() {
         }
     }
 
-    // 7. 最终解锁判断（确保到达目标高度后再解锁）
+    // 4. 最后一步：精准飞回Home基准高度（你的核心新增逻辑，补充可靠性保障）
+    const double FINAL_STEP_TIMEOUT = 8.0; // 最后一步超时时间（放宽至8秒，确保稳定降落）
+    const float FINAL_HEIGHT_TOL = 0.03f;  // 最后一步高度容差（更严格，确保精准）
+    ros::Time final_step_start = ros::Time::now();
+    bool home_height_reached = false;
+
+    ROS_INFO("Start final step: land to home base height (%.2fm)", home_base_z);
+    while (ros::ok() && !home_height_reached) {
+        // 4.1 检查最后一步超时（避免无限等待）
+        if ((ros::Time::now() - final_step_start).toSec() >= FINAL_STEP_TIMEOUT) {
+            ROS_WARN("Final step timeout (target home height: %.2fm), proceed to disarm", home_base_z);
+            break;
+        }
+        // 4.2 检查总降落超时（确保不超过全局超时）
+        if ((ros::Time::now() - total_start).toSec() >= landing_timeout_) {
+            ROS_ERROR("Total landing timeout during final step, force disarm");
+            armSwitch(0);
+            return;
+        }
+
+        // 4.3 发送最后一步飞控指令（带重试）
+        bool final_cmd_sent = false;
+        for (int retry = 0; retry < CMD_RETRY_COUNT; ++retry) {
+            if (flytoAbsolute(land_x, land_y, home_base_z, land_yaw)) {
+                final_cmd_sent = true;
+                break;
+            }
+            ROS_WARN("Final flyto command failed (retry %d/%d), wait 500ms", retry + 1, CMD_RETRY_COUNT);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+        if (!final_cmd_sent) {
+            ROS_ERROR("Final flyto command failed after %d retries, force disarm", CMD_RETRY_COUNT);
+            armSwitch(0);
+            return;
+        }
+
+        // 处理回调并控制频率
+        ros::spinOnce();
+        rate.sleep();
+
+        // 4.4 检查是否到达Home基准高度（加锁读取最新位置）
+        geometry_msgs::PoseStamped current_pose_final;
+        {
+            std::lock_guard<std::mutex> lock(current_pose_mutex_);
+            current_pose_final = current_pose;
+        }
+        if (fabs(current_pose_final.pose.position.z - home_base_z) < FINAL_HEIGHT_TOL) {
+            home_height_reached = true;
+            ROS_INFO("Reached home base height: %.2fm (current: %.2fm)", 
+                     home_base_z, current_pose_final.pose.position.z);
+        }
+    }
+
+    // 5. 最终解锁判断（基于实际高度，确保安全）
     geometry_msgs::PoseStamped current_pose_disarm;
     {
         std::lock_guard<std::mutex> lock(current_pose_mutex_);
         current_pose_disarm = current_pose;
     }
 
-    // 到达目标高度（或低于），执行解锁
-    if (current_pose_disarm.pose.position.z <= target_land_z + 0.01f) { // 容差处理，避免浮点数误差
-        ROS_INFO("Landing successful (final height: %.2fm), disarm", current_pose_disarm.pose.position.z);
+    // 判定是否成功降落（优先以Home基准高度为准）
+    if (fabs(current_pose_disarm.pose.position.z - home_base_z) < FINAL_HEIGHT_TOL) {
+        ROS_INFO("Landing successful! Final height: %.2fm (home base: %.2fm), disarm", 
+                 current_pose_disarm.pose.position.z, home_base_z);
+        armSwitch(0);
+    } else if (current_pose_disarm.pose.position.z <= target_land_z + 0.01f) {
+        ROS_WARN("Landed to tolerance height (%.2fm) but not home base (%.2fm), disarm", 
+                 current_pose_disarm.pose.position.z, home_base_z);
         armSwitch(0);
     } else {
-        ROS_WARN("Final height (%.2fm) exceeds target (%.2fm), still disarm", 
-                 current_pose_disarm.pose.position.z, target_land_z);
-        armSwitch(0); // 即使未完全达标，也强制解锁（避免悬停耗电或失控）
+        ROS_ERROR("Final height (%.2fm) exceeds target (%.2fm), force disarm", 
+                  current_pose_disarm.pose.position.z, target_land_z);
+        armSwitch(0);
     }
 }
