@@ -20,7 +20,7 @@ apoc::apoc(): rate(20.0){
     nh.param("apoc_pkg/reach_tolerance_distance", reach_tolerance_distance_, 0.1);
     nh.param("apoc_pkg/reach_tolerance_angle", reach_tolerance_angle_, 0.1);
     nh.param("apoc_pkg/landing_tolerance", landing_tolerance_, 0.1);
-    nh.param("apoc_pkg/landing_timeout", landing_timeout_, 3.0);
+    nh.param("apoc_pkg/landing_timeout", landing_timeout_, 10.0);
     nh.param("apoc_pkg/trace_cam_ratio", trace_cam_ratio_, 0.005);
     nh.param("apoc_pkg/trace_target_center_x", trace_target_center_x_, 320.0);
     nh.param("apoc_pkg/trace_target_center_y", trace_target_center_y_, 320.0);
