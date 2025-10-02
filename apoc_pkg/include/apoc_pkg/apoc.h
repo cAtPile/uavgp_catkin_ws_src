@@ -139,6 +139,7 @@ private:
 
     //线程互斥锁
     mutable std::mutex current_pose_mutex_;
+    mutable std::mutex home_pose_mutex_;           // 新增Home位置互斥锁
 
     //回调函数
     void state_cb(const mavros_msgs::State::ConstPtr& msg);

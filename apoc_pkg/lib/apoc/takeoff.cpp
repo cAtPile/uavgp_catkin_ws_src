@@ -29,6 +29,12 @@ bool apoc::takeoffSwitch(float takeoff_alt) {
         current_pose_copy = current_pose; // 拷贝到局部变量
     }
 
+    //写互斥锁
+    {
+        std::lock_guard<std::mutex> lock(current_pose_mutex_);
+        home_pose = current_pose_copy;
+    }
+
     // 记录当前位置作为home位置
     home_pose = current_pose_copy;
     ROS_INFO("Home position recorded");

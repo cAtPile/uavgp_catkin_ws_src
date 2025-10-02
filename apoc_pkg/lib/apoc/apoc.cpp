@@ -106,14 +106,17 @@ apoc::apoc(): rate(20.0){
     pose.pose.orientation.w = 1.0;
 
     //home_pose
-    home_pose.header.frame_id = "map";
-    home_pose.pose.position.x = 0;
-    home_pose.pose.position.y = 0;
-    home_pose.pose.position.z = 0;
-    home_pose.pose.orientation.x = 0.0;
-    home_pose.pose.orientation.y = 0.0;
-    home_pose.pose.orientation.z = 0.0;
-    home_pose.pose.orientation.w = 1.0;
+    {
+        std::lock_guard<std::mutex> lock(home_pose_mutex_); // 写操作加锁
+        home_pose.header.frame_id = "map";
+        home_pose.pose.position.x = 0;
+        home_pose.pose.position.y = 0;
+        home_pose.pose.position.z = 0;
+        home_pose.pose.orientation.x = 0.0;
+        home_pose.pose.orientation.y = 0.0;
+        home_pose.pose.orientation.z = 0.0;
+        home_pose.pose.orientation.w = 1.0;
+    }
 
     //current_pose
     {
