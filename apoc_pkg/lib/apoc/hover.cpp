@@ -25,10 +25,16 @@ bool apoc::hoverSwitch(float hover_time){
     hover_pose.pose.position.x = current_pose.pose.position.x;
     hover_pose.pose.position.y = current_pose.pose.position.y;
     hover_pose.pose.position.z = current_pose.pose.position.z;
+    /*非默认姿态
     hover_pose.pose.orientation.x = current_pose.pose.orientation.x;
     hover_pose.pose.orientation.y = current_pose.pose.orientation.y;
     hover_pose.pose.orientation.z = current_pose.pose.orientation.z;
     hover_pose.pose.orientation.w = current_pose.pose.orientation.w;
+    */
+    hover_pose.pose.orientation.x = flight_orien_x_;
+    hover_pose.pose.orientation.y = flight_orien_y_;
+    hover_pose.pose.orientation.z = flight_orien_z_;
+    hover_pose.pose.orientation.w = flight_orien_w_;
 
     ros::Time start = ros::Time::now();
 

@@ -6,11 +6,11 @@ void apoc::trackSwitch() {
     //追踪初始化
     geometry_msgs::PoseStamped trace_pose;
     trace_pose.header.frame_id = "map"; 
-    trace_pose.pose.position.z = 1;
-    trace_pose.pose.orientation.x = 0.0;
-    trace_pose.pose.orientation.y = 0.0;
-    trace_pose.pose.orientation.z = 0.0;
-    trace_pose.pose.orientation.w = 1.0;
+    trace_pose.pose.position.z = home_pose.pose.position.z+flight_alt_;
+    trace_pose.pose.orientation.x = flight_orien_x_;
+    trace_pose.pose.orientation.y = flight_orien_y_;
+    trace_pose.pose.orientation.z = flight_orien_z_;
+    trace_pose.pose.orientation.w = flight_orien_w_;
 
     // 计算校正系数
     float correct_ratio = current_pose.pose.position.z * trace_cam_ratio_;
@@ -67,13 +67,14 @@ void apoc::trackSwitch() {
         float target_offset_y = (current_detection.detection_x - trace_target_center_x_) * correct_ratio + current_pose.pose.position.y ;
         float target_offset_x = (current_detection.detection_y - trace_target_center_y_) * correct_ratio + current_pose.pose.position.x ;
 
-        // 8. PID控制：设置目标偏差，计算控制量（输入=当前实际偏差）
+        // 8. PID控制：设置目标偏差，计算控制量
         pid_x.setSetpoint(target_offset_x);  // PID期望偏差=目标偏差
         pid_y.setSetpoint(target_offset_y);
         float delta_x = pid_x.compute(current_pose.pose.position.x);  // 计算X轴增量
         float delta_y = pid_y.compute(current_pose.pose.position.y);  // 计算Y轴增量
 
         // 计算下一步位置
+        //修正
         float via_x = current_pose.pose.position.x + delta_x;
         float via_y = current_pose.pose.position.y + delta_y;
 

@@ -9,6 +9,7 @@ bool apoc::reachCheck(float check_x, float check_y, float check_z, float check_y
     float distance = std::sqrt(dx*dx + dy*dy + dz*dz);
     bool position_reached = (distance < reach_tolerance_distance_);
     
+    /*
     // 角度检查（偏航角误差）
     // 从四元数转换为偏航角（弧度）
     tf2::Quaternion quat(
@@ -29,5 +30,6 @@ bool apoc::reachCheck(float check_x, float check_y, float check_z, float check_y
     if(yaw_reached && position_reached){
         return  true;
     }
-    return  false;
+    */
+    return  position_reached;
 }

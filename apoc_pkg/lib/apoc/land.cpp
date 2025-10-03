@@ -12,10 +12,10 @@ void apoc::landSwitch() {
     land_pose.pose.position.x = land_x;
     land_pose.pose.position.y = land_y;
     land_pose.pose.position.z = home_pose.pose.position.z + landing_tolerance_;
-    land_pose.pose.orientation.x = 0;
-    land_pose.pose.orientation.y = 0;
-    land_pose.pose.orientation.z = 0;
-    land_pose.pose.orientation.w = 1;
+    land_pose.pose.orientation.x = flight_orien_x_;
+    land_pose.pose.orientation.y = flight_orien_y_;
+    land_pose.pose.orientation.z = flight_orien_z_;
+    land_pose.pose.orientation.w = flight_orien_w_;
 
     ros::Time start_time = ros::Time::now();
 

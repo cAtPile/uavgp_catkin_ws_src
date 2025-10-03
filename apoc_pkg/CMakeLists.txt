@@ -136,7 +136,7 @@ add_library(apoc_lib
   lib/apoc/apoc.cpp
   lib/apoc/arm.cpp
 #lib/apoc/avoid.cpp
-  lib/apoc/callback.cpp
+#lib/apoc/callback.cpp
   lib/apoc/connect.cpp
   lib/apoc/fly_ab.cpp
   lib/apoc/fly_re.cpp

@@ -1,37 +1,3 @@
-/*
-* file:     arm.cpp
-* name：    armSwitch
-* path：    apoc_pkg/lib/apoc
-* describe：arm/disarm
-* input：   arm_key = 0 -> disarm
-*           arm_key = 1 -> arm
-* output:   true    ->  成功arm/disarm
-*           false   ->  失败
-* param:    ARMSWITCH_TIMEOUT
-* depend:   ros-noetic,cpp,mavros,px4,ununtu20.04,apoc.h
-* function: NONE
-* vision:   1.0
-* method:   调用arm_cmd
-* info:     "Already " << action << "ED"
-*           已经处于目标状态
-*           
-*           action << " command accepted by FCU"
-*           解锁被接受
-*           
-*           action << " command rejected by FCU"
-*           解锁被拒绝
-*           
-*           Failed to call arming service
-*           服务调用失败
-*
-*           "Vehicle " << action << "ED successfully"
-*           已经处于目标状态
-*       
-*           "Timeout while trying to " << action
-*           状态切换超时
-*
-*/
-
 #include "apoc_pkg/apoc.h"
 
 bool apoc::armSwitch(int arm_key) {

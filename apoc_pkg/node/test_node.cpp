@@ -7,8 +7,9 @@ void missionPlanner(apoc& apoc_control) {
     //已经包含连接，解锁，模式切换
     apoc_control.takeoffSwitch(1);
     apoc_control.trackSwitch();
+    ROS_INFO("开始降落");
     //apoc_control.flytoRelative(1,1,1,0);
-    apoc_control.hoverSwitch(1.0);
+    //apoc_control.hoverSwitch(1.0);
     apoc_control.landSwitch();
 }
 
@@ -18,7 +19,7 @@ int main(int argc, char **argv) {
     ROS_INFO("=== APOC Complete Flight Test Node Started ===");
 
     // 创建ROS节点句柄
-    ros::NodeHandle nh("~");  // 私有命名空间
+    ros::NodeHandle nh("~");  
     // 创建apoc类实例
     apoc apoc_control;
 

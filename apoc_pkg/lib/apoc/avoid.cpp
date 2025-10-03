@@ -1,4 +1,3 @@
-
 #include "apoc_pkg/apoc.h"
 
 /**
@@ -17,10 +16,10 @@ bool apoc::avoidGoal(float goal_x,float goal_y,float goal_z){
     goal_pose.pose.position.x = goal_x;
     goal_pose.pose.position.y = goal_y;
     goal_pose.pose.position.z = goal_z;
-    goal_pose.pose.orientation.x = 0;
-    goal_pose.pose.orientation.y = 0;
-    goal_pose.pose.orientation.z = 0;
-    goal_pose.pose.orientation.w = 1;
+    goal_pose.pose.orientation.x = flight_orien_x_;
+    goal_pose.pose.orientation.y = flight_orien_y_;
+    goal_pose.pose.orientation.z = flight_orien_z_;
+    goal_pose.pose.orientation.w = flight_orien_w_;
 
     //发布目标点
     goal_pub.publish(goal_pose);

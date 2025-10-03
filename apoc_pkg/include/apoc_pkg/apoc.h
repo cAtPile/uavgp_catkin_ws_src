@@ -98,6 +98,14 @@ private:
     double pid_control_rate_;       // 控制频率(Hz)
     double pid_flight_timeout_;  // 飞行超时(s)
 
+    //巡航参数
+    double flight_orien_x_;
+    double flight_orien_y_;
+    double flight_orien_z_;
+    double flight_orien_w_;
+
+    double flight_alt_;
+
     //ros句柄
     ros::NodeHandle nh;
 
@@ -138,9 +146,9 @@ private:
     ros::Rate rate;
 
     //回调函数
-    void state_cb(const mavros_msgs::State::ConstPtr& msg);
-    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg);
-    void detection_data_cb(const apoc_pkg::detection_data::ConstPtr& msg);
+    void state_cb(const mavros_msgs::State::ConstPtr& msg){current_state = *msg;}
+    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){current_state = *msg;}
+    void detection_data_cb(const apoc_pkg::detection_data::ConstPtr& msg){current_detection = *msg;}
 
     //加载参数
     void loadParams();

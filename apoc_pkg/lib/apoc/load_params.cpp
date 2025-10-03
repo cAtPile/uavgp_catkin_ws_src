@@ -21,6 +21,14 @@ void apoc::loadParams() {
     在追踪参数部分
     */
 
+    // ============== 飞行任务参数获取==============
+    nh.param("apoc_pkg/flight_orien_x", flight_orien_x_, 0.0);
+    nh.param("apoc_pkg/flight_orien_y", flight_orien_y_, 0.0);
+    nh.param("apoc_pkg/flight_orien_z", flight_orien_z_, 0.0);
+    nh.param("apoc_pkg/flight_orien_w", flight_orien_w_, 1.0);
+    
+    nh.param("apoc_pkg/flight_alt", flight_alt_, 1.0);
+
     // ============== 追踪参数获取==============
     nh.param("apoc_pkg/trace_cam_ratio", trace_cam_ratio_, 0.005);
     nh.param("apoc_pkg/trace_target_center_x", trace_target_center_x_, 320.0);

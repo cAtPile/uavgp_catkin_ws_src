@@ -14,6 +14,15 @@
   <param name="apoc_pkg/landing_tolerance" type="double" value="0.03" />        <!--着陆容忍值(单位：m)-->
   <param name="apoc_pkg/trace_tolerance" type="double" value="10.0" />          <!--追踪容忍值(单位：像素)-->
 
+  <!-- 容忍值参数 -->
+  <param name="apoc_pkg/flight_orien_x" type="double" value="0.0" />  <!--飞行姿态-->
+  <param name="apoc_pkg/flight_orien_y" type="double" value="0.0" />  <!--四元数-->
+  <param name="apoc_pkg/flight_orien_z" type="double" value="0.0" />  <!--=RPY(0,0,1)-->
+  <param name="apoc_pkg/flight_orien_w" type="double" value="1.0" />  <!-- -->
+
+  <param name="apoc_pkg/flight_alt" type="double" value="1.0" />  <!--到达检测距离容忍值(单位：m)-->
+
+
   <!--追踪参数-->
   <param name="apoc_pkg/trace_cam_ratio" type="double" value="0.00125" /><!--像素比例参数-->
   <param name="apoc_pkg/trace_target_center_x" type="double" value="320.0" /><!--像素目标中心x-->

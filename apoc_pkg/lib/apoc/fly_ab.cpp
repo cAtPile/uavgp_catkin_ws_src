@@ -9,11 +9,18 @@ bool apoc::flytoAbsolute(float fly_ab_x, float fly_ab_y, float fly_ab_z, float f
     target_pose.pose.position.y = fly_ab_y;
     target_pose.pose.position.z = fly_ab_z;
 
-    // 设置目标偏航角（四元数转换）
+    /*非默认姿态
     target_pose.pose.orientation.x = 0.0;
     target_pose.pose.orientation.y = 0.0;
     target_pose.pose.orientation.z = sin(fly_ab_yaw / 2.0);
     target_pose.pose.orientation.w = cos(fly_ab_yaw / 2.0);
+    */
+
+    //默认姿态
+    target_pose.pose.orientation.x = flight_orien_x_;
+    target_pose.pose.orientation.y = flight_orien_y_;
+    target_pose.pose.orientation.z = flight_orien_z_;
+    target_pose.pose.orientation.w = flight_orien_w_;
 
     // 飞行控制循环：持续发布目标位置直到到达或超时
     ros::Time start_time = ros::Time::now();

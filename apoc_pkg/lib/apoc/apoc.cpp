@@ -7,13 +7,11 @@ apoc::apoc(): rate(20.0){
     /*****sub订阅初始化*****/
     state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 10, &apoc::state_cb, this);
     local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &apoc::local_pos_cb, this);
-    //识别话题
     detection_data_sub = nh.subscribe<apoc_pkg::detection_data>("/detection/data",10,&apoc::detection_data_cb, this);
 
     /*****pub发布初始化*****/
     local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local", 10);
     local_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("/mavros/setpoint_velocity/cmd_vel", 10);  
-    //识别使能
     detection_action_pub = nh.advertise<std_msgs::Bool>("/tracker_action", 1);
     
     /*****clinet服务初始化*****/    
@@ -22,8 +20,8 @@ apoc::apoc(): rate(20.0){
 
     //current_state
     current_state.connected = false;
-    current_state.armed = false;//disarm
-    current_state.mode = "STABILIZED";  // 默认模式
+    current_state.armed = false;
+    current_state.mode = "STABILIZED";
 
     //pose
     pose.header.frame_id = "map";
