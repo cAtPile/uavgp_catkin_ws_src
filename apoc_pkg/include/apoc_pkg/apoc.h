@@ -147,7 +147,7 @@ private:
 
     //回调函数
     void state_cb(const mavros_msgs::State::ConstPtr& msg){current_state = *msg;}
-    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){current_state = *msg;}
+    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr& msg){current_pose = *msg;}
     void detection_data_cb(const apoc_pkg::detection_data::ConstPtr& msg){current_detection = *msg;}
 
     //加载参数
