@@ -75,8 +75,8 @@ void apoc::trackSwitch() {
 
         // 计算下一步位置
         //修正
-        float via_x = current_pose.pose.position.x + delta_x;
-        float via_y = current_pose.pose.position.y + delta_y;
+        float via_x = current_pose.pose.position.x - delta_x;
+        float via_y = current_pose.pose.position.y - delta_y;
 
         // 发送飞行指令
         trace_pose.pose.position.x = via_x;
