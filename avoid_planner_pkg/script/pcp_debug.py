@@ -7,6 +7,11 @@ from std_msgs.msg import Header
 from avoid_planner_pkg.msg import PolarHistogramMsg  # 替换为你的包名
 import math
 
+'''
+
+
+'''
+
 # 全局变量存储最新的直方图数据
 latest_histogram = None
 lock = False

@@ -58,8 +58,8 @@ struct PolarHistogram {
         min_elevation(-0.122),      // -°(弧度)
         max_elevation(0.984),       // +°(弧度)
         num_azimuth_bins(360),
-        num_elevation_bins(7),
-        data(360, std::vector<double>(7, INFINITY)) {}
+        num_elevation_bins(12),
+        data(360, std::vector<double>(12, INFINITY)) {}
 };
 
 /**
