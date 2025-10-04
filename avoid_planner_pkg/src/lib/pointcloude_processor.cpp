@@ -17,7 +17,7 @@ PointcloudProcessor::PointcloudProcessor(ros::NodeHandle& nh) :
     nh_.param<double>("voxel_grid_size", voxel_grid_size_, 0.1);
     nh_.param<int>("statistical_filter_mean_k", statistical_filter_mean_k_, 10);//统计滤波的邻域点数量
     nh_.param<double>("statistical_filter_std_dev", statistical_filter_std_dev_, 0.1);//统计滤波标准差阈值
-    nh_.param<std::string>("lidar_frame_id", lidar_frame_id_, "mid360_link");
+    nh_.param<std::string>("lidar_frame_id", lidar_frame_id_, "livox_frame");
     nh_.param<std::string>("body_frame_id", body_frame_id_, "base_link");
     
     // 订阅点云话题
@@ -52,6 +52,9 @@ void PointcloudProcessor::resetUpdatedFlag()   {
 
 //点云回调
 void PointcloudProcessor::pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
+
+    ROS_INFO_THROTTLE(1.0, "resive PointsCloud,wide=%d,high=%d,pointsNum=%d",
+        msg->width, msg->height, msg->width * msg->height);
     
     // 将ROS点云消息转换为PCL点云
     pcl::PointCloud<pcl::PointXYZ> raw_cloud;

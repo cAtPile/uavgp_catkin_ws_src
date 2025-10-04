@@ -55,8 +55,8 @@ struct PolarHistogram {
         max_range(50.0),  // 新增：初始化最大传感器距离（如Mid360的最大探测距离为50米）
         min_azimuth(-M_PI),
         max_azimuth(M_PI),
-        min_elevation(-0.2618),      // -15°(弧度)
-        max_elevation(0.2618),       // +15°(弧度)
+        min_elevation(-0.122),      // -°(弧度)
+        max_elevation(0.984),       // +°(弧度)
         num_azimuth_bins(360),
         num_elevation_bins(7),
         data(360, std::vector<double>(7, INFINITY)) {}
