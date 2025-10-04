@@ -33,7 +33,11 @@
   <!-- PID参数：X轴 -->
   <param name="apoc_pkg/PID_X_KP" type="double" value="1.0" />    <!-- 比例系数 -->
   <param name="apoc_pkg/PID_X_KI" type="double" value="0.0" />    <!-- 积分系数 -->
+<<<<<<< Updated upstream
   <param name="apoc_pkg/PID_X_KD" type="double" value="0.0" />   <!-- 微分系数 -->
+=======
+  <param name="apoc_pkg/PID_X_KD" type="double" value="0.5" />   <!-- 微分系数 -->
+>>>>>>> Stashed changes
   <param name="apoc_pkg/PID_X_OUT_MIN" type="double" value="-1.0" /> <!-- 输出最小值 -->
   <param name="apoc_pkg/PID_X_OUT_MAX" type="double" value="1.0" />  <!-- 输出最大值 -->
   <param name="apoc_pkg/PID_X_INT_MIN" type="double" value="-0.5" /> <!-- 积分最小值 -->
@@ -42,7 +46,11 @@
   <!-- PID参数：Y轴 -->
   <param name="apoc_pkg/PID_Y_KP" type="double" value="1.0" />
   <param name="apoc_pkg/PID_Y_KI" type="double" value="0.0" />
+<<<<<<< Updated upstream
   <param name="apoc_pkg/PID_Y_KD" type="double" value="0.0" />
+=======
+  <param name="apoc_pkg/PID_Y_KD" type="double" value="0.5" />
+>>>>>>> Stashed changes
   <param name="apoc_pkg/PID_Y_OUT_MIN" type="double" value="-1.0" />
   <param name="apoc_pkg/PID_Y_OUT_MAX" type="double" value="1.0" />
   <param name="apoc_pkg/PID_Y_INT_MIN" type="double" value="-0.5" />
