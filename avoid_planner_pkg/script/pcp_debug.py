@@ -3,26 +3,59 @@ import rospy
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from mpl_toolkits.mplot3d import Axes3D
 from std_msgs.msg import Header
-from avoid_planner_pkg.msg import PolarHistogramMsg  # 替换为你的包名
+from avoid_planner_pkg.msg import PolarHistogramMsg  # 已使用正确的包名
 import math
+'''
+
+1.
+订阅:/polar_histogram
+/polar_histogram的消息类型是:
+/*
+std_msgs/Header header
+float64 azimuth_resolution
+float64 elevation_resolution
+float64 min_azimuth
+float64 max_azimuth
+float64 min_elevation
+float64 max_elevation
+float64 max_range
+uint32 num_azimuth_bins
+uint32 num_elevation_bins
+float64[] data
+*/
+
+2.
+其中data[] 需要转换成12*360的数组
+12是俯仰角的-7,-2,3,8,13.....53
+从-7到53步长5度
+360是方位角
+0,1,2,3,4....,360
+从0到360步长1
+存储的数值的距离极中心的距离
+
+3.
+请帮我构建一个三维极坐标系
+将有数值的面填充
+例如data[10][120]=3
+在俯仰角为43 方位角为120处最近的障碍物为3m
 
 '''
 
-
-'''
 
 # 全局变量存储最新的直方图数据
 latest_histogram = None
 lock = False
 
 def callback(msg):
-    """处理接收到的直方图消息"""
+    """处理接收到的直方图消息，转换为12×360的二维数组"""
     global latest_histogram, lock
     if not lock:
-        # 将一维数据转换为二维数组
+        # 将一维数据转换为12×360的二维数组（俯仰角×方位角）
         data = np.array(msg.data)
-        data_2d = data.reshape((msg.num_azimuth_bins, msg.num_elevation_bins))
+        # 注意：根据消息定义重塑为(俯仰角数量, 方位角数量)
+        data_2d = data.reshape((msg.num_elevation_bins, msg.num_azimuth_bins))
         
         # 将inf替换为max_range以便更好地可视化
         data_2d[np.isinf(data_2d)] = msg.max_range
@@ -42,76 +75,98 @@ def callback(msg):
             'header': msg.header
         }
 
-def update_plot(frame, ax, heatmap, cbar, text):
-    """更新绘图数据"""
+def update_plot(frame, ax, surf, cbar, text):
+    """更新三维极坐标图数据"""
     global latest_histogram, lock
     
+    # 清除上一帧的图像
+    ax.clear()
+    
     if latest_histogram is None:
-        text.set_text("等待接收直方图数据...")
-        return heatmap, cbar, text
+        text = ax.text(0, 0, 0, "等待接收直方图数据...", fontsize=12)
+        return surf, cbar, text
     
     # 加锁防止数据更新冲突
     lock = True
     hist = latest_histogram
     lock = False
     
-    # 更新标题和时间戳
+    # 获取数据
+    data = hist['data']  # 形状为(12, 360)
+    max_range = hist['max_range']
+    
+    # 准备角度数据（转换为弧度用于计算）
+    # 方位角：0~360度，步长1度
+    azimuths_deg = np.linspace(0, 360, hist['num_azimuth_bins'], endpoint=False)
+    azimuths_rad = np.radians(azimuths_deg)
+    
+    # 俯仰角：-7~53度，步长5度（共12个角度）
+    elevations_deg = np.linspace(-7, 53, hist['num_elevation_bins'], endpoint=True)
+    elevations_rad = np.radians(elevations_deg)
+    
+    # 创建网格
+    A, E = np.meshgrid(azimuths_rad, elevations_rad)
+    
+    # 极坐标转换为笛卡尔坐标（x,y,z）
+    R = data  # 距离值
+    X = R * np.cos(E) * np.cos(A)  # 考虑俯仰角的三维坐标计算
+    Y = R * np.cos(E) * np.sin(A)
+    Z = R * np.sin(E)
+    
+    # 创建三维表面图
+    surf = ax.plot_surface(X, Y, Z, 
+                          cmap='viridis', 
+                          linewidth=0.5, 
+                          edgecolors='k',  # 边缘线颜色，增强立体感
+                          vmin=0, 
+                          vmax=max_range)
+    
+    # 设置坐标轴标签和范围
+    ax.set_xlabel('X (m)')
+    ax.set_ylabel('Y (m)')
+    ax.set_zlabel('Z (m)')
+    max_dim = max_range
+    ax.set_xlim(-max_dim, max_dim)
+    ax.set_ylim(-max_dim, max_dim)
+    ax.set_zlim(-max_dim/2, max_dim/2)  # Z轴范围适当缩小
+    
+    # 添加标题和时间戳
     timestamp = hist['header'].stamp
-    text.set_text(f"时间戳: {timestamp.secs}.{timestamp.nsecs//1000000}")
+    ax.set_title(f"三维极坐标直方图 (时间戳: {timestamp.secs}.{timestamp.nsecs//1000000})")
     
-    # 准备极坐标角度数据
-    azimuths = np.linspace(hist['min_azimuth'], hist['max_azimuth'], 
-                          hist['num_azimuth_bins'], endpoint=False)
-    # 转换为度以便更好地显示
-    azimuths_deg = np.rad2deg(azimuths)
+    # 更新颜色条
+    if cbar:
+        cbar.remove()
+    cbar = plt.colorbar(surf, ax=ax, pad=0.1)
+    cbar.set_label('障碍物距离 (m)')
     
-    # 准备仰角数据
-    elevations = np.linspace(hist['min_elevation'], hist['max_elevation'], 
-                            hist['num_elevation_bins'], endpoint=False)
-    elevations_deg = np.rad2deg(elevations)
+    # 添加俯仰角标签
+    for i, elev_deg in enumerate(elevations_deg):
+        # 在边缘位置标注俯仰角
+        ax.text(X[i, 0], Y[i, 0], Z[i, 0], f"{elev_deg}°", fontsize=8)
     
-    # 由于极坐标图通常以0为前方，我们将数据旋转90度
-    data_rotated = np.rot90(hist['data'], 1)
-    
-    # 更新热力图数据
-    heatmap.set_array(data_rotated)
-    heatmap.set_clim(0, hist['max_range'])
-    
-    return heatmap, cbar, text
+    return surf, cbar, text
 
 def main():
-    rospy.init_node('polar_histogram_visualizer', anonymous=True)
+    rospy.init_node('3d_polar_histogram_visualizer', anonymous=True)
     
-    # 替换为你的直方图话题名
-    topic_name = rospy.get_param('~histogram_topic', '/polar_histogram')
-    rospy.Subscriber(topic_name, PolarHistogramMsg, callback)
+    # 订阅指定的话题
+    rospy.Subscriber('/polar_histogram', PolarHistogramMsg, callback)
     
-    # 创建极坐标图
-    fig, ax = plt.subplots(figsize=(10, 8), subplot_kw=dict(projection='polar'))
-    fig.suptitle('极坐标直方图可视化 - 障碍物距离分布')
+    # 创建3D图形
+    fig = plt.figure(figsize=(12, 10))
+    ax = fig.add_subplot(111, projection='3d')
     
-    # 初始热力图（将在更新时替换）
-    initial_data = np.zeros((1, 1))
-    heatmap = ax.imshow(initial_data, cmap='viridis', aspect='auto', 
-                       extent=[0, 360, np.rad2deg(-0.122), np.rad2deg(0.984)])
-    
-    # 添加颜色条
-    cbar = fig.colorbar(heatmap, ax=ax)
-    cbar.set_label('距离 (m)')
-    
-    # 添加时间戳文本
-    text = ax.text(0.05, 0.95, "", transform=ax.transAxes, 
-                  verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
-    
-    # 设置极坐标显示
-    ax.set_theta_zero_location('N')  # 北方向为0度
-    ax.set_theta_direction(-1)       # 顺时针为正方向
-    ax.set_rlabel_position(0)        # 半径标签位置
+    # 初始变量
+    surf = None
+    cbar = None
+    text = ax.text(0, 0, 0, "等待接收数据...", fontsize=12)
     
     # 创建动画
-    ani = FuncAnimation(fig, update_plot, fargs=(ax, heatmap, cbar, text), 
-                       interval=100, blit=False)
+    ani = FuncAnimation(fig, update_plot, fargs=(ax, surf, cbar, text), 
+                       interval=200, blit=False)
     
+    plt.tight_layout()
     plt.show()
     
     rospy.spin()
