@@ -7,80 +7,47 @@ from mpl_toolkits.mplot3d import Axes3D
 from std_msgs.msg import Header
 from avoid_planner_pkg.msg import PolarHistogramMsg  # 已使用正确的包名
 import math
-'''
-
-1.
-订阅:/polar_histogram
-/polar_histogram的消息类型是:
-/*
-std_msgs/Header header
-float64 azimuth_resolution
-float64 elevation_resolution
-float64 min_azimuth
-float64 max_azimuth
-float64 min_elevation
-float64 max_elevation
-float64 max_range
-uint32 num_azimuth_bins
-uint32 num_elevation_bins
-float64[] data
-*/
-
-2.
-其中data[] 需要转换成12*360的数组
-12是俯仰角的-7,-2,3,8,13.....53
-从-7到53步长5度
-360是方位角
-0,1,2,3,4....,360
-从0到360步长1
-存储的数值的距离极中心的距离
-
-3.
-请帮我构建一个三维极坐标系
-将有数值的面填充
-例如data[10][120]=3
-在俯仰角为43 方位角为120处最近的障碍物为3m
-
-'''
-
 
 # 全局变量存储最新的直方图数据
 latest_histogram = None
 lock = False
+max_range_global = 50.0  # 初始最大距离，会根据实际数据更新
 
 def callback(msg):
-    """处理接收到的直方图消息，转换为12×360的二维数组"""
-    global latest_histogram, lock
+    """处理接收到的直方图消息，转换为360×12的二维数组（方位角×俯仰角）"""
+    global latest_histogram, lock, max_range_global
     if not lock:
-        # 将一维数据转换为12×360的二维数组（俯仰角×方位角）
+        # 将一维数据转换为360×12的二维数组（方位角数量×俯仰角数量）
         data = np.array(msg.data)
-        # 注意：根据消息定义重塑为(俯仰角数量, 方位角数量)
-        data_2d = data.reshape((msg.num_elevation_bins, msg.num_azimuth_bins))
+        data_2d = data.reshape((msg.num_azimuth_bins, msg.num_elevation_bins))  # 关键修改：360×12
         
         # 将inf替换为max_range以便更好地可视化
         data_2d[np.isinf(data_2d)] = msg.max_range
         
+        # 更新全局最大距离
+        max_range_global = msg.max_range
+        
         # 存储完整的直方图信息
         latest_histogram = {
-            'data': data_2d,
-            'azimuth_resolution': msg.azimuth_resolution,
-            'elevation_resolution': msg.elevation_resolution,
-            'min_azimuth': msg.min_azimuth,
-            'max_azimuth': msg.max_azimuth,
-            'min_elevation': msg.min_elevation,
-            'max_elevation': msg.max_elevation,
-            'max_range': msg.max_range,
+            'data': data_2d,  # 现在形状为(360, 12)
+            'header': msg.header,
             'num_azimuth_bins': msg.num_azimuth_bins,
-            'num_elevation_bins': msg.num_elevation_bins,
-            'header': msg.header
+            'num_elevation_bins': msg.num_elevation_bins
         }
 
-def update_plot(frame, ax, surf, cbar, text):
+def update_plot(frame, ax, surf, cbar, text, elevations_deg, azimuths_rad):
     """更新三维极坐标图数据"""
-    global latest_histogram, lock
+    global latest_histogram, lock, max_range_global
     
-    # 清除上一帧的图像
+    # 清除上一帧的图像但保留坐标轴设置
     ax.clear()
+    ax.set_xlabel('X (m)')
+    ax.set_ylabel('Y (m)')
+    ax.set_zlabel('Z (m)')
+    max_dim = max_range_global
+    ax.set_xlim(-max_dim, max_dim)
+    ax.set_ylim(-max_dim, max_dim)
+    ax.set_zlim(-max_dim/2, max_dim/2)  # Z轴范围适当缩小
     
     if latest_histogram is None:
         text = ax.text(0, 0, 0, "等待接收直方图数据...", fontsize=12)
@@ -91,25 +58,16 @@ def update_plot(frame, ax, surf, cbar, text):
     hist = latest_histogram
     lock = False
     
-    # 获取数据
-    data = hist['data']  # 形状为(12, 360)
-    max_range = hist['max_range']
+    # 获取数据（360×12格式：方位角×俯仰角）
+    data = hist['data']
     
-    # 准备角度数据（转换为弧度用于计算）
-    # 方位角：0~360度，步长1度
-    azimuths_deg = np.linspace(0, 360, hist['num_azimuth_bins'], endpoint=False)
-    azimuths_rad = np.radians(azimuths_deg)
-    
-    # 俯仰角：-7~53度，步长5度（共12个角度）
-    elevations_deg = np.linspace(-7, 53, hist['num_elevation_bins'], endpoint=True)
-    elevations_rad = np.radians(elevations_deg)
-    
-    # 创建网格
-    A, E = np.meshgrid(azimuths_rad, elevations_rad)
+    # 创建网格（方位角×俯仰角）
+    A, E = np.meshgrid(azimuths_rad, np.radians(elevations_deg))
+    # 数据需要转置以匹配网格形状 (12, 360)
+    R = data.T  # 转置为(12, 360)以匹配俯仰角×方位角的网格
     
     # 极坐标转换为笛卡尔坐标（x,y,z）
-    R = data  # 距离值
-    X = R * np.cos(E) * np.cos(A)  # 考虑俯仰角的三维坐标计算
+    X = R * np.cos(E) * np.cos(A)
     Y = R * np.cos(E) * np.sin(A)
     Z = R * np.sin(E)
     
@@ -119,26 +77,15 @@ def update_plot(frame, ax, surf, cbar, text):
                           linewidth=0.5, 
                           edgecolors='k',  # 边缘线颜色，增强立体感
                           vmin=0, 
-                          vmax=max_range)
+                          vmax=max_range_global)
     
-    # 设置坐标轴标签和范围
-    ax.set_xlabel('X (m)')
-    ax.set_ylabel('Y (m)')
-    ax.set_zlabel('Z (m)')
-    max_dim = max_range
-    ax.set_xlim(-max_dim, max_dim)
-    ax.set_ylim(-max_dim, max_dim)
-    ax.set_zlim(-max_dim/2, max_dim/2)  # Z轴范围适当缩小
+    # 更新颜色条范围（不重新创建）
+    cbar.mappable.set_clim(0, max_range_global)
+    cbar.mappable.set_array(R)
     
     # 添加标题和时间戳
     timestamp = hist['header'].stamp
-    ax.set_title(f"三维极坐标直方图 (时间戳: {timestamp.secs}.{timestamp.nsecs//1000000})")
-    
-    # 更新颜色条
-    if cbar:
-        cbar.remove()
-    cbar = plt.colorbar(surf, ax=ax, pad=0.1)
-    cbar.set_label('障碍物距离 (m)')
+    ax.set_title(f"三维极坐标直方图 (360×12格式) (时间戳: {timestamp.secs}.{timestamp.nsecs//1000000})")
     
     # 添加俯仰角标签
     for i, elev_deg in enumerate(elevations_deg):
@@ -153,17 +100,40 @@ def main():
     # 订阅指定的话题
     rospy.Subscriber('/polar_histogram', PolarHistogramMsg, callback)
     
+    # 预计算角度数据（固定不变）
+    num_azimuth_bins = 360
+    num_elevation_bins = 12
+    azimuths_deg = np.linspace(0, 360, num_azimuth_bins, endpoint=False)
+    azimuths_rad = np.radians(azimuths_deg)
+    elevations_deg = np.linspace(-7, 53, num_elevation_bins, endpoint=True)  # -7到53度，步长5度
+    
     # 创建3D图形
     fig = plt.figure(figsize=(12, 10))
     ax = fig.add_subplot(111, projection='3d')
     
-    # 初始变量
-    surf = None
-    cbar = None
+    # 初始创建一个空的表面图用于初始化颜色条
+    dummy_X, dummy_Y = np.meshgrid(azimuths_rad[:2], np.radians(elevations_deg[:2]))
+    dummy_Z = np.zeros_like(dummy_X)
+    surf = ax.plot_surface(dummy_X, dummy_Y, dummy_Z, cmap='viridis', vmin=0, vmax=50)
+    
+    # 创建一次颜色条并保持在图中
+    cbar = fig.colorbar(surf, ax=ax, pad=0.1)
+    cbar.set_label('障碍物距离 (m)')
+    
+    # 初始文本
     text = ax.text(0, 0, 0, "等待接收数据...", fontsize=12)
     
+    # 设置初始坐标轴
+    ax.set_xlabel('X (m)')
+    ax.set_ylabel('Y (m)')
+    ax.set_zlabel('Z (m)')
+    ax.set_xlim(-50, 50)
+    ax.set_ylim(-50, 50)
+    ax.set_zlim(-25, 25)
+    
     # 创建动画
-    ani = FuncAnimation(fig, update_plot, fargs=(ax, surf, cbar, text), 
+    ani = FuncAnimation(fig, update_plot, 
+                       fargs=(ax, surf, cbar, text, elevations_deg, azimuths_rad), 
                        interval=200, blit=False)
     
     plt.tight_layout()
