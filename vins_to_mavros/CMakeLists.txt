@@ -206,31 +206,6 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-#mid360PositionTf_node#
-# Add the node executable
-add_executable(mid360PositionTf_node src/mid360PositionTf_node.cpp)
-
-# Specify libraries to link against
-target_link_libraries(mid360PositionTf_node
-  ${catkin_LIBRARIES}
-)
-
-#ardutfs_node#
-# Add the node executable
-add_executable(ardutf_node src/ardutf_node.cpp)
-# Specify libraries to link against 
-target_link_libraries(ardutf_node
-  ${catkin_LIBRARIES}
-)
-
-#odomToMav_node#
-# Add the node executable
-add_executable(odomToMav_node src/odomToMav_node.cpp)
-# Specify libraries to link against
-target_link_libraries(odomToMav_node
-  ${catkin_LIBRARIES}
-)
-
 add_executable(otm_node src/otm_node.cpp)
 # Specify libraries to link against
 target_link_libraries(otm_node

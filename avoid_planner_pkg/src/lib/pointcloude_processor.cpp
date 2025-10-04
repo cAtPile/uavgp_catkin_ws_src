@@ -21,7 +21,7 @@ PointcloudProcessor::PointcloudProcessor(ros::NodeHandle& nh) :
     nh_.param<std::string>("body_frame_id", body_frame_id_, "base_link");
     
     // 订阅点云话题
-    pointcloud_sub_ = nh_.subscribe("/mid360/points", 10, //待修改
+    pointcloud_sub_ = nh_.subscribe("/livox/lidar", 10, //待修改
                                    &PointcloudProcessor::pointcloudCallback, this);
     
     ROS_INFO("PointcloudProcessor initialized with parameters:");

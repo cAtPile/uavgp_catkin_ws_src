@@ -21,7 +21,7 @@ int main(int argc, char**argv) {
         ros::Rate rate(20);  // 20Hz循环频率
         while (ros::ok()) {
             // 检查是否有新的直方图数据
-            if (processor.isUpdated()) {
+            if (1) {
                 // 获取直方图数据（内部已加锁保护）
                 const mid360_avoidance::PolarHistogram& hist = processor.getHistogram();
                 
@@ -49,14 +49,14 @@ int main(int argc, char**argv) {
                 
                 // 发布消息
                 hist_pub.publish(msg);
-                ROS_DEBUG_THROTTLE(1.0, "Published polar histogram with %zu azimuth bins and %zu elevation bins",
+                ROS_INFO_THROTTLE(1.0, "Published polar histogram with %zu azimuth bins and %zu elevation bins",
                                   hist.num_azimuth_bins, hist.num_elevation_bins);
                 
                 // 重置更新标志
                 processor.resetUpdatedFlag();
             }
 
-            // 处理回调函数（点云订阅在处理器内部）
+            // 处理回调函数
             ros::spinOnce();
             rate.sleep();
         }
