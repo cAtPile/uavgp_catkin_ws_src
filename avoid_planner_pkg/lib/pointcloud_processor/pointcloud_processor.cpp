@@ -33,7 +33,7 @@ PointcloudProcessor::PointcloudProcessor(ros::NodeHandle& nh) :
     loadParams();
 
     // 订阅点云话题
-    pointcloud_sub_ = nh_.subscribe(lidar_topic, 10,
+    pointcloud_sub_ = nh_.subscribe(lidar_topic_, 10,
                                    &PointcloudProcessor::pointcloudCallback, this);
 
     //参数展示
