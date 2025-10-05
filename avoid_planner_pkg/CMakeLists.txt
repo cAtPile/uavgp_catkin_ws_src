@@ -51,9 +51,21 @@ add_library(avoid_planner_lib
   src/lib/cost_calculator.cpp
   src/lib/local_planner.cpp
   src/lib/mavros_interface.cpp
-  src/lib/pointcloud_processor.cpp  
+  #src/lib/pointcloud_processor.cpp  
   src/lib/star_planner.cpp
   src/lib/utils.cpp
+  lib/pointcloud_processor/angle_tobin_index.cpp
+  lib/pointcloud_processor/filter_pointcloud.cpp
+  lib/pointcloud_processor/generate_polarhistogram.cpp
+  lib/pointcloud_processor/get_angle_bin_index.cpp
+  lib/pointcloud_processor/get_histogram.cpp
+  lib/pointcloud_processor/is_updated.cpp
+  lib/pointcloud_processor/load_params.cpp
+  lib/pointcloud_processor/pointcloud_processor.cpp
+  lib/pointcloud_processor/pointcloude_callback.cpp
+  lib/pointcloud_processor/reset_updated_flag.cpp
+  lib/pointcloud_processor/transform_to_bodyframe.cpp
+  lib/pointcloud_processor/update_histogram_from_point.cpp
 )
 
 add_dependencies(avoid_planner_lib ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -67,7 +79,7 @@ target_link_libraries(avoid_planner_lib
 
 # 6. 编译测试节点
 add_executable(pcp_test_node
-  src/test/pcp_test.cpp
+  test/pcp_test.cpp
 )
 
 #
