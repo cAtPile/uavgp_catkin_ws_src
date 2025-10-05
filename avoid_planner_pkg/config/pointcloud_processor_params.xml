@@ -1,0 +1,23 @@
+<launch>
+    <!--pointcloude processor params-->
+    <!--传感器参数-->
+    <param name="max_sensor_range" type="double" value="50.0"/><!--最大检测范围-->
+    <param name="min_sensor_range" type="double" value="0.5"/><!--最小检测范围-->
+    <param name="voxel_grid_size" type="double" value="0.1"/><!---->
+    <param name="statistical_filter_mean_k" type="int" value="10"/><!---->
+    <param name="statistical_filter_std_dev" type="double" value="0.1"/><!---->
+
+    <param name="lidar_frame_id" type="string" value="livox_frame"/><!---->
+    <param name="body_frame_id" type="string" value="base_link"/><!---->
+
+    <!-- 雷达话题参数 -->
+    <param name="lidar_topic" type="string" value="/livox/lidar"/><!---->
+
+    <!-- 直方图参数（角度单位：度） -->
+    <param name="azimuth_resolution_deg" type="double" value="1.0"/><!---->
+    <param name="elevation_resolution_deg" type="double" value="5.0"/><!---->
+    <param name="min_azimuth_deg" type="double" value="-180.0"/><!---->
+    <param name="max_azimuth_deg" type="double" value="180.0"/><!---->
+    <param name="min_elevation_deg" type="double" value="-15.0"/><!---->
+    <param name="max_elevation_deg" type="double" value="15.0"/><!---->
+</launch>

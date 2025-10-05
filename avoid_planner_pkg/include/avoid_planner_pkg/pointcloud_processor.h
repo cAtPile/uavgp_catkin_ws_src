@@ -1,5 +1,5 @@
-#ifndef MID360_AVOIDANCE_POINTCLOUD_PROCESSOR_H
-#define MID360_AVOIDANCE_POINTCLOUD_PROCESSOR_H
+#ifndef AVOID_PLANNER_POINTCLOUD_PROCESSOR_H
+#define AVOID_PLANNER_POINTCLOUD_PROCESSOR_H
 
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -17,7 +17,7 @@
 #include <memory>
 #include <mutex>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @struct PolarHistogram
@@ -93,103 +93,33 @@ private:
     bool is_updated_;                     // 更新标志
     mutable std::mutex updated_mutex_;    // 更新标志锁
 
-    /**
-     * @brief 点云消息回调函数
-     * @param msg 点云消息指针
-     */
-    //点云回调
-    void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg);
-    
-    /**
-     * @brief 过滤原始点云
-     * @param input 输入点云
-     * @param output 输出过滤后的点云
-     */
-    //过滤点云
+    //==========私有函数============
+    void loadParams(); //加载参数
+    void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg);//点云回调
     void filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& input, 
-                         pcl::PointCloud<pcl::PointXYZ>& output);
-    
-    /**
-     * @brief 将点云从雷达坐标系转换到机体坐标系
-     * @param input 输入点云(雷达坐标系)
-     * @param output 输出点云(机体坐标系)
-     * @return 转换成功返回true，否则返回false
-     */
-    //坐标系转换
+                         pcl::PointCloud<pcl::PointXYZ>& output);//过滤点云
     bool transformToBodyFrame(const pcl::PointCloud<pcl::PointXYZ>& input, 
-                             pcl::PointCloud<pcl::PointXYZ>& output);
-    
-    /**
-     * @brief 生成极坐标直方图
-     * @param cloud 机体坐标系下的点云
-     */
-    //生成极坐标直方图
-    void generatePolarHistogram(const pcl::PointCloud<pcl::PointXYZ>& cloud);
-    
-    /**
-     * @brief 将笛卡尔坐标点转换为极坐标并更新直方图
-     * @param x X坐标(机体坐标系)
-     * @param y Y坐标(机体坐标系)
-     * @param z Z坐标(机体坐标系)
-     */
-    //将笛卡尔坐标点转换为极坐标并更新直方图
-    void updateHistogramFromPoint(double x, double y, double z);
-    
-    /**
-     * @brief 将角度值映射到直方图网格索引
-     * @param angle 角度值(弧度)
-     * @param min_angle 最小角度(弧度)
-     * @param max_angle 最大角度(弧度)
-     * @param num_bins 网格数量
-     * @return 网格索引，若超出范围返回-1
-     */
-    //角度映射
-    int angleToBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);
-
-    /**
-     * @brief 统一加载所有参数（传感器参数+直方图参数）
-     */
-    //加载参数
-    void loadParams(); 
+                             pcl::PointCloud<pcl::PointXYZ>& output);//坐标系转换
+    void generatePolarHistogram(const pcl::PointCloud<pcl::PointXYZ>& cloud);//生成极坐标直方图
+    void updateHistogramFromPoint(double x, double y, double z);//逐点更新直方图
+    int angleToBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);//角度映射
 
 public:
-    /**
-     * @brief 构造函数
-     * @param nh ROS节点句柄
-     */
-    explicit PointcloudProcessor(ros::NodeHandle& nh);
-    
-    /**
-     * @brief 析构函数
-     */
-    ~PointcloudProcessor() = default;
-    
-    /**
-     * @brief 获取处理后的极坐标直方图
-     * @return 极坐标直方图引用
-     */
-    const PolarHistogram& getHistogram() const;
-    
-    /**
-     * @brief 检查是否有新的直方图数据
-     * @return 若有新数据则返回true，否则返回false
-     */
-    bool isUpdated() const;
-    
-    /**
-     * @brief 重置更新标志
-     */
-    void resetUpdatedFlag();
 
-    int getAngleBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);
-
-    // 添加智能指针类型定义
+    // 智能指针类型定义
     typedef boost::shared_ptr<PointcloudProcessor> Ptr;
     typedef boost::shared_ptr<const PointcloudProcessor> ConstPtr;
 
+    //===========公共函数=================
+    explicit PointcloudProcessor(ros::NodeHandle& nh);//构造函数
+    ~PointcloudProcessor() = default;//析构函数
+    const PolarHistogram& getHistogram() const;//只读直方图
+    bool isUpdated() const;//更新检测
+    void resetUpdatedFlag();//重置更新标致
+    int getAngleBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);//获取角度索引
 
 };
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner 
 
-#endif // MID360_AVOIDANCE_POINTCLOUD_PROCESSOR_H
+#endif // AVOID_PLANNER_POINTCLOUD_PROCESSOR_H

@@ -1,0 +1,11 @@
+<launch>
+    <!-- 节点名称 -->
+    <node name="pcp_test_node" pkg="avoid_planner_pkg" type="pcp_test" output="screen">
+        <!-- 加载XML格式的参数文件 -->
+        <rosparam file="$(find avoid_planner_pkg)/config/params.xml" command="load" format="xml"/>
+        
+        <!-- 可在这里覆盖配置文件中的参数 -->
+        <!-- 例如：<param name="lidar_topic" value="/new/lidar/topic"/> -->
+        <!-- 例如：<param name="azimuth_resolution_deg" value="0.5"/> -->
+    </node>
+</launch>
