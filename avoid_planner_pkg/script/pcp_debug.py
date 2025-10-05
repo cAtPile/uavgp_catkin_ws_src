@@ -11,7 +11,7 @@ import math
 # 全局变量存储最新的直方图数据
 latest_histogram = None
 lock = False
-max_range_global = 50.0  # 初始最大距离，会根据实际数据更新
+max_range_global = 0.01  # 初始最大距离，会根据实际数据更新
 
 def callback(msg):
     """处理接收到的直方图消息，转换为360×12的二维数组（方位角×俯仰角）"""

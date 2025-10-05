@@ -1,5 +1,3 @@
-//点云处理模块声明
-
 #ifndef MID360_AVOIDANCE_POINTCLOUD_PROCESSOR_H
 #define MID360_AVOIDANCE_POINTCLOUD_PROCESSOR_H
 
@@ -67,6 +65,93 @@ struct PolarHistogram {
  * @brief 点云处理器类，负责处理Mid360激光雷达数据并生成障碍物直方图
  */
 class PointcloudProcessor {
+
+private:
+
+    // ROS相关成员
+    ros::NodeHandle nh_;
+
+    //订阅
+    ros::Subscriber pointcloud_sub_;      // 点云订阅者
+
+    //tf
+    tf2_ros::Buffer tf_buffer_;           // TF变换缓存
+    tf2_ros::TransformListener tf_listener_; // TF变换监听器
+    
+    // 点云处理参数
+    double max_sensor_range_;             // 最大感知距离(m)
+    double min_sensor_range_;             // 最小感知距离(m)
+    double voxel_grid_size_;              // 体素滤波分辨率(m)
+    int statistical_filter_mean_k_;       // 统计滤波邻域点数量
+    double statistical_filter_std_dev_;   // 统计滤波标准差阈值
+    std::string lidar_frame_id_;          // 激光雷达坐标系ID
+    std::string body_frame_id_;           // 机体坐标系ID
+    
+    // 直方图数据
+    PolarHistogram histogram_;            // 极坐标直方图
+    mutable std::mutex histogram_mutex_;  // 直方图数据锁
+    bool is_updated_;                     // 更新标志
+    mutable std::mutex updated_mutex_;    // 更新标志锁
+
+    /**
+     * @brief 点云消息回调函数
+     * @param msg 点云消息指针
+     */
+    //点云回调
+    void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg);
+    
+    /**
+     * @brief 过滤原始点云
+     * @param input 输入点云
+     * @param output 输出过滤后的点云
+     */
+    //过滤点云
+    void filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& input, 
+                         pcl::PointCloud<pcl::PointXYZ>& output);
+    
+    /**
+     * @brief 将点云从雷达坐标系转换到机体坐标系
+     * @param input 输入点云(雷达坐标系)
+     * @param output 输出点云(机体坐标系)
+     * @return 转换成功返回true，否则返回false
+     */
+    //坐标系转换
+    bool transformToBodyFrame(const pcl::PointCloud<pcl::PointXYZ>& input, 
+                             pcl::PointCloud<pcl::PointXYZ>& output);
+    
+    /**
+     * @brief 生成极坐标直方图
+     * @param cloud 机体坐标系下的点云
+     */
+    //生成极坐标直方图
+    void generatePolarHistogram(const pcl::PointCloud<pcl::PointXYZ>& cloud);
+    
+    /**
+     * @brief 将笛卡尔坐标点转换为极坐标并更新直方图
+     * @param x X坐标(机体坐标系)
+     * @param y Y坐标(机体坐标系)
+     * @param z Z坐标(机体坐标系)
+     */
+    //将笛卡尔坐标点转换为极坐标并更新直方图
+    void updateHistogramFromPoint(double x, double y, double z);
+    
+    /**
+     * @brief 将角度值映射到直方图网格索引
+     * @param angle 角度值(弧度)
+     * @param min_angle 最小角度(弧度)
+     * @param max_angle 最大角度(弧度)
+     * @param num_bins 网格数量
+     * @return 网格索引，若超出范围返回-1
+     */
+    //角度映射
+    int angleToBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);
+
+    /**
+     * @brief 统一加载所有参数（传感器参数+直方图参数）
+     */
+    //加载参数
+    void loadParams(); 
+
 public:
     /**
      * @brief 构造函数
@@ -102,74 +187,7 @@ public:
     typedef boost::shared_ptr<PointcloudProcessor> Ptr;
     typedef boost::shared_ptr<const PointcloudProcessor> ConstPtr;
 
-private:
-    /**
-     * @brief 点云消息回调函数
-     * @param msg 点云消息指针
-     */
-    void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg);
-    
-    /**
-     * @brief 过滤原始点云
-     * @param input 输入点云
-     * @param output 输出过滤后的点云
-     */
-    void filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& input, 
-                         pcl::PointCloud<pcl::PointXYZ>& output);
-    
-    /**
-     * @brief 将点云从雷达坐标系转换到机体坐标系
-     * @param input 输入点云(雷达坐标系)
-     * @param output 输出点云(机体坐标系)
-     * @return 转换成功返回true，否则返回false
-     */
-    bool transformToBodyFrame(const pcl::PointCloud<pcl::PointXYZ>& input, 
-                             pcl::PointCloud<pcl::PointXYZ>& output);
-    
-    /**
-     * @brief 生成极坐标直方图
-     * @param cloud 机体坐标系下的点云
-     */
-    void generatePolarHistogram(const pcl::PointCloud<pcl::PointXYZ>& cloud);
-    
-    /**
-     * @brief 将笛卡尔坐标点转换为极坐标并更新直方图
-     * @param x X坐标(机体坐标系)
-     * @param y Y坐标(机体坐标系)
-     * @param z Z坐标(机体坐标系)
-     */
-    void updateHistogramFromPoint(double x, double y, double z);
-    
-    /**
-     * @brief 将角度值映射到直方图网格索引
-     * @param angle 角度值(弧度)
-     * @param min_angle 最小角度(弧度)
-     * @param max_angle 最大角度(弧度)
-     * @param num_bins 网格数量
-     * @return 网格索引，若超出范围返回-1
-     */
-    int angleToBinIndex(double angle, double min_angle, double max_angle, size_t num_bins);
 
-    // ROS相关成员
-    ros::NodeHandle nh_;                  // ROS节点句柄
-    ros::Subscriber pointcloud_sub_;      // 点云订阅者
-    tf2_ros::Buffer tf_buffer_;           // TF变换缓存
-    tf2_ros::TransformListener tf_listener_; // TF变换监听器
-    
-    // 点云处理参数
-    double max_sensor_range_;             // 最大感知距离(m)
-    double min_sensor_range_;             // 最小感知距离(m)
-    double voxel_grid_size_;              // 体素滤波分辨率(m)
-    int statistical_filter_mean_k_;       // 统计滤波邻域点数量
-    double statistical_filter_std_dev_;   // 统计滤波标准差阈值
-    std::string lidar_frame_id_;          // 激光雷达坐标系ID
-    std::string body_frame_id_;           // 机体坐标系ID
-    
-    // 直方图数据
-    PolarHistogram histogram_;            // 极坐标直方图
-    mutable std::mutex histogram_mutex_;  // 直方图数据锁
-    bool is_updated_;                     // 更新标志
-    mutable std::mutex updated_mutex_;    // 更新标志锁
 };
 
 } // namespace mid360_avoidance

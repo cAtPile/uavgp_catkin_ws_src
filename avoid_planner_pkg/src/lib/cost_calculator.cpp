@@ -1,13 +1,13 @@
 #include "avoid_planner_pkg/cost_calculator.h" 
 #include "avoid_planner_pkg/utils.h" 
-#include <mutex>          // 用于线程同步的互斥锁
-#include <ros/ros.h>      // ROS相关功能
-#include <Eigen/Dense>    // Eigen矩阵矩阵运算
-#include <cmath>          // 数学函数
+#include <mutex>
+#include <ros/ros.h>
+#include <Eigen/Dense>
+#include <cmath>
 
 namespace mid360_avoidance {
     
-// 构造函数：初始化成本计算器参数
+// 构造函数
 CostCalculator::CostCalculator() :
     histogram_updated_(false),  // 直方图未更新
     is_updated_(false),         // 成本矩阵未更新
