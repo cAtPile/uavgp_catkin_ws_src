@@ -88,3 +88,5 @@ void PointcloudProcessor::pointcloudCallback(const sensor_msgs::PointCloud2::Con
         is_updated_ = true;
     }
 }
+
+}
