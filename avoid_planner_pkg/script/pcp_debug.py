@@ -101,11 +101,11 @@ def main():
     rospy.Subscriber('/polar_histogram', PolarHistogramMsg, callback)
     
     # 预计算角度数据（固定不变）
-    num_azimuth_bins = 360
-    num_elevation_bins = 12
+    num_azimuth_bins = 90
+    num_elevation_bins = 10
     azimuths_deg = np.linspace(0, 360, num_azimuth_bins, endpoint=False)
     azimuths_rad = np.radians(azimuths_deg)
-    elevations_deg = np.linspace(-7, 53, num_elevation_bins, endpoint=True)  # -7到53度，步长5度
+    elevations_deg = np.linspace(0, 50, num_elevation_bins, endpoint=True)  # -7到53度，步长5度
     
     # 创建3D图形
     fig = plt.figure(figsize=(12, 10))
