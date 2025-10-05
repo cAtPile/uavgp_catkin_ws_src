@@ -23,13 +23,13 @@ namespace avoid_planner {
 void PointcloudProcessor::loadParams() {
 
     // 加载传感器参数
-    nh_.param<double>("avoid_planner/max_sensor_range", max_sensor_range_, 50.0);
-    nh_.param<double>("avoid_planner/min_sensor_range", min_sensor_range_, 0.5);
-    nh_.param<double>("avoid_planner/voxel_grid_size", voxel_grid_size_, 0.1);
-    nh_.param<int>("avoid_planner/statistical_filter_mean_k", statistical_filter_mean_k_, 10);
-    nh_.param<double>("avoid_planner/statistical_filter_std_dev", statistical_filter_std_dev_, 0.1);
-    nh_.param<std::string>("avoid_planner/lidar_frame_id", lidar_frame_id_, "livox_frame");
-    nh_.param<std::string>("avoid_planner/body_frame_id", body_frame_id_, "base_link");
+    nh_.param<double>("max_sensor_range", max_sensor_range_, 50.0);
+    nh_.param<double>("min_sensor_range", min_sensor_range_, 0.5);
+    nh_.param<double>("voxel_grid_size", voxel_grid_size_, 0.1);
+    nh_.param<int>("statistical_filter_mean_k", statistical_filter_mean_k_, 10);
+    nh_.param<double>("statistical_filter_std_dev", statistical_filter_std_dev_, 0.1);
+    nh_.param<std::string>("lidar_frame_id", lidar_frame_id_, "livox_frame");
+    nh_.param<std::string>("body_frame_id", body_frame_id_, "base_link");
     nh_.param<std::string>("lidar_topic", lidar_topic_, "/livox/lidar");
     
     // 直方图参数 单位：度
@@ -41,12 +41,12 @@ void PointcloudProcessor::loadParams() {
     double max_el_deg;  //最大俯仰角
     
     // 加载角度参数
-    nh_.param<double>("avoid_planner/azimuth_resolution_deg", az_res_deg, 1.0); // 默认1°
-    nh_.param<double>("avoid_planner/elevation_resolution_deg", el_res_deg, 5.0); // 默认5°
-    nh_.param<double>("avoid_planner/min_azimuth_deg", min_az_deg, -180.0); // 默认-180°
-    nh_.param<double>("avoid_planner/max_azimuth_deg", max_az_deg, 180.0); // 默认180°
-    nh_.param<double>("avoid_planner/min_elevation_deg", min_el_deg, -7.0); // 默认-7°
-    nh_.param<double>("avoid_planner/max_elevation_deg", max_el_deg, 52.0); // 默认52°
+    nh_.param<double>("azimuth_resolution_deg", az_res_deg, 1.0); // 默认1°
+    nh_.param<double>("elevation_resolution_deg", el_res_deg, 5.0); // 默认5°
+    nh_.param<double>("min_azimuth_deg", min_az_deg, -180.0); // 默认-180°
+    nh_.param<double>("max_azimuth_deg", max_az_deg, 180.0); // 默认180°
+    nh_.param<double>("min_elevation_deg", min_el_deg, -7.0); // 默认-7°
+    nh_.param<double>("max_elevation_deg", max_el_deg, 52.0); // 默认52°
     
     // 转换为弧度并更新直方图
     histogram_.azimuth_resolution = az_res_deg * M_PI / 180.0;

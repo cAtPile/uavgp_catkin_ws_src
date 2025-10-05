@@ -1,7 +1,7 @@
 <launch>
   <!-- 加载参数 -->
-  <rosparam file="$(find avoid_planner_pkg)/config/pointcloud_processor_params.yaml" />
+  <rosparam file="$(find avoid_planner_pkg)/config/pcp_test_params.yaml" />
 
   <!-- 启动 PointcloudProcessor 节点 -->
-  <node pkg="avoid_planner_pkg" type="pcp_test_node" name="pcp_test_node" output="screen" ns="avoid_planner"/>
+  <node pkg="avoid_planner_pkg" type="pcp_test_node" name="pcp_test_node" output="screen"/>
 </launch>
