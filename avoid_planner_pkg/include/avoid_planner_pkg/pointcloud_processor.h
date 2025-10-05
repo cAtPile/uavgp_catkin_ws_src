@@ -69,7 +69,7 @@ class PointcloudProcessor {
 private:
 
     // ROS相关成员
-    ros::NodeHandle nh_;
+    ros::NodeHandle nh;//nh_;
 
     //订阅
     ros::Subscriber pointcloud_sub_;      // 点云订阅者

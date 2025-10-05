@@ -4,7 +4,7 @@
 int main(int argc, char**argv) {
     // 初始化ROS节点
     ros::init(argc, argv, "mid360_avoidance_node");
-    ros::NodeHandle nh("~");  // 使用私有命名空间
+    ros::NodeHandle nh;//("~");  // 使用私有命名空间
 
     try {
         // 创建局部规划器实例
