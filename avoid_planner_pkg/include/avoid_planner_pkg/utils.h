@@ -1,6 +1,6 @@
 //通用工具函数声明
-#ifndef MID360_AVOIDANCE_UTILS_H
-#define MID360_AVOIDANCE_UTILS_H
+#ifndef AVOID_PLANNER_UTILS_H
+#define AVOID_PLANNER_UTILS_H
 
 #include <Eigen/Dense>
 #include <geometry_msgs/Quaternion.h>
@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @struct Params
@@ -102,6 +102,6 @@ double normalizeAngle(double angle);
 geometry_msgs::PoseStamped vectorToPoseStamped(const Eigen::Vector3d& position,
                                               const std::string& frame_id);
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner
 
-#endif // MID360_AVOIDANCE_UTILS_H
+#endif // AVOID_PLANNER_UTILS_H

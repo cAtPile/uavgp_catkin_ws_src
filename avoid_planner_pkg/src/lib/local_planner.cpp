@@ -7,7 +7,7 @@
 #include <ros/console.h>
 #include <algorithm>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @brief 局部规划器构造函数（初始化核心模块和ROS接口）
@@ -417,4 +417,4 @@ void LocalPlanner::loadParameters() {
     );
 } 
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner

@@ -5,7 +5,7 @@
 #include <Eigen/Dense>
 #include <cmath>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
     
 // 构造函数
 CostCalculator::CostCalculator() :
@@ -290,4 +290,4 @@ Eigen::Vector3d CostCalculator::anglesToDirectionVector(double azimuth, double e
     return dir.normalized();  // 归一化为单位向量
 }
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner

@@ -1,6 +1,6 @@
 //成本计算模块声明
-#ifndef MID360_AVOIDANCE_COST_CALCULATOR_H
-#define MID360_AVOIDANCE_COST_CALCULATOR_H
+#ifndef AVOID_PLANNER_COST_CALCULATOR_H
+#define AVOID_PLANNER_COST_CALCULATOR_H
 
 #include <Eigen/Dense>
 #include <vector>
@@ -8,7 +8,7 @@
 #include <mutex>
 #include "avoid_planner_pkg/pointcloud_processor.h"
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @struct CostMatrix
@@ -173,6 +173,6 @@ private:
     mutable std::mutex update_mutex_;   // 更新标志锁
 };
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner
 
-#endif // MID360_AVOIDANCE_COST_CALCULATOR_H
+#endif // AVOID_PLANNER_COST_CALCULATOR_H

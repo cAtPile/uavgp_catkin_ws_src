@@ -1,5 +1,5 @@
-#ifndef MID360_AVOIDANCE_LOCAL_PLANNER_H
-#define MID360_AVOIDANCE_LOCAL_PLANNER_H
+#ifndef AVOID_PLANNER_LOCAL_PLANNER_H
+#define AVOID_PLANNER_LOCAL_PLANNER_H
 
 #include <ros/ros.h>
 #include <nav_msgs/Path.h>
@@ -14,7 +14,7 @@
 #include "avoid_planner_pkg/mavros_interface.h"
 #include <ros/timer.h>  // 让编译器认识 ros::TimerEvent 类型
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @struct PlannerConfig
@@ -141,6 +141,6 @@ private:
     PlannerConfig config_;                    // 规划器配置
 };
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner
 
-#endif // MID360_AVOIDANCE_LOCAL_PLANNER_H
+#endif // AVOID_PLANNER_LOCAL_PLANNER_H

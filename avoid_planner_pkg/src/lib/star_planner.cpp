@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <ros/console.h>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @brief 节点优先级比较器结构体（用于优先队列排序）
@@ -456,4 +456,4 @@ std::vector<Eigen::Vector3d> StarPlanner::smoothPath(const std::vector<Eigen::Ve
     return smoothed;  // 返回平滑后的路径
 }
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner

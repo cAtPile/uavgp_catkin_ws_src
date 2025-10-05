@@ -5,7 +5,7 @@
 #include <cmath>
 #include <ros/console.h>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 //rpy
 Eigen::Vector3d quaternionToYaw(const geometry_msgs::Quaternion& quat) {
@@ -217,4 +217,4 @@ geometry_msgs::PoseStamped vectorToPoseStamped(const Eigen::Vector3d& position,
     return pose;
 }
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner

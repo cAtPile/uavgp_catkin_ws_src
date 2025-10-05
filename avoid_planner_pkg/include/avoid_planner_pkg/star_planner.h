@@ -1,6 +1,6 @@
 //星形搜索算法类声明
-#ifndef MID360_AVOIDANCE_STAR_PLANNER_H
-#define MID360_AVOIDANCE_STAR_PLANNER_H
+#ifndef AVOID_PLANNER_STAR_PLANNER_H
+#define AVOID_PLANNER_STAR_PLANNER_H
 
 #include <Eigen/Dense>
 #include <vector>
@@ -10,7 +10,7 @@
 #include <set>
 #include "avoid_planner_pkg/cost_calculator.h"
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @struct StarNode
@@ -188,6 +188,6 @@ private:
     double max_elevation_;                // 最大仰角(弧度)
 };
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner
 
-#endif // MID360_AVOIDANCE_STAR_PLANNER_H
+#endif // AVOID_PLANNER_STAR_PLANNER_H

@@ -1,6 +1,6 @@
 //MAVROS通信接口声明
-#ifndef MID360_AVOIDANCE_MAVROS_INTERFACE_H
-#define MID360_AVOIDANCE_MAVROS_INTERFACE_H
+#ifndef AVOID_PLANNER_MAVROS_INTERFACE_H
+#define AVOID_PLANNER_MAVROS_INTERFACE_H
 
 #include <ros/ros.h>
 #include <mavros_msgs/SetMode.h>
@@ -14,7 +14,7 @@
 #include <mutex>
 #include <string>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @struct VehicleState
@@ -180,6 +180,6 @@ private:
     double offboard_rate_;                        // OFFBOARD模式发布频率(Hz)
 };
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner
 
-#endif // MID360_AVOIDANCE_MAVROS_INTERFACE_H
+#endif // AVOID_PLANNER_MAVROS_INTERFACE_H

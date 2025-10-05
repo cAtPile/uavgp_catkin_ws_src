@@ -5,7 +5,7 @@
 #include <cmath>
 #include <limits>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 //构造函数
 PointcloudProcessor::PointcloudProcessor(ros::NodeHandle& nh) : 
@@ -251,4 +251,4 @@ int PointcloudProcessor::getAngleBinIndex(double angle, double min_angle, double
     return angleToBinIndex(angle, min_angle, max_angle, num_bins);
 }
 
-} // namespace mid360_avoidance
+} // namespace avoid_planner

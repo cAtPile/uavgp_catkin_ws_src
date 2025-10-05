@@ -6,7 +6,7 @@
 #include <ros/console.h>
 #include <cmath>
 
-namespace mid360_avoidance {
+namespace avoid_planner {
 
 /**
  * @brief MavrosInterface类构造函数（初始化MAVROS接口）
@@ -338,4 +338,4 @@ geometry_msgs::PoseStamped MavrosInterface::eigenToPoseStamped(const Eigen::Vect
     return pose;  // 返回转换后的PoseStamped消息
 }
 
-} // namespace mid36
+} // namespace avoid_planner
