@@ -86,7 +86,7 @@ private:
     double statistical_filter_std_dev_;   // 统计滤波标准差阈值
     std::string lidar_frame_id_;          // 激光雷达坐标系ID
     std::string body_frame_id_;           // 机体坐标系ID
-    std::string lidar_topic_              // 点云话题
+    std::string lidar_topic_ ;             // 点云话题
     
     // 直方图数据
     PolarHistogram histogram_;            // 极坐标直方图
