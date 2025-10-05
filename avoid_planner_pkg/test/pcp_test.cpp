@@ -9,7 +9,7 @@ int main(int argc, char**argv) {
 
     try {
         // 创建点云处理器实例
-        mid360_avoidance::PointcloudProcessor processor(nh);
+        avoid_planner::PointcloudProcessor processor(nh);
         
         // 创建直方图消息发布者
         ros::Publisher hist_pub = nh.advertise<avoid_planner_pkg::PolarHistogramMsg>(
@@ -23,7 +23,7 @@ int main(int argc, char**argv) {
             // 检查是否有新的直方图数据
             if (1) {
                 // 获取直方图数据（内部已加锁保护）
-                const mid360_avoidance::PolarHistogram& hist = processor.getHistogram();
+                const avoid_planner::PolarHistogram& hist = processor.getHistogram();
                 
                 // 构造ROS消息
                 avoid_planner_pkg::PolarHistogramMsg msg;
