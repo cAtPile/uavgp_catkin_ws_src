@@ -30,7 +30,7 @@ void PointcloudProcessor::loadParams() {
     nh_.param<double>("avoid_planner/statistical_filter_std_dev", statistical_filter_std_dev_, 0.1);
     nh_.param<std::string>("avoid_planner/lidar_frame_id", lidar_frame_id_, "livox_frame");
     nh_.param<std::string>("avoid_planner/body_frame_id", body_frame_id_, "base_link");
-    nh_.param<std::string>("avoid_planner/lidar_topic", lidar_topic_, "/livox/lidar");
+    nh_.param<std::string>("lidar_topic", lidar_topic_, "/livox/lidar");
     
     // 直方图参数 单位：度
     double az_res_deg;  //方位角步长（度）
@@ -45,7 +45,7 @@ void PointcloudProcessor::loadParams() {
     nh_.param<double>("avoid_planner/elevation_resolution_deg", el_res_deg, 5.0); // 默认5°
     nh_.param<double>("avoid_planner/min_azimuth_deg", min_az_deg, -180.0); // 默认-180°
     nh_.param<double>("avoid_planner/max_azimuth_deg", max_az_deg, 180.0); // 默认180°
-    nh_.param<double>("avoid_planner/min_elevation_deg", min_el_deg, -7.0); // 默认-7°
+    nh_.param<double>("min_elevation_deg", min_el_deg, -7.0); // 默认-7°
     nh_.param<double>("avoid_planner/max_elevation_deg", max_el_deg, 52.0); // 默认52°
     
     // 转换为弧度并更新直方图

@@ -3,7 +3,5 @@
   <rosparam file="$(find avoid_planner_pkg)/config/pointcloud_processor_params.yaml" />
 
   <!-- 启动 PointcloudProcessor 节点 -->
-  <node pkg="avoid_planner_pkg" type="pcp_test_node" name="pcp_test_node" output="screen">
-    <param name="ros_namespace" value="avoid_planner"/>
-  </node>
+  <node pkg="avoid_planner_pkg" type="pcp_test_node" name="pcp_test_node" output="screen" ns="avoid_planner"/>
 </launch>
