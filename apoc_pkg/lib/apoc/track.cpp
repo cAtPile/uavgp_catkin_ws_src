@@ -47,14 +47,9 @@ void apoc::trackSwitch() {
         }
 
         // 检查是否有有效的检测目标
-<<<<<<< Updated upstream
         if (current_detection.detection_id == 0 && (ros::Time::now() - start).toSec() < trace_timeout_) {
             ROS_INFO_THROTTLE(1, "Waiting for detection data...");  
             local_pos_pub.publish(current_pose);
-=======
-        if (current_detection.detection_id == 0) {
-            ROS_INFO_THROTTLE(1, "Waiting for detection data...");  
->>>>>>> Stashed changes
             ros::spinOnce();
             rate.sleep();
             continue;
