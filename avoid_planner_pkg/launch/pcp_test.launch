@@ -2,7 +2,7 @@
     <!-- 节点名称 -->
     <node name="pcp_test_node" pkg="avoid_planner_pkg" type="pcp_test" output="screen">
         <!-- 加载XML格式的参数文件 -->
-        <rosparam param="pointcloud_processor" file="$(find avoid_planner_pkg)/config/pointcloud_processor_params.xml" command="load" format="xml"/>
+        <rosparam param="pointcloud_processor" file="$(find avoid_planner_pkg)/config/pointcloud_processor_params.xml" command="load" />
         
         <!-- 可在这里覆盖配置文件中的参数 -->
         <!-- 例如：<param name="lidar_topic" value="/new/lidar/topic"/> -->
