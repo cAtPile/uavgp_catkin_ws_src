@@ -98,7 +98,8 @@ struct PotentialGrid {
  */
 class PotentialFieldCalculator {
 private:
-    // 数据成员
+
+    //===========数据成员================
     double att_gain_;           // 引力增益系数
     double rep_gain_;           // 斥力增益系数
     double rep_radius_;         // 斥力影响半径
@@ -115,23 +116,11 @@ private:
     bool is_updated_;           // 势场是否已更新的标志
 
     //===========成员函数=====================
-    /**
-     * @brief 从参数服务器加载参数
-     */
-    void loadParams();
-
-    /**
-     * @brief 获取极坐标直方图（从点云处理器或传感器）
-     * @return 极坐标直方图
-     */
-    PolarHistogram getPolarHistogram();
-
-    /**
-     * @brief 计算引力
-     * @param az 方位角
-     * @param el 仰角
-     * @return 引力大小
-     */
+    void loadParams(); //加载参数
+    PotentialGrid generatePotentialField(); //生成势场图
+    PolarHistogram getPolarHistogram(); //获取直方图
+    void generateAttractiveFan(); //生成引力扇
+    double calculateTotalForce(double az, double el);//计算势力
     double calculateAttractiveForce(double az, double el);
 
     /**
@@ -148,7 +137,6 @@ private:
      * @param el 仰角
      * @return 合力大小
      */
-    double calculateTotalForce(double az, double el);
 
     /**
      * @brief 生成合力方向
@@ -164,30 +152,16 @@ private:
     /**
      * @brief 生成引力扇区（限制引力作用角度范围）
      */
-    void generateAttractiveFan();
+
 
     /**
      * @brief 生成势场图
      * @return 生成的势场网格
      */
-    PotentialGrid generatePotentialField();
 
 public:
     PotentialFieldCalculator(ros::NodeHandle& nh);//构造函数
     ~PotentialFieldCalculator()= default;//析构
-
-    /**
-     * @brief 构造函数
-     * @param nh ROS节点句柄
-     */
-
-
-    /**
-     * @brief 析构函数
-     */
-
-
-
 
     /**
      * @brief 逐步更新势场图（用于动态环境）
