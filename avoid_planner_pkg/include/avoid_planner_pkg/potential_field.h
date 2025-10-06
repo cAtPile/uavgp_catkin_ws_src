@@ -110,7 +110,7 @@ private:
     Eigen::Vector3d current_pose_;  // 当前位置(x, y, z)
     Eigen::Vector3d goal_pose_;     // 目标位置(x, y, z)
     Eigen::Vector3d force_direction_;  // 合力方向
-    Eigen::Vector3d polar_goal_;    // 目标的极坐标位置（az，el，dis）
+    Eigen::Vector3d current_polar_goal_;    // 目标的极坐标位置（az，el，dis）
     PotentialGrid current_field_;   // 当前势场
     PolarHistogram current_histogram_; // 当前极坐标直方图
     bool is_updated_;           // 势场是否已更新的标志
@@ -119,9 +119,9 @@ private:
     void loadParams(); //加载参数
     PotentialGrid generatePotentialField(); //生成势场图
     PolarHistogram getPolarHistogram(); //获取直方图
-    void generateAttractiveFan(); //生成引力扇
-    double calculateTotalForce(double az, double el);//计算势力
-    double calculateAttractiveForce(double az, double el);
+    //void generateAttractiveFan(); //生成引力扇
+    double calculateTotalForce(double az, double el,double att_distance);//计算势力,有引力情况
+   // double calculateAttractiveForce(double az, double el);
 
     /**
      * @brief 计算斥力
