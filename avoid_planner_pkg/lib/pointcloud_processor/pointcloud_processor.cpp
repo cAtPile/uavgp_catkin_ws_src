@@ -9,22 +9,12 @@ namespace avoid_planner {
     
 /**
  * @brief PointcloudProcessor类的构造函数
- * @details 初始化点云处理器的核心组件，包括ROS句柄、TF监听器、参数加载和点云订阅
- *          完成参数配置后会打印所有初始化参数，便于调试和确认配置正确性
- * 
- * @param[in] nh ROS节点句柄，用于创建订阅器和访问参数服务器
- * 
- * @note 构造函数初始化列表中完成了成员变量的初始化：
- *       - 复制ROS句柄(nh_)
- *       - 初始化TF缓冲区和监听器(tf_buffer_, tf_listener_)
- *       - 初始化更新标志(is_updated_)为false
- * 
- * @see loadParams() 用于从参数服务器加载配置参数
- * @see pointcloudCallback 点云消息的回调函数，由订阅器触发
- * @see pointcloud_sub_ 点云话题的订阅器成员变量
- * 
- * @warning 若参数加载失败，可能导致处理器工作在非预期状态
- * @warning 需确保TF变换在节点启动时已可用，否则可能影响后续坐标转换
+ * @details 初始化点云处理器的核心组件
+ *          设置参数
+ * @param[in] nh ROS节点句柄
+ * @see loadParams() 
+ * @see pointcloudCallback 
+ * @see pointcloud_sub_ 
  */
 PointcloudProcessor::PointcloudProcessor(ros::NodeHandle& nh) : 
     nh_(nh), tf_listener_(tf_buffer_), is_updated_(false) {
