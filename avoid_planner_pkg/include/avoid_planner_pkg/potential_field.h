@@ -114,7 +114,7 @@ private:
     PolarHistogram current_histogram_; // 当前极坐标直方图
     bool is_updated_;           // 势场是否已更新的标志
 
-    // 成员函数
+    //===========成员函数=====================
     /**
      * @brief 从参数服务器加载参数
      */
@@ -166,23 +166,28 @@ private:
      */
     void generateAttractiveFan();
 
-public:
-    /**
-     * @brief 构造函数
-     * @param nh ROS节点句柄
-     */
-    PotentialFieldCalculator(ros::NodeHandle& nh);
-
-    /**
-     * @brief 析构函数
-     */
-    ~PotentialFieldCalculator();
-
     /**
      * @brief 生成势场图
      * @return 生成的势场网格
      */
     PotentialGrid generatePotentialField();
+
+public:
+    PotentialFieldCalculator(ros::NodeHandle& nh);//构造函数
+    ~PotentialFieldCalculator()= default;//析构
+
+    /**
+     * @brief 构造函数
+     * @param nh ROS节点句柄
+     */
+
+
+    /**
+     * @brief 析构函数
+     */
+
+
+
 
     /**
      * @brief 逐步更新势场图（用于动态环境）
