@@ -49,7 +49,7 @@
   <param name="apoc_pkg/PID_Y_INT_MAX" type="double" value="0.5" />
 
   <!-- PID参数：Z轴 -->
-  <param name="apoc_pkg/PID_Z_KP" type="double" value="2.0" />
+  <param name="apoc_pkg/PID_Z_KP" type="double" value="1.0" />
   <param name="apoc_pkg/PID_Z_KI" type="double" value="0.2" />
   <param name="apoc_pkg/PID_Z_KD" type="double" value="0.1" />
   <param name="apoc_pkg/PID_Z_OUT_MIN" type="double" value="-0.8" />

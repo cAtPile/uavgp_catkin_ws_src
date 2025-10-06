@@ -1,18 +1,18 @@
-avoid_planner:
+pcp_test_node:
   # 传感器参数
-  max_sensor_range: 50.0
-  min_sensor_range: 0.5
-  voxel_grid_size: 0.1
-  statistical_filter_mean_k: 10
-  statistical_filter_std_dev: 0.1
+  max_sensor_range: 2.0
+  min_sensor_range: 0.0
+  voxel_grid_size: 0.01
+  statistical_filter_mean_k: 12
+  statistical_filter_std_dev: 0.3
   lidar_frame_id: "livox_frame"
   body_frame_id: "base_link"
-  lidar_topic: "/livxxox/lidar"
+  lidar_topic: "/livox/lidar"
 
   # 直方图参数
-  azimuth_resolution_deg: 1.0  # 方位角步长（度）
+  azimuth_resolution_deg: 4.0  # 方位角步长（度）
   elevation_resolution_deg: 5.0  # 俯仰角步长（度）
   min_azimuth_deg: -180.0  # 最小方位角
   max_azimuth_deg: 180.0  # 最大方位角
   min_elevation_deg: 0.0  # 最小俯仰角
-  max_elevation_deg: 30.0  # 最大俯仰角
+  max_elevation_deg: 50.0  # 最大俯仰角
