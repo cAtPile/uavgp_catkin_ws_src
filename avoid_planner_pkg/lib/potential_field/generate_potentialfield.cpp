@@ -6,6 +6,7 @@ namespace avoid_planner {
  * @brief 生成势场
  * @details 获取直方图->处理目标值->计算合力
  * @see getPolarHistogram() 获取直方图
+ * @see updatePolarGoal() 获取引力区
  * @see calculateTotalForce() 计算含引力的势力
  * @see calculateRepulsiveForce() 计算仅有斥力的势力
  * @see generateTotalForce() 计算合力方向
@@ -25,12 +26,12 @@ PotentialGrid PotentialFieldCalculator::generatePotentialField() {
     current_field_.num_azimuth_bins = az_num;
     current_field_.num_elevation_bins = el_num;
     
-    // 获取目标点
-    // 将目标点转换为极坐标
-    // 确定极坐标的扇区
-    int goal_az;
-    int goal_el;
-    double att_dis;
+    // 获取引力
+    updatePolarGoal();
+    int goal_az = current_polar_goal_[0];
+    int goal_el = current_polar_goal_[1];
+    double att_dis = current_polar_goal_[2];
+    
 
     // 遍历所有角度网格计算势场
     for (size_t el_i = 0; el_i < el_num; ++el_i) {

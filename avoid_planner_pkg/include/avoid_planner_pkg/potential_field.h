@@ -9,6 +9,7 @@
 
 namespace avoid_planner {
     
+//计划合并
 /**
  * @struct PolarHistogram
  * @brief 极坐标直方图结构，存储每个角度网格中的障碍物距离
@@ -119,9 +120,16 @@ private:
     void loadParams(); //加载参数
     PotentialGrid generatePotentialField(); //生成势场图
     PolarHistogram getPolarHistogram(); //获取直方图
-    //void generateAttractiveFan(); //生成引力扇
     double calculateTotalForce(double az, double el,double att_distance);//计算势力,有引力情况
-   // double calculateAttractiveForce(double az, double el);
+    void updatePolarGoal();//获取目标极坐标
+
+    //************回调函数*******************
+    void currentPoseCallback(){}
+    void currentGoalCallback(){}
+    
+   //++++++++++待添加函数+++++++++++++++
+   //v
+    //void goalCallback();
 
     /**
      * @brief 计算斥力
@@ -149,15 +157,6 @@ private:
      */
     void getGoal();
 
-    /**
-     * @brief 生成引力扇区（限制引力作用角度范围）
-     */
-
-
-    /**
-     * @brief 生成势场图
-     * @return 生成的势场网格
-     */
 
 public:
     PotentialFieldCalculator(ros::NodeHandle& nh);//构造函数
