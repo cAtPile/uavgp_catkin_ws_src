@@ -37,19 +37,20 @@ private:
 
     //=================飞行参量===================
 
-    //-----------------超时参数-------------------
+    //超时参数
     double connect_timeout_;
     double modeswitch_timeout_;
     double armswitch_timeout_;
     double fly_ab_timeout_;
     double landing_timeout_;
     double trace_timeout_;
-    double TRACE_TIMEOUT;
 
-
+    //容忍值参数
     double reach_tolerance_distance_;
     double reach_tolerance_angle_;
     double landing_tolerance_;
+
+    //================追踪参数====================
     double trace_cam_ratio_;
     double trace_target_center_x_;
     double trace_target_center_y_;
@@ -58,8 +59,10 @@ private:
     double TRACE_TARGET_CENTER_X;
     double TRACE_TARGET_CENTER_Y;
     double TRACE_TOLERANCE;
+    double TRACE_TIMEOUT;
+
     
-    // -------------- PID参数变量--------------
+    //================PID参数变量===================
     // X轴PID
     double pid_x_kp_;
     double pid_x_ki_;
@@ -100,7 +103,7 @@ private:
     double pid_control_rate_;       // 控制频率(Hz)
     double pid_flight_timeout_;  // 飞行超时(s)
 
-    //巡航参数
+    //=================巡航参数===================
     double flight_orien_x_;
     double flight_orien_y_;
     double flight_orien_z_;
