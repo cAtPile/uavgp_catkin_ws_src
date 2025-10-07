@@ -129,8 +129,8 @@ public:
 
     PotentialFieldCalculator(ros::NodeHandle& nh);//构造函数
     ~PotentialFieldCalculator()= default;//析构
-    PotentialGrid getPotentialField(){return current_field_};//获取当前势场
-    Eigen::Vector3d getForceDirection(){return current_field_.force_vector};//获取当前方向
+    PotentialGrid getPotentialField(){return current_field_;}//获取当前势场
+    Eigen::Vector3d getForceDirection(){return current_field_.force_vector;}//获取当前方向
     void setGoal(double gaol_x,double goal_y,double goal_z);
     void setCurrentPose(double current_x,double current_y,double current_z);
 
