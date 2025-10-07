@@ -1,3 +1,11 @@
+/**
+ * @file pidctrl.h
+ * @brief classpidctrl
+ * @details 构建pid控制类
+ * @author apoc
+ * @date 2025/10/7
+ * @note 待废除
+ */
 #ifndef PIDCTRL_H
 #define PIDCTRL_H
 
