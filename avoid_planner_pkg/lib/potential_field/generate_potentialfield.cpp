@@ -31,18 +31,28 @@ PotentialGrid PotentialFieldCalculator::generatePotentialField() {
     int goal_az = current_polar_goal_[0];
     int goal_el = current_polar_goal_[1];
     double att_dis = current_polar_goal_[2];
+    // 计算目标方位角对应的网格索引
+    int goal_az_idx = static_cast<int>((polar_goal_[0] - current_histogram_.min_azimuth) 
+        / current_histogram_.azimuth_resolution);
+    int goal_el_idx = static_cast<int>((polar_goal_[1] - current_histogram_.min_elevation) 
+        / current_histogram_.elevation_resolution);
+    // 限制索引在有效范围内
+    goal_az_idx = std::clamp(goal_az_idx, 0, static_cast<int>(az_num - 1));
+    goal_el_idx = std::clamp(goal_el_idx, 0, static_cast<int>(el_num - 1));
     
 
     // 遍历所有角度网格计算势场
     for (size_t el_i = 0; el_i < el_num; ++el_i) {
         for (size_t az_i = 0; az_i < az_num; ++az_i) {
 
+            double total_force = 0;
+
             // 如果处于有引力的扇区
-            if(az_i==goal_az&&el_i==goal_el){
-                double total_force = calculateTotalForce(az_i, el_i,att_dis);
+            if(az_i==goal_az_idx&&el_i==goal_el_idx){
+                total_force = calculateTotalForce(az_i, el_i,att_dis);
             }else{
                 // 计算该角度下的合力
-                double total_force = calculateRepulsiveForce(az_i, el_i);
+                total_force = calculateRepulsiveForce(az_i, el_i);
             }
 
             // 限制最大力，防止数值溢出

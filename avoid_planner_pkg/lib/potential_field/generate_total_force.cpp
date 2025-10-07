@@ -8,7 +8,7 @@ namespace avoid_planner{
  *          默认力集中于块的中心点
  * @return total_force合力方向
  */
-Eigen::Vector3d generateTotalForce(){
+Eigen::Vector3d PotentialFieldCalculator::generateTotalForce(){
 
     //total_force 0
     Eigen::Vector3d total_force = Eigen::Vector3d::Zero();

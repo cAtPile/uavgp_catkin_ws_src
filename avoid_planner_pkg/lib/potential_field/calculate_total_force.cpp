@@ -12,7 +12,11 @@ namespace{
  */
 double PotentialFieldCalculatorz::calculateTotalForce(double az, double el, double att_dis){
 
-    float rep_dis = current_histogram_.data[az][el];
+    if (att_dis > attract_range_) return 0.0; // 超出引力范围
+    
+    double attractive_force = att_gain_ * (attract_range_ - att_dis); // 引力示例公式
+    double repulsive_force = calculateRepulsiveForce(az, el);
+    return attractive_force - repulsive_force; // 合力 = 引力 - 斥力（方向相反）
 
     if(rep_dis<att_gain_){
         double force = att_gain_/att_dis-rep_gain_/rep_dis //计算出势

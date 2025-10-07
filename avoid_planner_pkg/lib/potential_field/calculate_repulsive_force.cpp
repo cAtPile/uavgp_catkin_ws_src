@@ -1,6 +1,6 @@
 # include "avoid_planner_pkg/potential_field.h"
 
-namespace{
+namespace avoid_planner{
     
 /**
  * @brief 计算势力，无引力状态
@@ -9,10 +9,13 @@ namespace{
  * @param el 俯仰角索引
  * @return force 该点的力
  */
-double PotentialFieldCalculatorz::calculateRepulsiveForce(double az, double el, ){
+double PotentialFieldCalculatorz::calculateRepulsiveForce(double az, double el ){
 
-    float rep_dis = current_histogram_.data[az][el];
-    return ep_gain_/rep_dis;
+    double rep_dis = current_histogram_.data[az][el];
+    if (rep_dis < rep_radius_ && rep_dis != INFINITY) {
+        return rep_gain_ * (1.0 / rep_dis - 1.0 / rep_radius_) / (rep_dis * rep_dis);
+    }
+    return 0.0;
     
 }
 

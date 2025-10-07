@@ -3,7 +3,8 @@
 namespace{
 
 PolarHistogram PotentialFieldCalculatorz::getPolarHistogram(){
-    return PointcloudProcessor::getHistogram()
+    PolarHistogram histogram;
+    return histogram
 }
 
 }

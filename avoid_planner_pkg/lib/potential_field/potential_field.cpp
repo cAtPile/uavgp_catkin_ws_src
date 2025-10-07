@@ -6,7 +6,7 @@ namespace avoid_planner {
  * @brief 构造函数实现
  * @param nh ROS节点句柄，用于加载参数
  */
-PotentialFieldCalculator::PotentialFieldCalculator(ros::NodeHandle& nh) 
+PotentialFieldCalculator::PotentialFieldCalculator(ros::NodeHandle& nh_) 
   : att_gain_(1.0), 
     rep_gain_(10.0), 
     rep_radius_(2.0), 

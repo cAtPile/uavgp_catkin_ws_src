@@ -100,6 +100,9 @@ struct PotentialGrid {
 class PotentialFieldCalculator {
 private:
 
+    //===========ros成员================
+    ros::NodeHandle nh_;
+
     //===========数据成员================
     double att_gain_;           // 引力增益系数
     double rep_gain_;           // 斥力增益系数
