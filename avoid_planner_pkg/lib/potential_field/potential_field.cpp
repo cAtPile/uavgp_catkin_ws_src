@@ -22,7 +22,16 @@ PotentialFieldCalculator::PotentialFieldCalculator(ros::NodeHandle& nh)
 
     //加载参数
     loadParams();
-    
+
+    //参数展示
+    ROS_INFO("att_gain_ = %1.f",att_gain_);
+    ROS_INFO("rep_gain_ = %1.f",rep_gain_);
+    ROS_INFO("rep_radius_ = %1.f",rep_radius_);
+    ROS_INFO("max_force_ = %1.f",max_force_);
+    ROS_INFO("field_resolution_ = %1.f",field_resolution_);
+    ROS_INFO("field_range_ = %1.f",field_range_);
+    ROS_INFO("attract_range_ = %1.f",attract_range_);
+
     // 初始化极坐标直方图
     current_histogram_ = PolarHistogram();
     
