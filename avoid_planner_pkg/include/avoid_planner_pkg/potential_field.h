@@ -121,36 +121,15 @@ private:
     PotentialGrid generatePotentialField(); //生成势场图
     PolarHistogram getPolarHistogram(); //获取直方图
     double calculateTotalForce(double az, double el,double att_distance);//计算势力,有引力情况
+    double calculateRepulsiveForce(double az, double el);//仅斥力
     void updatePolarGoal();//获取目标极坐标
+    Eigen::Vector3d generateTotalForce();//生成合力方向
 
     //************回调函数*******************
     void currentPoseCallback(){}
     void currentGoalCallback(){}
     
    //++++++++++待添加函数+++++++++++++++
-   //v
-    //void goalCallback();
-
-    /**
-     * @brief 计算斥力
-     * @param az 方位角
-     * @param el 仰角
-     * @return 斥力大小
-     */
-    double calculateRepulsiveForce(double az, double el);
-
-    /**
-     * @brief 计算合力
-     * @param az 方位角
-     * @param el 仰角
-     * @return 合力大小
-     */
-
-    /**
-     * @brief 生成合力方向
-     * @return 合力方向向量
-     */
-    Eigen::Vector3d generateTotalForce();
 
     /**
      * @brief 获取目标点位置并转换为极坐标
@@ -161,36 +140,9 @@ private:
 public:
     PotentialFieldCalculator(ros::NodeHandle& nh);//构造函数
     ~PotentialFieldCalculator()= default;//析构
+    PotentialGrid getPotentialField(){return current_field_};//获取当前势场
+    Eigen::Vector3d getForceDirection(){return current_field_.force_vector};//获取当前方向
 
-    /**
-     * @brief 逐步更新势场图（用于动态环境）
-     * @return 更新比例
-     */
-    double stepPotentialField();
-
-    /**
-     * @brief 获取当前势场
-     * @return 当前势场网格
-     */
-    PotentialGrid getPotentialField();
-
-    /**
-     * @brief 获取合力方向
-     * @return 合力方向向量
-     */
-    Eigen::Vector3d getForceDirection();
-
-    /**
-     * @brief 更新当前位置
-     * @param pose 新的位置
-     */
-    void updateCurrentPose(const Eigen::Vector3d& pose);
-
-    /**
-     * @brief 设置目标位置
-     * @param goal 目标位置
-     */
-    void setGoalPose(const Eigen::Vector3d& goal);
 };
 
 }  // namespace avoid_planner
