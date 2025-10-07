@@ -1,61 +1,63 @@
-
-/*
-* file：    apoc.h
-* name:     apoc.h
-* discribe: apoc头文件
-* vision:   1.0
-* depend:   ununtu20.04,ros-noetic
-* class:    apoc
-*           pidctrl
-* path:
-*/
-
+/**
+ * @file apoc.h
+ * @brief 无人机控制核心组件
+ * @details class apoc
+ * @author apoc
+ * @date 2025/10/7
+ * @par ubuntu 20.04
+ *      ros-noetic
+ *      px-4,mavros
+ */
 #ifndef APOC_H
 #define APOC_H
 
-#include <ros/ros.h>//ros
-#include <geometry_msgs/PoseStamped.h>//定点
-#include <mavros_msgs/CommandBool.h>//arm
-#include <mavros_msgs/SetMode.h>//mode
-#include <mavros_msgs/State.h>//状态
+#include <ros/ros.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <mavros_msgs/CommandBool.h>
+#include <mavros_msgs/SetMode.h>
+#include <mavros_msgs/State.h>
 #include <mavros_msgs/Trajectory.h>
-#include <tf2/LinearMath/Quaternion.h>//四元数
-#include <tf2/LinearMath/Matrix3x3.h>//rpy
-#include <geometry_msgs/TwistStamped.h>//mav速度
-
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <geometry_msgs/TwistStamped.h>
 #include <sensor_msgs/LaserScan.h>
-
-#include <apoc_pkg/detection_data.h>//检测
-
+#include <apoc_pkg/detection_data.h>
 #include <vector>
 #include <cmath>
-
 #include <std_msgs/Bool.h>
-
 #include <mutex>
 
+/**
+ * @class apoc
+ * @brief 无人机核心控制类
+ * @details 无人机连接，解锁，模式转换，巡航和其他任务
+ */
 class apoc{
 private:
 
-    //------------飞行参量----------------------
+    //=================飞行参量===================
+
+    //-----------------超时参数-------------------
     double connect_timeout_;
     double modeswitch_timeout_;
     double armswitch_timeout_;
     double fly_ab_timeout_;
+    double landing_timeout_;
+    double trace_timeout_;
+    double TRACE_TIMEOUT;
+
+
     double reach_tolerance_distance_;
     double reach_tolerance_angle_;
-    double landing_timeout_;
     double landing_tolerance_;
     double trace_cam_ratio_;
     double trace_target_center_x_;
     double trace_target_center_y_;
     double trace_tolerance_;
-    double trace_timeout_;
     double TRACE_CAM_RATIO;
     double TRACE_TARGET_CENTER_X;
     double TRACE_TARGET_CENTER_Y;
     double TRACE_TOLERANCE;
-    double TRACE_TIMEOUT;
     
     // -------------- PID参数变量--------------
     // X轴PID
@@ -170,7 +172,7 @@ public:
     void landSwitch();//降落
     void publishZeroVelocity();//0速度发布
     void trackSwitch();
-    //void plannerSwitch();
+    //void plannerSwitch();//待构建
 
 };
 
