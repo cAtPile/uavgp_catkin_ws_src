@@ -15,6 +15,9 @@
 
 namespace avoid_planner{
 
+//构建结构体polar_field
+
+
 /**
  * @class AvoidPlannerBridge
  * @brief apoc和avoid_planner桥
