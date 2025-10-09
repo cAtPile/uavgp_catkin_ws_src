@@ -15,6 +15,10 @@
 
 namespace avoid_planner{
 
+// 声明class
+class PointcloudProcessor;
+class PotentialFieldCalculator;
+
 //构建结构体polar_field
 /**
  * @struct PolarField
@@ -67,7 +71,16 @@ struct PolarField{
  */
 class planner_bridge{
 private:
-    /* data */
+
+//ros
+
+//action创建
+
+//缓存数据
+
+//相关函数
+
+
 public:
     planner_bridge(/* args */);
     ~planner_bridge();

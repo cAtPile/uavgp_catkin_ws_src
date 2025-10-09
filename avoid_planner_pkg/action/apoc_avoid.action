@@ -1,0 +1,11 @@
+# 目标
+float32 goal_x
+float32 goal_y
+float32 goal_z
+uint8 cmd
+---
+#结果
+float32 dir_x
+float32 dir_y
+float32 dir_z
+---
