@@ -48,11 +48,11 @@ include_directories(
 
 # 5. 编译自定义库
 add_library(avoid_planner_lib
-  src/lib/cost_calculator.cpp
-  src/lib/local_planner.cpp
-  src/lib/mavros_interface.cpp
-  src/lib/star_planner.cpp
-  src/lib/utils.cpp
+  #src/lib/cost_calculator.cpp
+  #src/lib/local_planner.cpp
+  #src/lib/mavros_interface.cpp
+  #src/lib/star_planner.cpp
+  lib/utils.cpp
   lib/pointcloud_processor/angle_tobin_index.cpp
   lib/pointcloud_processor/filter_pointcloud.cpp
   lib/pointcloud_processor/generate_polarhistogram.cpp
