@@ -52,12 +52,11 @@ PlannerBridge::~PlannerBridge() {
     if (process_thread_.joinable()) {
         process_thread_.join();
     }
-    ROS_INFO("PlannerBridge已销毁");
 }
 
 void PlannerBridge::start() {
     as_.start();
-    ROS_INFO("PlannerBridge开始运行，等待Action请求...");
+    ROS_INFO("PlannerBridge start");
 }
 
 void PlannerBridge::goalCallback() {
