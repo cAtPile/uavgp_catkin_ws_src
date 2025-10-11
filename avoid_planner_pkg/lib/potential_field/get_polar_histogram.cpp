@@ -4,7 +4,7 @@ namespace{
 
 PolarHistogram PotentialFieldCalculatorz::getPolarHistogram(){
     PolarHistogram histogram;
-    return histogram
+    return histogram;
 }
 
 }
