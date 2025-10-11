@@ -1,5 +1,5 @@
 /**
- * @file planner_brideg.h
+ * @file planner_bridge.h
  * @brief 规划桥
  * @details 构建一个服务
  *          根据action,启动pointcloud_processor和potential_filed
@@ -11,23 +11,23 @@
 #ifndef AVOID_PLANNER_PLANNER_BRIDGE_H
 #define AVOID_PLANNER_PLANNER_BRIDGE_H
 
-# include<ros/ros.h>
+#include <ros/ros.h>
+#include <actionlib/server/simple_action_server.h>
+#include <avoid_planner_pkg/AvoidPlannerAction.h>  // 自定义Action消息
+#include <Eigen/Dense>
+#include <memory>
+#include <mutex>
+
+// 前向声明
+namespace avoid_planner{
+    class PointcloudProcessor;
+    class PotentialFieldCalculator;
+}
 
 namespace avoid_planner{
 
-// 声明class
-class PointcloudProcessor;
-class PotentialFieldCalculator;
-
-//构建结构体polar_field
-/**
- * @struct PolarField
- * @brief 极坐标场
- * @details 存储地图信息和网格信息
- */
-
+// 极坐标场结构体定义
 struct PolarField{
-
     // 角度分辨率配置
     double azimuth_resolution;  // 方位角分辨率(弧度)
     double elevation_resolution; // 仰角分辨率(弧度)
@@ -38,7 +38,7 @@ struct PolarField{
     double min_elevation;       // 最小仰角(弧度)
     double max_elevation;       // 最大仰角(弧度)
 
-    double max_range;   // 用于存储最大传感器距离(m)
+    double max_range;   // 最大传感器距离(m)
     double min_range;   // 传感器最小距离(m)
     
     // 网格尺寸
@@ -51,41 +51,80 @@ struct PolarField{
     // 势场数据 [azimuth][elevation] = 力大小（N）
     std::vector<std::vector<double>> pot_map;
 
-
     Eigen::Vector3d local_position; // 本地坐标
     Eigen::Vector3d force_vector;   // 合力向量
     
     // 时间戳
     ros::Time timestamp;
-
 };
 
 /**
  * @class AvoidPlannerBridge
  * @brief apoc和avoid_planner桥
- * @details 创建一个ROS action: 收apoc的cmd控制avoid_planner启动停止
- *                         收apoc的goal目标位置
- *          发运动方向direction到apoc
+ * @details 创建一个ROS action: 接收apoc的cmd控制avoid_planner启动停止
+ *                         接收apoc的goal目标位置
+ *          发布运动方向direction到apoc
  * @see class PointcloudProcessor 处理点云
  * @see class PotentialFieldCalculator 计算势场
  */
-class planner_bridge{
+class PlannerBridge{
 private:
+    // ROS节点句柄
+    ros::NodeHandle nh_;
+    ros::NodeHandle pnh_;
 
-//ros
+    // Action服务器
+    actionlib::SimpleActionServer<avoid_planner_pkg::AvoidPlannerAction> as_;
+    std::string action_name_;
+    
+    // Action消息
+    avoid_planner_pkg::AvoidPlannerGoal current_goal_;
+    avoid_planner_pkg::AvoidPlannerFeedback feedback_;
+    avoid_planner_pkg::AvoidPlannerResult result_;
 
-//action创建
+    // 子模块指针
+    std::unique_ptr<PointcloudProcessor> pointcloud_processor_;
+    std::unique_ptr<PotentialFieldCalculator> potential_field_calculator_;
 
-//缓存数据
+    // 数据缓存
+    PolarField current_polar_field_;
+    Eigen::Vector3d current_direction_;
+    std::mutex data_mutex_;  // 数据保护锁
 
-//相关函数
+    // 状态变量
+    bool is_running_;
+    ros::Rate update_rate_;
 
+    // 回调函数
+    void goalCallback();
+    void preemptCallback();
+    
+    // 主处理循环
+    void processLoop();
+    
+    // 数据处理函数
+    bool updatePointcloud();
+    bool calculatePotentialField();
+    void publishDirection();
 
 public:
-    planner_bridge(/* args */);
-    ~planner_bridge();
+    /**
+     * @brief 构造函数
+     * @param name Action服务器名称
+     */
+    PlannerBridge(const std::string& name);
+    
+    /**
+     * @brief 析构函数
+     */
+    ~PlannerBridge();
+    
+    /**
+     * @brief 启动规划桥
+     */
+    void start();
 };
 
-}
+}  // namespace avoid_planner
 
-#endif
+#endif  // AVOID_PLANNER_PLANNER_BRIDGE_H
