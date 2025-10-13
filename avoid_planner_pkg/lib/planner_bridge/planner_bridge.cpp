@@ -144,11 +144,11 @@ void PlannerBridge::processLoop() {
 
         update_rate_.sleep();
     }
-
+//
     // 处理结束状态
     if (is_running_) {
         result_.success = true;
-        result_.message = "规划完成";
+        result_.message = "succeed";
         as_.setSucceeded(result_);
     } else {
         result_.success = false;
