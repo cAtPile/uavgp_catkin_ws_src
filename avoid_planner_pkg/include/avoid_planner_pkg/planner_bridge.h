@@ -18,16 +18,25 @@
 #include <memory>
 #include <mutex>
 
+#include "avoid_planner_pkg/pointcloud_processor.h"
+#include "avoid_planner_pkg/potential_field.h"
+#include "avoid_planner_pkg/utils.h"
+
+#include <geometry_msgs/Vector3Stamped.h>
+#include <thread>
+
 // 前向声明
 namespace avoid_planner{
-    class PointcloudProcessor;
-    class PotentialFieldCalculator;
-}
+class PointcloudProcessor;
+class PotentialFieldCalculator;
 
-namespace avoid_planner{
-
-// 极坐标场结构体定义
+/**
+ * @struct PolarField
+ * @brief 极坐标场
+ * @details 存储
+ */
 struct PolarField{
+
     // 角度分辨率配置
     double azimuth_resolution;  // 方位角分辨率(弧度)
     double elevation_resolution; // 仰角分辨率(弧度)
@@ -38,6 +47,7 @@ struct PolarField{
     double min_elevation;       // 最小仰角(弧度)
     double max_elevation;       // 最大仰角(弧度)
 
+    //传感器参数
     double max_range;   // 最大传感器距离(m)
     double min_range;   // 传感器最小距离(m)
     

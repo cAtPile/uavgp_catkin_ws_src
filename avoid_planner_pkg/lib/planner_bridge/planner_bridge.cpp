@@ -10,11 +10,6 @@
  */
 
 #include "avoid_planner_pkg/planner_bridge.h"
-#include "avoid_planner_pkg/pointcloud_processor.h"
-#include "avoid_planner_pkg/potential_field.h"
-#include "avoid_planner_pkg/utils.h"
-#include <geometry_msgs/Vector3Stamped.h>
-#include <thread>
 
 namespace avoid_planner {
 
