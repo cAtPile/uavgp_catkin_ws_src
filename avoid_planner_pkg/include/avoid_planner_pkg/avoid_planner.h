@@ -1,15 +1,14 @@
 /**
- * @file planner_bridge.h
- * @brief 规划桥
- * @details struct PolarField
- *          calss PlannerBridge 
+ * @file avoid_planner.h
+ * @brief 
+ * @details 
  * @par apoc_pkg
  * @author apoc
  * @date 2025/10/7
  */
 
-#ifndef AVOID_PLANNER_PLANNER_BRIDGE_H
-#define AVOID_PLANNER_PLANNER_BRIDGE_H
+#ifndef AVOID_PLANNER_H
+#define AVOID_PLANNER_H
 
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
@@ -25,7 +24,7 @@
 #include <geometry_msgs/Vector3Stamped.h>
 #include <thread>
 
-namespace avoid_planner{
+
 class PointcloudProcessor;
 class PotentialFieldCalculator;
 
@@ -93,6 +92,4 @@ public:
     PolarField getCurrentPolarField();//获取当前极坐标地图
 };
 
-}  // namespace avoid_planner
-
-#endif  // AVOID_PLANNER_PLANNER_BRIDGE_H
+#endif  // AVOID_PLANNER_H

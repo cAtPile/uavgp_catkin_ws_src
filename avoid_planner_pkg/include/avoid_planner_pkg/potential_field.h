@@ -1,3 +1,8 @@
+/**
+ * @file potential_field.h
+ * @brief 势场构建
+ * @details 构建势场和合力方向
+ */
 #ifndef AVOID_PLANNER_POTENTIAL_FIELD_H
 #define AVOID_PLANNER_POTENTIAL_FIELD_H
 
@@ -7,95 +12,9 @@
 #include <ros/ros.h>
 #include <cmath>
 
+#include "avoid_planner_pkg/pointcloud_processor.h"
+
 namespace avoid_planner {
-
-/**
- * @struct
- */
-    
-//计划合并
-/**
- * @struct PolarHistogram
- * @brief 极坐标直方图结构，存储每个角度网格中的障碍物距离
- */
-struct PolarHistogram {
-    // 角度分辨率配置
-    double azimuth_resolution;  // 方位角分辨率(弧度)
-    double elevation_resolution; // 仰角分辨率(弧度)
-    
-    // 角度范围
-    double min_azimuth;         // 最小方位角(弧度)
-    double max_azimuth;         // 最大方位角(弧度)
-    double min_elevation;       // 最小仰角(弧度)
-    double max_elevation;       // 最大仰角(弧度)
-
-    double max_range;  // 最大传感器距离
-    
-    // 网格尺寸
-    size_t num_azimuth_bins;    // 方位角网格数量
-    size_t num_elevation_bins;  // 仰角网格数量
-    
-    // 直方图数据: [azimuth][elevation] = 障碍物距离(m)
-    std::vector<std::vector<double>> data;
-    
-    // 时间戳
-    ros::Time timestamp;
-    
-    // 构造函数
-    PolarHistogram() : 
-        azimuth_resolution(0.01745),  // 约1°(弧度)
-        elevation_resolution(0.0873), // 约5°(弧度)
-        max_range(50.0),  // 初始化最大传感器距离
-        min_azimuth(-M_PI),
-        max_azimuth(M_PI),
-        min_elevation(-0.122),      // 约-7°(弧度)
-        max_elevation(0.984),       // 约+56°(弧度)
-        num_azimuth_bins(360),
-        num_elevation_bins(12),
-        data(360, std::vector<double>(12, INFINITY)) {}
-};
-
-/**
- * @struct PotentialGrid
- * @brief 势场网格结构，存储每个角度网格中的势场信息
- */
-struct PotentialGrid {
-    // 角度分辨率配置
-    double azimuth_resolution;  // 方位角分辨率(弧度)
-    double elevation_resolution; // 仰角分辨率(弧度)
-    
-    // 角度范围
-    double min_azimuth;         // 最小方位角(弧度)
-    double max_azimuth;         // 最大方位角(弧度)
-    double min_elevation;       // 最小仰角(弧度)
-    double max_elevation;       // 最大仰角(弧度)
-    
-    // 网格尺寸
-    size_t num_azimuth_bins;    // 方位角网格数量
-    size_t num_elevation_bins;  // 仰角网格数量
-
-    // 势场数据: [azimuth][elevation] = 势场力大小
-    std::vector<std::vector<double>> data;
-
-    Eigen::Vector3d local_position; // 本地坐标
-    Eigen::Vector3d force_vector;   // 合力向量
-    
-    ros::Time timestamp; // 时间戳
-
-    // 构造函数
-    PotentialGrid() :
-        azimuth_resolution(0.01745),
-        elevation_resolution(0.0873),
-        min_azimuth(-M_PI),
-        max_azimuth(M_PI),
-        min_elevation(-0.122),
-        max_elevation(0.984),
-        num_azimuth_bins(360),
-        num_elevation_bins(12),
-        data(360, std::vector<double>(12, 0.0)),
-        local_position(Eigen::Vector3d::Zero()),
-        force_vector(Eigen::Vector3d::Zero()) {}
-};
 
 /**
  * @class PotentialFieldCalculator

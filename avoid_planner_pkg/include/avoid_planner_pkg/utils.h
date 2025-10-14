@@ -1,4 +1,8 @@
-//通用工具函数声明
+/**
+ * @file utils.h
+ * @brief 通用工具
+
+ */
 #ifndef AVOID_PLANNER_UTILS_H
 #define AVOID_PLANNER_UTILS_H
 
