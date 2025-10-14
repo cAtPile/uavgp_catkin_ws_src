@@ -1,3 +1,9 @@
+/**
+ * @file pointcloud_processor.h
+ * @brief 处理点云
+ */
+
+
 #ifndef AVOID_PLANNER_POINTCLOUD_PROCESSOR_H
 #define AVOID_PLANNER_POINTCLOUD_PROCESSOR_H
 

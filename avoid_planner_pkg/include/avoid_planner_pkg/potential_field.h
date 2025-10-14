@@ -8,6 +8,10 @@
 #include <cmath>
 
 namespace avoid_planner {
+
+/**
+ * @struct
+ */
     
 //计划合并
 /**

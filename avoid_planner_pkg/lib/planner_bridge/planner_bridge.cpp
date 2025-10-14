@@ -1,23 +1,18 @@
 /**
  * @file planner_bridge.cpp
- */
-/**
- * @file planner_bridge.cpp
  * @brief 规划桥实现文件
  * @details 实现PlannerBridge类的核心逻辑，处理Action请求、点云处理和势场计算
  * @author apoc
  * @date 2025/10/7
  */
-
 #include "avoid_planner_pkg/planner_bridge.h"
-#include "avoid_planner_pkg/pointcloud_processor.h"
-#include "avoid_planner_pkg/potential_field.h"
-#include "avoid_planner_pkg/utils.h"
-#include <geometry_msgs/Vector3Stamped.h>
-#include <thread>
 
 namespace avoid_planner {
 
+/**
+ * @brief 构造函数
+ * 
+ */
 PlannerBridge::PlannerBridge(const std::string& name)
     : nh_(),
       pnh_("~"),
