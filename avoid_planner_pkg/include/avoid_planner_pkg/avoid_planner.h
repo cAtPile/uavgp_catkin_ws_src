@@ -141,6 +141,12 @@ private:
     Eigen::Vector3d current_direction_;
     std::mutex data_mutex_;  // 数据保护锁
 
+    //==============参数=====================
+    /*点云处理参数*/
+    double max_sensor_range_;             // 最大感知距离(m)
+    double min_sensor_range_;             // 最小感知距离(m)
+    double voxel_grid_size_;              // 体素滤波分辨率(m)
+
     // 状态变量
     bool is_running_;
     ros::Rate update_rate_;
