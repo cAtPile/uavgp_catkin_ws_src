@@ -1,9 +1,9 @@
 /**
  * @file pointcloudCB.cpp
  * @brief 点云信息回调
- * @details
- * @author
- * @date
+ * @details 过滤/坐标系转换/生成dismap
+ * @author apoc
+ * @date 2025/10/16
  */
 #include"avoid_planner_pkg/avoid_planner.h"
 
