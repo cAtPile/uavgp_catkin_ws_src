@@ -133,6 +133,9 @@ private:
     avoid_planner_pkg::AvoidPlannerFeedback feedback_;
     avoid_planner_pkg::AvoidPlannerResult result_;
 
+    //=============topic订阅===================
+    ros::Subscriber pointcloud_sub_;      // 点云订阅者
+
     //=============数据缓存=====================
     PolarField current_polar_field_;
     Eigen::Vector3d current_direction_;
@@ -154,6 +157,11 @@ private:
     bool updatePointcloud();
     bool calculatePotentialField();
     void publishDirection();
+
+    //=============点云处理函数============
+    void filterPC();//过滤点云
+    bool tfBodyFrame();//坐标转换
+    void generatePFdismap();//生成dismap
 
 public:
 
