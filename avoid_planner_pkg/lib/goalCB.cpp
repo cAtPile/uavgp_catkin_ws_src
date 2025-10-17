@@ -16,3 +16,7 @@
  *          计算目标方向
  * @see generatePFpotmap();
  */
+void AvoidPlaner::goalCB(){
+
+    
+}
