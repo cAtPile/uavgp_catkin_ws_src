@@ -43,7 +43,7 @@ void AvoidPlanner::pointcloudCB(const sensor_msgs::PointCloud2::ConstPtr& msg){
     
     // 转换到机体坐标系
     pcl::PointCloud<pcl::PointXYZ> body_cloud;
-    if (!tfBodyFrame(filtered_cloud, body_cloud)) {
+    if (!tfBodyframe(filtered_cloud, body_cloud)) {
         ROS_WARN_THROTTLE(1.0, "Failed to transform pointcloud to body frame");
         return;
     }
