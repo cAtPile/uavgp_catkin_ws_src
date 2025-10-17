@@ -15,7 +15,7 @@
  * @param[in] y 点在机体坐标系下的y坐标(米)
  * @param[in] z 点在机体坐标系下的z坐标(米)
  * @see anglebinIndex() 将角度值映射到直方图网格索引的工具函数
- * @see histogram_ 存储极坐标直方图数据和参数的成员变量
+ * @see current_polar_field_ 存储极坐标直方图数据和参数的成员变量
  */
 void PointcloudProcessor::updateHistogramFromPoint(double x, double y, double z) {
 
@@ -29,19 +29,19 @@ void PointcloudProcessor::updateHistogramFromPoint(double x, double y, double z)
     double elevation = std::atan2(z, std::sqrt(x*x + y*y));  // 范围[-π/2, π/2]
     
     // 映射到直方图网格
-    int az_index = anglebinIndex(azimuth, histogram_.min_azimuth, 
-                                  histogram_.max_azimuth, histogram_.num_azimuth_bins);
-    int el_index = anglebinIndex(elevation, histogram_.min_elevation, 
-                                  histogram_.max_elevation, histogram_.num_elevation_bins);
+    int az_index = anglebinIndex(azimuth, current_polar_field_.min_azimuth, 
+                                  current_polar_field_.max_azimuth, current_polar_field_.num_azimuth_bins);
+    int el_index = anglebinIndex(elevation, current_polar_field_.min_elevation, 
+                                  current_polar_field_.max_elevation, current_polar_field_.num_elevation_bins);
     
     // 检查索引有效性
-    if (az_index < 0 || az_index >= static_cast<int>(histogram_.num_azimuth_bins) ||
-        el_index < 0 || el_index >= static_cast<int>(histogram_.num_elevation_bins)) {
+    if (az_index < 0 || az_index >= static_cast<int>(current_polar_field_.num_azimuth_bins) ||
+        el_index < 0 || el_index >= static_cast<int>(current_polar_field_.num_elevation_bins)) {
         return;
     }
     
     // 只保留每个网格中最近的障碍物
-    if (distance < histogram_.data[az_index][el_index]) {
-        histogram_.data[az_index][el_index] = distance;
+    if (distance < current_polar_field_.data[az_index][el_index]) {
+        current_polar_field_.dis_map[az_index][el_index] = distance;
     }
 }

@@ -10,7 +10,7 @@
 /**
  * @brief pointcloudCB
  * @details
- * @param msg
+ * @param msg pc2
  * @see filterPC()
  * @see tfBodyFrame()
  * @see generatePFdismap()

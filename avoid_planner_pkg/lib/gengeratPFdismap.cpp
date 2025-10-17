@@ -13,7 +13,6 @@
  *          并按角度分辨率划分到对应的直方图 bins 中，每个 bin 存储最近障碍物的距离
  * @param[in] cloud 机体坐标系下的点云数据（pcl::PointXYZ类型）
  * @see current_polar_field_ 存储极坐标直方图数据和参数的成员变量
- * @see histogram_mutex_ 保护直方图数据的互斥锁
  * @see updatePFpoint() 用于将单个点更新到直方图的内部函数
  * @see min_sensor_range_ 传感器最小有效距离阈值
  * @see max_sensor_range_ 传感器最大有效距离阈值
