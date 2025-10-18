@@ -1,9 +1,9 @@
 /**
- * @file
- * @brief
+ * @file utils.cpp
+ * @brief 工具函数
  * @details
- * @author
- * @date
+ * @author apoc
+ * @date 2025/10/18
  */
 #include "avoid_planner_pkg/utils.h"
 #include <tf2/LinearMath/Quaternion.h>
@@ -11,8 +11,6 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <cmath>
 #include <ros/console.h>
-
-namespace avoid_planner {
 
 //rpy
 Eigen::Vector3d quaternionToYaw(const geometry_msgs::Quaternion& quat) {
@@ -223,5 +221,3 @@ geometry_msgs::PoseStamped vectorToPoseStamped(const Eigen::Vector3d& position,
     
     return pose;
 }
-
-} // namespace avoid_planner
