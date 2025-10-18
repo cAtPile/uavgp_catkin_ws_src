@@ -2,8 +2,8 @@
  * @file anglebinIndex.cpp
  * @brief
  * @details
- * @author
- * @date
+ * @author apoc
+ * @date 2025/10/17
  */
 #include"avoid_planner_pkg/avoid_planner.h"
 
