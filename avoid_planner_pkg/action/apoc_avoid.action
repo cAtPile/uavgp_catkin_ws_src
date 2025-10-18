@@ -1,4 +1,7 @@
 # 目标
+float32 current_pose_x
+float32 current_pose_y
+float32 current_pose_z
 float32 goal_x
 float32 goal_y
 float32 goal_z

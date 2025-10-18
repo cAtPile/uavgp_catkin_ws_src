@@ -135,6 +135,7 @@ private:
 
     //=============topic订阅===================
     ros::Subscriber pointcloud_sub_;      // 点云订阅者
+    ros::Subscriber local_pos_sub_;
 
     //=============数据缓存=====================
     PolarField current_polar_field_;
