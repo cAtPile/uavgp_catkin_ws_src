@@ -1,4 +1,4 @@
-std_msgs/Header header
+Header header
 float64 azimuth_resolution
 float64 elevation_resolution
 float64 min_azimuth
@@ -6,6 +6,10 @@ float64 max_azimuth
 float64 min_elevation
 float64 max_elevation
 float64 max_range
+float64 min_range
 uint32 num_azimuth_bins
 uint32 num_elevation_bins
-float64[] data
+float64[] obstacle_distances
+float64[] pot_map
+geometry_msgs/Vector3 force_vector
+geometry_msgs/Vector3 local_position
