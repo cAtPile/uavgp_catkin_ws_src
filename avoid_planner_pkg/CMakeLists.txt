@@ -48,32 +48,22 @@ include_directories(
 
 # 5. 编译自定义库
 add_library(avoid_planner_lib
-  #src/lib/cost_calculator.cpp
-  #src/lib/local_planner.cpp
-  #src/lib/mavros_interface.cpp
-  #src/lib/star_planner.cpp
   lib/utils.cpp
-  lib/pointcloud_processor/angle_tobin_index.cpp
-  lib/pointcloud_processor/filter_pointcloud.cpp
-  lib/pointcloud_processor/generate_polarhistogram.cpp
-  lib/pointcloud_processor/get_angle_bin_index.cpp
-  lib/pointcloud_processor/get_histogram.cpp
-  lib/pointcloud_processor/is_updated.cpp
-  lib/pointcloud_processor/load_params.cpp
-  lib/pointcloud_processor/pointcloud_processor.cpp
-  lib/pointcloud_processor/pointcloude_callback.cpp
-  lib/pointcloud_processor/reset_updated_flag.cpp
-  lib/pointcloud_processor/transform_to_bodyframe.cpp
-  lib/pointcloud_processor/update_histogram_from_point.cpp
-  lib/potential_field/calculate_repulsive_force.cpp
-  lib/potential_field/calculate_total_force.cpp
-  lib/potential_field/generate_potentialfield.cpp
-  lib/potential_field/generate_total_force.cpp
-  lib/potential_field/get_polar_histogram.cpp
-  lib/potential_field/load_params.cpp
-  lib/potential_field/potential_field.cpp
-  lib/potential_field/set.cpp
-  lib/potential_field/update_polar_goal.cpp
+  lib/anglebinIndex.cpp
+  lib/avoid_planner.cpp
+  lib/calculateAtt.cpp
+  lib/calculateRep.cpp
+  lib/calculateTotal.cpp
+  lib/filterPC.cpp
+  lib/generateForceDir.cpp
+  lib/generatePFdismap.cpp
+  lib/generatePFpotmap.cpp
+  lib/goalCB.cpp
+  lib/pointcloudCB.cpp
+  lib/tfBodyframe.cpp
+  lib/updatePFpoint.cpp
+  lib/utils.cpp
+
 )
 
 add_dependencies(avoid_planner_lib ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
