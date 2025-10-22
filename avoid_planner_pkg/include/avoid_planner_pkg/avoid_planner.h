@@ -16,6 +16,8 @@
 #include <Eigen/Dense>
 #include <mutex>
 #include <geometry_msgs/Vector3Stamped.h>
+#include <sensor_msgs/PointCloud2.h>
+
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <thread>
