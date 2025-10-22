@@ -119,6 +119,7 @@ class AvoidPlanner{
 private:
 
     //===========ROS节点====================
+    ros::Rate rate;
     ros::NodeHandle nh_;
     ros::NodeHandle pnh_;
 
