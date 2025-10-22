@@ -161,7 +161,7 @@ private:
     ros::Rate update_rate_;
 
     // 内部函数
-    void loadParams();                     // 加载参数
+    bool loadParams();                     // 加载参数
     void updatePFpoint(double x, double y, double z);  // 更新极坐标场点
 
     // 回调函数
