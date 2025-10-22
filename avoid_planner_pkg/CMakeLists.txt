@@ -61,8 +61,6 @@ add_library(avoid_planner_lib
   lib/pointcloudCB.cpp
   lib/tfBodyframe.cpp
   lib/updatePFpoint.cpp
-  lib/utils.cpp
-
 )
 
 add_dependencies(avoid_planner_lib ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
