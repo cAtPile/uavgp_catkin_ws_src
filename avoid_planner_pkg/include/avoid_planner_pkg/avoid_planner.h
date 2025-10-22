@@ -121,13 +121,13 @@ private:
     ros::NodeHandle pnh_;
 
     //===========Action服务器================
-    actionlib::SimpleActionServer<avoid_planner_pkg::AvoidPlannerAction> as_;
+    actionlib::SimpleActionServer<avoid_planner_pkg::ApocAvoidAction> as_;
     std::string action_name_;
     
     //============Action消息===================
-    avoid_planner_pkg::AvoidPlannerGoal current_goal_;
-    avoid_planner_pkg::AvoidPlannerFeedback feedback_;
-    avoid_planner_pkg::AvoidPlannerResult result_;
+    avoid_planner_pkg::ApocAvoidGoal current_goal_;
+    avoid_planner_pkg::ApocAvoidFeedback feedback_;
+    avoid_planner_pkg::ApocAvoidResult result_;
 
     //=============topic订阅===================
     ros::Subscriber pointcloud_sub_;      // 点云订阅者
