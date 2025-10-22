@@ -10,7 +10,7 @@ int main(int argc, char**argv) {
 
     try {
         // 创建避障规划器实例（内部包含PolarField数据）
-        avoid_planner_pkg::AvoidPlanner planner;
+        AvoidPlanner planner;
         
         // 创建PolarField消息发布者
         ros::Publisher field_pub = nh.advertise<avoid_planner_pkg::PolarFieldMsg>(
