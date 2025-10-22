@@ -1,4 +1,4 @@
-// 点云测试程序（修正版）
+// 点云测试程序（直接访问私有成员版）
 #include "avoid_planner_pkg/avoid_planner.h"
 #include "avoid_planner_pkg/PolarFieldMsg.h"  // 自定义的PolarField消息类型
 #include <ros/ros.h>
@@ -21,13 +21,11 @@ int main(int argc, char**argv) {
         // 主循环
         ros::Rate rate(20);  // 20Hz循环频率
         while (ros::ok()) {
-            // 1. 通过公有接口获取锁（替代直接访问私有mutex）
-            std::lock_guard<std::mutex> lock(planner.getUpdatedMutex());
-            
-            // 2. 通过公有接口检查更新标志（替代直接访问私有is_updated_）
-            if (planner.checkIsUpdated()) {
+            // 直接访问私有锁和更新标志（注意：这破坏了类的封装性）
+            std::lock_guard<std::mutex> lock(planner.updated_mutex_);
+            if (planner.is_updated_) {
                 // 获取极坐标场数据
-                const PolarField& field = planner.getCurrentPolarField();  // 修正命名空间
+                const PolarField& field = planner.getCurrentPolarField();
                 
                 // 构造ROS消息
                 avoid_planner_pkg::PolarFieldMsg msg;
@@ -52,11 +50,11 @@ int main(int argc, char**argv) {
                 msg.num_azimuth_bins = field.num_azimuth_bins;
                 msg.num_elevation_bins = field.num_elevation_bins;
                 
-                // 扁平化障碍物距离数据（注意：原结构体中是dis_map，不是obstacle_distances）
+                // 扁平化障碍物距离数据（使用结构体中实际的dis_map）
                 msg.obstacle_distances.clear();
                 msg.obstacle_distances.reserve(
                     field.num_azimuth_bins * field.num_elevation_bins);
-                for (const auto& az_bin : field.dis_map) {  // 修正为dis_map（原结构体定义）
+                for (const auto& az_bin : field.dis_map) {
                     msg.obstacle_distances.insert(
                         msg.obstacle_distances.end(), az_bin.begin(), az_bin.end());
                 }
@@ -83,8 +81,8 @@ int main(int argc, char**argv) {
                 ROS_INFO_THROTTLE(1.0, "Published polar field with %zu x %zu bins",
                                   field.num_azimuth_bins, field.num_elevation_bins);
                 
-                // 3. 通过公有接口重置更新标志（替代直接修改私有is_updated_）
-                planner.resetIsUpdated();
+                // 直接重置私有更新标志
+                planner.is_updated_ = false;
             }
 
             // 处理回调函数
