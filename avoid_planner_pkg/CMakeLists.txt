@@ -25,7 +25,7 @@ add_message_files(
 # 声明Action文件
 add_action_files(
   FILES
-  action/apoc_avoid.action
+  apoc_avoid.action
 )
 
 # 生成消息
