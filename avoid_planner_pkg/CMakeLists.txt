@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   geometry_msgs  
+  sensor_msgs
   pcl_ros        
   message_generation  # 消息生成依赖
   actionlib        
