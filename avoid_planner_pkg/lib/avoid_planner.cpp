@@ -102,3 +102,13 @@ void AvoidPlanner::preemptCB() {
     as_.setPreempted();  // 通知客户端当前目标已被抢占
     is_running_ = false; // 停止当前避障规划任务的执行循环
 }
+// 析构函数实现
+AvoidPlanner::~AvoidPlanner() {
+    // 可选：添加清理逻辑（如停止线程、关闭订阅等）
+}
+
+// getCurrentPolarField()实现（返回当前极坐标场数据）
+PolarField AvoidPlanner::getCurrentPolarField() {
+    // 根据你的逻辑返回数据，例如直接返回成员变量
+    return current_polar_field_;
+}
