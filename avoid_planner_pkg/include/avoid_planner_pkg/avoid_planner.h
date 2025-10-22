@@ -22,6 +22,10 @@
 #include <pcl/point_types.h>
 #include <thread>
 #include <cmath>
+// 包含PCL滤波所需的头文件
+#include <pcl/filters/passthrough.h>       // 用于PassThrough滤波
+#include <pcl/filters/voxel_grid.h>        // 用于VoxelGrid体素滤波
+#include <pcl/filters/statistical_outlier_removal.h>  // 用于StatisticalOutlierRemoval滤波
 
 /**
  * @struct PolarField
