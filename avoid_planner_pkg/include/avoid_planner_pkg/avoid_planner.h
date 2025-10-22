@@ -103,7 +103,7 @@ struct PolarField{
         num_elevation_bins = static_cast<size_t>((max_elevation - min_elevation) / elevation_resolution) + 1;
         
         // 初始化距离图和势场图
-        obstacle_distances.resize(num_azimuth_bins, std::vector<double>(num_elevation_bins, INFINITY));
+        dis_map.resize(num_azimuth_bins, std::vector<double>(num_elevation_bins, INFINITY));
         pot_map.resize(num_azimuth_bins, std::vector<double>(num_elevation_bins, 0.0));
     }
 };
