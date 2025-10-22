@@ -12,3 +12,4 @@ float32 dir_x
 float32 dir_y
 float32 dir_z
 ---
+float32 actpro
