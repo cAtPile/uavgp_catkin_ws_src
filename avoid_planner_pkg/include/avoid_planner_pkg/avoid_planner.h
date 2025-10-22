@@ -47,7 +47,7 @@ struct PolarField{
     size_t num_elevation_bins;  // 仰角网格数量
     
     // 直方图数据: [azimuth][elevation] = 障碍物距离(m)
-    std::vector<std::vector<double>> obstacle_distances;  // 原dis_map重命名，更清晰
+    std::vector<std::vector<double>> dis_map;  // 原dis_map重命名，更清晰
 
     // 势场数据 [azimuth][elevation] = 力大小（N）
     std::vector<std::vector<double>> pot_map;
