@@ -17,7 +17,7 @@
  * @see anglebinIndex() 将角度值映射到直方图网格索引的工具函数
  * @see current_polar_field_ 存储极坐标直方图数据和参数的成员变量
  */
-void PointcloudProcessor::updateHistogramFromPoint(double x, double y, double z) {
+void AvoidPlanner::updatePFpoint(double x, double y, double z) {
 
     // 计算距离
     double distance = std::sqrt(x*x + y*y + z*z);

@@ -130,6 +130,11 @@ struct PolarField{
  */
 class AvoidPlanner{
 private:
+    // TF变换相关成员（必须声明）
+    tf2_ros::Buffer tf_buffer_;                  // TF缓冲区
+    tf2_ros::TransformListener tf_listener_;     // TF监听器
+    std::string body_frame_id_;                  // 机体坐标系ID
+    std::string lidar_frame_id_;                 // 激光雷达坐标系ID
 
     //===========ROS节点====================
     ros::Rate rate;
