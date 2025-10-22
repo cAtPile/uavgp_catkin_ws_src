@@ -76,7 +76,7 @@ target_link_libraries(avoid_planner_lib
 
 # 6. 编译测试节点
 add_executable(pcp_test_node
-  test/pcp_test.cpp
+  test/test.cpp
 ) 
 
 #
