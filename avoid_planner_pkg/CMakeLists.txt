@@ -127,7 +127,3 @@ install(DIRECTORY action/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/action
 )
 
-# 安装配置文件 (如果需要的话)
-# install(DIRECTORY config/
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
-# )
