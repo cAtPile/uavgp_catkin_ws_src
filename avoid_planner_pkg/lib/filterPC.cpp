@@ -17,7 +17,7 @@
  * @see min_sensor_range_ 传感器最小探测范围(米)  ？？？
  * @see voxel_grid_size_
  */
-void AvoidPlanner::filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& input, 
+void AvoidPlanner::filterPC(const pcl::PointCloud<pcl::PointXYZ>& input, 
                                           pcl::PointCloud<pcl::PointXYZ>& output) {
     
     pcl::PointCloud<pcl::PointXYZ> temp_cloud;

@@ -26,6 +26,7 @@
 #include <pcl/filters/passthrough.h>       // 用于PassThrough滤波
 #include <pcl/filters/voxel_grid.h>        // 用于VoxelGrid体素滤波
 #include <pcl/filters/statistical_outlier_removal.h>  // 用于StatisticalOutlierRemoval滤波
+#include <pcl_conversions/pcl_conversions.h>  
 
 /**
  * @struct PolarField
@@ -182,7 +183,7 @@ private:
     void publishDirection();
 
     //=============点云处理函数============
-    void filterPointcloud(const pcl::PointCloud<pcl::PointXYZ>& input, 
+    void filterPC(const pcl::PointCloud<pcl::PointXYZ>& input, 
                           pcl::PointCloud<pcl::PointXYZ>& output);
     bool tfBodyframe(const pcl::PointCloud<pcl::PointXYZ>& input, 
                      pcl::PointCloud<pcl::PointXYZ>& output);
