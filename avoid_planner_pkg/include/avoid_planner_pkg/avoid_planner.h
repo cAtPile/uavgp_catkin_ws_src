@@ -28,6 +28,14 @@
 #include <pcl/filters/statistical_outlier_removal.h>  // 用于StatisticalOutlierRemoval滤波
 #include <pcl_conversions/pcl_conversions.h>  
 
+#include "avoid_planner_pkg/avoid_planner.h"
+// 新增以下头文件
+#include <tf2_ros/buffer.h>          // 用于tf2::Buffer
+#include <tf2_ros/transform_listener.h>  // 用于TF监听
+#include <tf2_eigen/tf2_eigen.h>     // 用于tf2::transformToEigen
+#include <pcl/common/transforms.h>   // 用于pcl::transformPointCloud
+#include <tf2/exceptions.h>          // 用于tf2::TransformException
+
 /**
  * @struct PolarField
  * @brief 极坐标场结构体
