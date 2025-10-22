@@ -17,7 +17,7 @@ find_package(OpenCV REQUIRED)
 # 声明消息文件 + 生成消息
 add_message_files(
   FILES
-  PolarHistogramMsg.msg  
+  PolarFieldMsg.msg  
 )
 
 # 生成消息
@@ -83,18 +83,6 @@ add_executable(pcp_test_node
 add_dependencies(pcp_test_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # 链接库
 target_link_libraries(pcp_test_node
-  avoid_planner_lib
-  ${EIGEN3_LIBS}
-  ${OpenCV_LIBRARIES}
-  ${PCL_LIBRARIES}
-  ${catkin_LIBRARIES}
-)
-
-add_executable(pf_test_node
-  test/pf_test_node.cpp
-)
-
-target_link_libraries(pf_test_node
   avoid_planner_lib
   ${EIGEN3_LIBS}
   ${OpenCV_LIBRARIES}
