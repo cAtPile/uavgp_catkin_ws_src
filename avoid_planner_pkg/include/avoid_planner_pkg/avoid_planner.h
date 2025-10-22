@@ -12,7 +12,7 @@
 
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
-#include <avoid_planner_pkg/apoc_avoid.h>  
+#include <avoid_planner_pkg/ApocAvoid.h>
 #include <Eigen/Dense>
 #include <mutex>
 #include <geometry_msgs/Vector3Stamped.h>
