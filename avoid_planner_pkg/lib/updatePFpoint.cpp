@@ -41,7 +41,7 @@ void AvoidPlanner::updatePFpoint(double x, double y, double z) {
     }
     
     // 只保留每个网格中最近的障碍物
-    if (distance < current_polar_field_.data[az_index][el_index]) {
+    if (distance < current_polar_field_.dis_map[az_index][el_index]) {
         current_polar_field_.dis_map[az_index][el_index] = distance;
     }
 }
