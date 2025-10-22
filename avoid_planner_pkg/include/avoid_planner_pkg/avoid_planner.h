@@ -159,7 +159,6 @@ private:
 
     // 状态变量
     bool is_running_;
-    ros::Rate update_rate_;
 
     // 内部函数
     bool loadParams();                     // 加载参数
