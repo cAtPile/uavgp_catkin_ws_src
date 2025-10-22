@@ -10,6 +10,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs  
   pcl_ros        
   message_generation  # 消息生成依赖
+  actionlib        
+  actionlib_msgs   
 )
 find_package(Eigen3 REQUIRED)  
 find_package(OpenCV REQUIRED)
@@ -20,12 +22,20 @@ add_message_files(
   PolarFieldMsg.msg  
 )
 
+# 声明Action文件
+add_action_files(
+  FILES
+  apoc_avoid.action
+)
+
 # 生成消息
 generate_messages(
   DEPENDENCIES
   std_msgs        
   geometry_msgs   
+  actionlib_msgs
 )
+
 
 #  catkin 包信息
 catkin_package(
