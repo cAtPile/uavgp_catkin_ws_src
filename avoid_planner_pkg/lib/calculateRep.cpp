@@ -22,7 +22,7 @@ double AvoidPlanner::calculateRep(size_t az_idx, size_t el_idx) {
 
     // 从极坐标直方图获取当前网格的障碍物距离（假设存储在obstacle_distances中）
     // obstacle_distances[az_idx][el_idx]表示该角度方向上最近障碍物的距离
-    double obs_dis = current_polar_field_.obstacle_distances[az_idx][el_idx];
+    double obs_dis = current_polar_field_.dis_map[az_idx][el_idx];
 
     // 若该方向无障碍物或大于安全距离，斥力为0
     if (obs_dis <= 0.0 || obs_dis >= safe_dis) {
