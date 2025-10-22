@@ -25,6 +25,6 @@ void AvoidPlanner::calculateTotal(size_t az_idx, size_t el_idx, double att_force
     }
 
     // 将合力存储到势场图对应网格
-    current_polar_field_.pot_map_[az_idx][el_idx] = total_force;
+    current_polar_field_.pot_map[az_idx][el_idx] = total_force;
 
 }
