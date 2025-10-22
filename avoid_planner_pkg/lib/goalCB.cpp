@@ -71,9 +71,10 @@ void AvoidPlanner::goalCB(){
 
     // 如果已经到达目标（距离小于阈值），返回结果
     if (distance < 0.5) {  // 假设0.5m为到达阈值
-        result_.dir_x = 0.0;
-        result_.dir_y = 0.0;
-        result_.dir_z = 0.0;
+        // 利用Vector3类型的current_direction，直接赋值其x/y/z子字段
+        result_.current_direction.x = 0.0;
+        result_.current_direction.y = 0.0;
+        result_.current_direction.z = 0.0;
         as_.setSucceeded(result_);
     }
 }
