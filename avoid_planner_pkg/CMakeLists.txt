@@ -54,6 +54,7 @@ include_directories(
   /usr/include/eigen3
   ${OpenCV_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
+  ${PROJECT_SOURCE_DIR}/include  # 确保 include 目录被正确加入
 )
 
 # 5. 编译自定义库
