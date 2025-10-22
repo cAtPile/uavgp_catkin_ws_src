@@ -48,7 +48,6 @@ include_directories(
 
 # 5. 编译自定义库
 add_library(avoid_planner_lib
-  lib/utils.cpp
   lib/anglebinIndex.cpp
   lib/avoid_planner.cpp
   lib/calculateAtt.cpp
