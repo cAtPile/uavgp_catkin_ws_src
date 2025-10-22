@@ -13,7 +13,7 @@
  * @details 初始化极坐标场数据结构、加载配置参数、
  *          建立ROS通信接口并启动动作服务器
  */
-AvoidPlanner::AvoidPlanner() : rate(20.0),nh_("~"), as_(nh_, "avoid_planner_action", false) {
+AvoidPlanner::AvoidPlanner() : rate(10),nh_("~"), as_(nh_, "avoid_planner_action", false) {
 
     // 初始化势场数据结构（使用PolarField的无参构造函数）
     current_polar_field_ = PolarField();

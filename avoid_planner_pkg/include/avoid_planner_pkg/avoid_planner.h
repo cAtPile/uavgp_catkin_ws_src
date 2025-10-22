@@ -169,6 +169,9 @@ private:
     void goalCB();
     void pointcloudCB(const sensor_msgs::PointCloud2::ConstPtr& msg);
 
+    void preemptCB(); // 声明 preemptCB 函数
+
+
     // 主处理循环
     void processLoop();
     
