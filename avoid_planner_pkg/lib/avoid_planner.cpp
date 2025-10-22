@@ -13,7 +13,7 @@
  * @details 初始化极坐标场数据结构、加载配置参数、
  *          建立ROS通信接口并启动动作服务器
  */
-AvoidPlanner::AvoidPlanner() : rate(10.0), nh_("~"), as_(nh_, "avoid_planner_action", false)
+AvoidPlanner::AvoidPlanner() : rate(10.0), nh_("~"), as_(nh_, "avoid_planner_action", false),
     tf_buffer_(),  // 初始化TF缓冲区（可省略，默认构造）
     tf_listener_(tf_buffer_)  // 关键：传入tf_buffer_初始化监听器
 {
