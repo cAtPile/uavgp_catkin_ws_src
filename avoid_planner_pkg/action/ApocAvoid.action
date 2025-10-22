@@ -1,13 +1,15 @@
-# 目标
-float32 current_pose_x
-float32 current_pose_y
-float32 current_pose_z
-float32 goal_x
-float32 goal_y
-float32 goal_z
-uint8 cmd
+# 目标（Goal）：客户端发送给服务器的目标数据
+float32 current_pose_x   # 当前位置x
+float32 current_pose_y   # 当前位置y
+float32 current_pose_z   # 当前位置z
+float32 goal_x           # 目标位置x
+float32 goal_y           # 目标位置y
+float32 goal_z           # 目标位置z
+uint8 cmd                # 控制命令
 ---
-#结果
-geometry_msgs/Vector3 current_direction
+# 结果（Result）：服务器完成目标后返回的结果
+geometry_msgs/Vector3 current_direction  # 最终运动方向（x,y,z）
 ---
-float32 actpro
+# 反馈（Feedback）：服务器执行过程中实时返回的中间状态
+float32 actpro           # 进度（例如完成百分比）
+geometry_msgs/Vector3 current_direction  # 实时运动方向（x,y,z）

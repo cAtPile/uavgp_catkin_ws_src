@@ -57,11 +57,7 @@ void AvoidPlanner::pointcloudCB(const sensor_msgs::PointCloud2::ConstPtr& msg){
     // 生成极坐标直方图
     generatePFdismap(body_cloud);
     
-    // 更新时间戳和标志
-    {
-        std::lock_guard<std::mutex> lock(histogram_mutex_);
-        histogram_.timestamp = msg->header.stamp;
-    }
+    current_polar_field_.timestamp = msg->header.stamp;
     
     {
         std::lock_guard<std::mutex> lock(updated_mutex_);
