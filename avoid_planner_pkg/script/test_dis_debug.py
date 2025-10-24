@@ -140,12 +140,12 @@ def main():
     ani = FuncAnimation(
         fig, update_plot,
         fargs=(ax, surf, cbar, text),
-        interval=200,  # 5Hz更新频率，匹配点云处理频率
+        interval=200,  # 5Hz更新频率
         blit=False
     )
     
     plt.tight_layout()
-    plt.show()
+    plt.show() 
     
     rospy.spin()
 
