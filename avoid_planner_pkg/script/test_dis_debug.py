@@ -133,7 +133,7 @@ def main():
     # 初始提示文本
     text = ax.text(0, 0, 0, "等待接收数据...", fontsize=12)
     
-    # 设置初始视角（更直观的观察角度）
+    # 设置初始视角
     ax.view_init(elev=30, azim=45)
     
     # 创建动画更新机制
