@@ -59,6 +59,7 @@ int main(int argc, char**argv) {
             rate.sleep();
             count++;
         }
+        
 
         ROS_INFO("测试完成");
     } catch (const std::exception& e) {
