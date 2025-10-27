@@ -63,12 +63,6 @@ AvoidPlanner::AvoidPlanner() : rate(10.0), nh_("~"), as_(nh_, "avoid_planner_act
     // 初始化势场数据结构（默认参数）
     //current_polar_field_ = PolarField();
 
-    //含参PF
-    current_polar_field_ = PolarField(az_res, el_res,
-                                      min_az, max_az,
-                                      min_el, max_el,
-                                      min_range, max_range);
-
     // 初始化ROS通信接口
     // 点云订阅
     pointcloud_sub_ = nh_.subscribe(lidar_topic_, 10,
@@ -118,6 +112,12 @@ bool AvoidPlanner::loadParams() {
     nh_.param("max_azimuth", max_az, M_PI);              // 默认+π
     nh_.param("min_elevation", min_el, -0.122);          // 默认~-7°
     nh_.param("max_elevation", max_el, 0.984);           // 默认~+56°
+
+    // 使用PolarField的含参构造函数更新极坐标场配置
+    current_polar_field_ = PolarField(az_res, el_res,
+                                      min_az, max_az,
+                                      min_el, max_el,
+                                      min_range, max_range);
 
     ROS_INFO("Parameters loaded: Azimuth bins=%zu, Elevation bins=%zu, Sensor range=[%0.2f, %0.2f]m",
              current_polar_field_.num_azimuth_bins,
