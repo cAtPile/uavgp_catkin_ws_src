@@ -4,7 +4,7 @@
  * @details 初始化避障规划器核心组件，包括参数加载、ROS通信通信接口初始化、
  *          势场数据结构初始化等，是系统的入口点
  * @author apoc
- * @date 2025/10/18
+ * @date 2025/10/
  */
 #include "avoid_planner_pkg/avoid_planner.h"
 
@@ -14,18 +14,52 @@
  *          建立ROS通信接口并启动动作服务器
  */
 AvoidPlanner::AvoidPlanner() : rate(10.0), nh_("~"), as_(nh_, "avoid_planner_action", false),
-    tf_buffer_(),  // 初始化TF缓冲区（可省略，默认构造）
-    tf_listener_(tf_buffer_)  // 关键：传入tf_buffer_初始化监听器
+    tf_buffer_(),  
+    tf_listener_(tf_buffer_)
 {
 
     // 初始化势场数据结构（使用PolarField的无参构造函数）
     current_polar_field_ = PolarField();
-
+    
     // 加载配置参数
     if (!loadParams()) {
         ROS_ERROR("Failed to load critical parameters. Exiting...");
         ros::shutdown();
         return;
+    }else{
+        // 展示参数
+        ROS_INFO("----------------------------------------");
+        ROS_INFO("AvoidPlanner Parameters Loaded:");
+        ROS_INFO("  Sensor Parameters:");
+        ROS_INFO("    lidar_topic: %s", lidar_topic_.c_str());
+        ROS_INFO("    body_frame_id: %s", body_frame_id_.c_str());
+        ROS_INFO("    lidar_frame_id: %s", lidar_frame_id_.c_str());
+        ROS_INFO("    min_sensor_range: %.2f m", min_sensor_range_);
+        ROS_INFO("    max_sensor_range: %.2f m", max_sensor_range_);
+        
+        ROS_INFO("\n  Filter Parameters:");
+        ROS_INFO("    voxel_grid_size: %.2f m", voxel_grid_size_);
+        ROS_INFO("    statistical_filter_mean_k: %d", statistical_filter_mean_k_);
+        ROS_INFO("    statistical_filter_std_dev: %.2f", statistical_filter_std_dev_);
+        
+        ROS_INFO("\n  Polar Field Parameters:");
+        ROS_INFO("    azimuth_resolution: %.4f rad (%.1f°)", 
+                current_polar_field_.azimuth_resolution,
+                current_polar_field_.azimuth_resolution * 180 / M_PI);
+        ROS_INFO("    elevation_resolution: %.4f rad (%.1f°)", 
+                current_polar_field_.elevation_resolution,
+                current_polar_field_.elevation_resolution * 180 / M_PI);
+        ROS_INFO("    azimuth range: [%.2f, %.2f] rad ([%.1f°, %.1f°])",
+                current_polar_field_.min_azimuth, current_polar_field_.max_azimuth,
+                current_polar_field_.min_azimuth * 180 / M_PI,
+                current_polar_field_.max_azimuth * 180 / M_PI);
+        ROS_INFO("    elevation range: [%.2f, %.2f] rad ([%.1f°, %.1f°])",
+                current_polar_field_.min_elevation, current_polar_field_.max_elevation,
+                current_polar_field_.min_elevation * 180 / M_PI,
+                current_polar_field_.max_elevation * 180 / M_PI);
+        ROS_INFO("    num_azimuth_bins: %zu", current_polar_field_.num_azimuth_bins);
+        ROS_INFO("    num_elevation_bins: %zu", current_polar_field_.num_elevation_bins);
+        ROS_INFO("----------------------------------------");
     }
 
     // 初始化ROS通信接口
@@ -56,7 +90,7 @@ bool AvoidPlanner::loadParams() {
     }
     nh_.param("body_frame_id", body_frame_id_, std::string("base_link"));
     nh_.param("lidar_frame_id", lidar_frame_id_, std::string("lidar_link"));
-    // 读取传感器范围参数（用于覆盖默认值）
+    // 读取传感器范围参数s
     double min_range, max_range;
     nh_.param("min_sensor_range", min_range, 0.5);  // 单位: m
     nh_.param("max_sensor_range", max_range, 50.0); // 单位: m
