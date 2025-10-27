@@ -1,43 +1,38 @@
 ### 文件结构
 
 ### save
-    livox_lidar_publisher2 (livox_ros_driver2/livox_ros_driver2_node)
-
-auto-starting new master
-process[master]: started with pid [21167]
-ROS_MASTER_URI=http://localhost:11311
-
-setting /run_id to cf22c648-b340-11f0-8fa9-60ff9e774db9
-process[rosout-1]: started with pid [21182]
-started core service [/rosout]
-process[livox_lidar_publisher2-2]: started with pid [21189]
-[INFO] [1761575139.332381382]: Livox Ros Driver2 Version: 1.2.4
-data source:0.
-[INFO] [1761575139.336441191]: Data Source is raw lidar.
-[INFO] [1761575139.336811123]: Config file : /home/a/ws_livox/src/livox_ros_driver2/config/MID360_config.json
-LdsLidar *GetInstance
-config lidar type: 8
-successfully parse base config, counts: 1
-[2025-10-27 22:25:39.337] [console] [info] set master/slave sdk to master sdk by default  [parse_cfg_file.cpp] [Parse] [82]
-[2025-10-27 22:25:39.337] [console] [info] Livox lidar logger disable.  [parse_cfg_file.cpp] [Parse] [126]
-[2025-10-27 22:25:39.337] [console] [info] Device type:9 point cloud data and IMU data unicast is enabled.  [params_check.cpp] [CheckLidarMulticastIp] [100]
-[2025-10-27 22:25:39.337] [console] [info] Data Handler Init Succ.  [data_handler.cpp] [Init] [49]
-bind failed
-[2025-10-27 22:25:39.338] [console] [error] Create detection socket failed.  [device_manager.cpp] [CreateDetectionChannel] [275]
-[2025-10-27 22:25:39.338] [console] [error] Create detection channel failed.  [device_manager.cpp] [CreateChannel] [242]
-[2025-10-27 22:25:39.338] [console] [error] Create channel failed.  [device_manager.cpp] [Init] [169]
-Failed to init livox lidar sdk.
-[ERROR] [1761575139.338086907]: Init lds lidar failed!
-^C[livox_lidar_publisher2-2] killing on exit
-^C^C[livox_lidar_publisher2-2] escalating to SIGTERM
-^C[rosout-1] killing on exit
-^C^C[master] killing on exit
+160
+[WARN] [1761575858.523398251]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575858.523564880]: Failed to transform pointcloud to body frame
+[INFO] [1761575859.419747610]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
+[WARN] [1761575859.568099749]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575859.568224041]: Failed to transform pointcloud to body frame
+[INFO] [1761575860.464828770]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
+[WARN] [1761575860.612153964]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575860.612284528]: Failed to transform pointcloud to body frame
+[INFO] [1761575861.510198901]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
+[WARN] [1761575861.657552000]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575861.657676036]: Failed to transform pointcloud to body frame
+[INFO] [1761575862.256882097]: published: 10  | az bins: 37, el bins: 11
+[INFO] [1761575862.556722127]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
+[WARN] [1761575862.704727119]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575862.704842547]: Failed to transform pointcloud to body frame
+[INFO] [1761575863.601459439]: resive PointsCloud,wide=19968,high=1,pointsNum=19968
+[WARN] [1761575863.749107716]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575863.749224072]: Failed to transform pointcloud to body frame
+[INFO] [1761575864.645876966]: resive PointsCloud,wide=19968,high=1,pointsNum=19968
+[WARN] [1761575864.793584605]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575864.793710625]: Failed to transform pointcloud to body frame
+[INFO] [1761575865.687311228]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
+[WARN] [1761575865.835685321]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575865.835799020]: Failed to transform pointcloud to body frame
+[INFO] [1761575866.731137217]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
+[WARN] [1761575866.876637360]: Transform exception: "base_link" passed to lookupTransform argument target_frame does not exist. 
+[WARN] [1761575866.876760244]: Failed to transform pointcloud to body frame
+^C[pcp_test_node-1] killing on exit
 shutting down processing monitor...
 ... shutting down processing monitor complete
 done
-a@ubuntu:~/ws_livox$ ^C
-
-
 
 待办：
 1.构建一个action
