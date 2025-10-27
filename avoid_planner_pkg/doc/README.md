@@ -1,7 +1,6 @@
 ### 文件结构
 
 ### save
-
 <launch>
 
 	<!--user configure parameters for ros start-->
@@ -12,7 +11,7 @@
 	<arg name="data_src" default="0"/>
 	<arg name="publish_freq" default="10.0"/>
 	<arg name="output_type" default="0"/>
-	<arg name="rviz_enable" default="true"/>
+	<arg name="rviz_enable" default="false"/>  <!-- 这里将默认值改为false -->
 	<arg name="rosbag_enable" default="false"/>
 	<arg name="cmdline_arg" default="$(arg bd_list)"/>
 	<arg name="msg_frame_id" default="livox_frame"/>
@@ -36,7 +35,7 @@
 	      type="livox_ros_driver2_node" required="true"
 	      output="screen" args="$(arg cmdline_arg)"/>
 
-	<group if="$(arg rviz_enable)">
+	<group if="$(arg rviz_enable)">  <!-- 由于rviz_enable默认是false，这个group不会执行 -->
 		<node name="livox_rviz" pkg="rviz" type="rviz" respawn="true"
 				args="-d $(find livox_ros_driver2)/config/display_point_cloud_ROS1.rviz"/>
     </group>
