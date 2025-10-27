@@ -18,7 +18,6 @@ AvoidPlanner::AvoidPlanner() : rate(10.0), nh_("~"), as_(nh_, "avoid_planner_act
     tf_listener_(tf_buffer_)
 {
 
-
     // 加载配置参数
     if (!loadParams()) {
         ROS_ERROR("Failed to load critical parameters. Exiting...");
@@ -84,6 +83,7 @@ AvoidPlanner::AvoidPlanner() : rate(10.0), nh_("~"), as_(nh_, "avoid_planner_act
  * @return 参数加载成功返回true，关键参数缺失返回false
  */
 bool AvoidPlanner::loadParams() {
+    
     // 传感器参数
     if (!nh_.getParam("lidar_topic", lidar_topic_)) {
         ROS_WARN("Using default lidar topic: /velodyne_points");
@@ -91,7 +91,8 @@ bool AvoidPlanner::loadParams() {
     }
     nh_.param("body_frame_id", body_frame_id_, std::string("base_link"));
     nh_.param("lidar_frame_id", lidar_frame_id_, std::string("lidar_link"));
-    // 读取传感器范围参数s
+
+    // 读取传感器范围参数
     double min_range, max_range;
     nh_.param("min_sensor_range", min_range, 0.5);  // 单位: m
     nh_.param("max_sensor_range", max_range, 50.0); // 单位: m
@@ -103,15 +104,23 @@ bool AvoidPlanner::loadParams() {
     nh_.param("statistical_filter_mean_k", statistical_filter_mean_k_, 50);
     nh_.param("statistical_filter_std_dev", statistical_filter_std_dev_, 1.0);
 
-    // 极坐标直方图参数（从参数服务器读取角度范围和分辨率）
+    // 读取YAML中的参数（使用带_deg的名称）
+    nh_.param("azimuth_resolution_deg", az_res_deg, 1.0);    // 默认1度
+    nh_.param("elevation_resolution_deg", el_res_deg, 5.0);  // 默认5度
+    nh_.param("min_azimuth_deg", min_az_deg, -180.0);        // 默认-180度
+    nh_.param("max_azimuth_deg", max_az_deg, 180.0);         // 默认180度
+    nh_.param("min_elevation_deg", min_el_deg, 0.0);         // 从YAML读取0度
+    nh_.param("max_elevation_deg", max_el_deg, 50.0);        // 从YAML读取50度
+
+    // 单位转换：度 → 弧度
     double az_res, el_res;
     double min_az, max_az, min_el, max_el;
-    nh_.param("azimuth_resolution", az_res, 0.01745);    // 默认~1°(弧度)
-    nh_.param("elevation_resolution", el_res, 0.0873);   // 默认~5°(弧度)
-    nh_.param("min_azimuth", min_az, -M_PI);             // 默认-π
-    nh_.param("max_azimuth", max_az, M_PI);              // 默认+π
-    nh_.param("min_elevation", min_el, -0.122);          // 默认~-7°
-    nh_.param("max_elevation", max_el, 0.984);           // 默认~+56°
+    double az_res = az_res_deg * M_PI / 180.0;
+    double el_res = el_res_deg * M_PI / 180.0;
+    double min_az = min_az_deg * M_PI / 180.0;
+    double max_az = max_az_deg * M_PI / 180.0;
+    double min_el = min_el_deg * M_PI / 180.0;
+    double max_el = max_el_deg * M_PI / 180.0;
 
     // 使用PolarField的含参构造函数更新极坐标场配置
     current_polar_field_ = PolarField(az_res, el_res,
