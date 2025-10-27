@@ -40,17 +40,17 @@ AvoidPlanner::AvoidPlanner() : rate(10.0), nh_("~"), as_(nh_, "avoid_planner_act
         ROS_INFO("    statistical_filter_std_dev: %.2f", statistical_filter_std_dev_);
         
         ROS_INFO("\n  Polar Field Parameters:");
-        ROS_INFO("    azimuth_resolution: %.4f rad (%.1f°)", 
+        ROS_INFO("    azimuth_resolution: %.4f rad (%.1f deg)", 
                 current_polar_field_.azimuth_resolution,
                 current_polar_field_.azimuth_resolution * 180 / M_PI);
-        ROS_INFO("    elevation_resolution: %.4f rad (%.1f°)", 
+        ROS_INFO("    elevation_resolution: %.4f rad (%.1f deg)", 
                 current_polar_field_.elevation_resolution,
                 current_polar_field_.elevation_resolution * 180 / M_PI);
-        ROS_INFO("    azimuth range: [%.2f, %.2f] rad ([%.1f°, %.1f°])",
+        ROS_INFO("    azimuth range: [%.2f, %.2f] rad ([%.1f deg, %.1f deg])",
                 current_polar_field_.min_azimuth, current_polar_field_.max_azimuth,
                 current_polar_field_.min_azimuth * 180 / M_PI,
                 current_polar_field_.max_azimuth * 180 / M_PI);
-        ROS_INFO("    elevation range: [%.2f, %.2f] rad ([%.1f°, %.1f°])",
+        ROS_INFO("    elevation range: [%.2f, %.2f] rad ([%.1f deg, %.1f deg])",
                 current_polar_field_.min_elevation, current_polar_field_.max_elevation,
                 current_polar_field_.min_elevation * 180 / M_PI,
                 current_polar_field_.max_elevation * 180 / M_PI);
@@ -104,7 +104,14 @@ bool AvoidPlanner::loadParams() {
     nh_.param("statistical_filter_mean_k", statistical_filter_mean_k_, 50);
     nh_.param("statistical_filter_std_dev", statistical_filter_std_dev_, 1.0);
 
-    // 读取YAML中的参数（使用带_deg的名称）
+    // 读取YAML中的参数 deg
+    double az_res_deg;
+    double el_res_deg;
+    double min_az_deg;
+    double max_az_deg;
+    double min_el_deg;
+    double max_el_deg;
+
     nh_.param("azimuth_resolution_deg", az_res_deg, 1.0);    // 默认1度
     nh_.param("elevation_resolution_deg", el_res_deg, 5.0);  // 默认5度
     nh_.param("min_azimuth_deg", min_az_deg, -180.0);        // 默认-180度
