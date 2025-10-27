@@ -10,7 +10,7 @@ int main(int argc, char**argv) {
     try {
         // 创建规划器实例
         AvoidPlanner planner;
-        ROS_INFO("AvoidPlanner 实例创建成功");
+        ROS_INFO("AvoidPlanner Buided!");
 
         // 创建消息发布者，发布极坐标场数据
         ros::Publisher field_pub = nh.advertise<avoid_planner_pkg::PolarFieldMsg>(
@@ -51,7 +51,7 @@ int main(int argc, char**argv) {
 
             // 打印日志
             if (count % 10 == 0) {
-                ROS_INFO("已发布 %d 次数据 | 方位角网格数: %zu, 仰角网格数: %zu",
+                ROS_INFO("published: %d  | az bins: %zu, el bins: %zu",
                          count, field.num_azimuth_bins, field.num_elevation_bins);
             }
 
@@ -59,11 +59,11 @@ int main(int argc, char**argv) {
             rate.sleep();
             count++;
         }
-        
 
-        ROS_INFO("测试完成");
+
+        ROS_INFO("Successfully");
     } catch (const std::exception& e) {
-        ROS_ERROR("测试失败: %s", e.what());
+        ROS_ERROR("field: %s", e.what());
         return 1;
     }
 
