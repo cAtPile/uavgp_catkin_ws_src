@@ -1,51 +1,43 @@
 ### 文件结构
 
 ### save
-<launch>
+    livox_lidar_publisher2 (livox_ros_driver2/livox_ros_driver2_node)
 
-	<!--user configure parameters for ros start-->
-	<arg name="lvx_file_path" default="livox_test.lvx"/>
-	<arg name="bd_list" default="100000000000000"/>
-	<arg name="xfer_format" default="0"/>
-	<arg name="multi_topic" default="0"/>
-	<arg name="data_src" default="0"/>
-	<arg name="publish_freq" default="10.0"/>
-	<arg name="output_type" default="0"/>
-	<arg name="rviz_enable" default="false"/>  <!-- 这里将默认值改为false -->
-	<arg name="rosbag_enable" default="false"/>
-	<arg name="cmdline_arg" default="$(arg bd_list)"/>
-	<arg name="msg_frame_id" default="livox_frame"/>
-	<arg name="lidar_bag" default="true"/>
-	<arg name="imu_bag" default="true"/>
-	<!--user configure parameters for ros end--> 
+auto-starting new master
+process[master]: started with pid [21167]
+ROS_MASTER_URI=http://localhost:11311
 
-	<param name="xfer_format" value="$(arg xfer_format)"/>
-	<param name="multi_topic" value="$(arg multi_topic)"/>
-	<param name="data_src" value="$(arg data_src)"/>
-	<param name="publish_freq" type="double" value="$(arg publish_freq)"/>
-	<param name="output_data_type" value="$(arg output_type)"/>
-	<param name="cmdline_str" type="string" value="$(arg bd_list)"/>
-	<param name="cmdline_file_path" type="string" value="$(arg lvx_file_path)"/>
-	<param name="user_config_path" type="string" value="$(find livox_ros_driver2)/config/MID360_config.json"/>
-	<param name="frame_id" type="string" value="$(arg msg_frame_id)"/>
-	<param name="enable_lidar_bag" type="bool" value="$(arg lidar_bag)"/>
-	<param name="enable_imu_bag" type="bool" value="$(arg imu_bag)"/>
+setting /run_id to cf22c648-b340-11f0-8fa9-60ff9e774db9
+process[rosout-1]: started with pid [21182]
+started core service [/rosout]
+process[livox_lidar_publisher2-2]: started with pid [21189]
+[INFO] [1761575139.332381382]: Livox Ros Driver2 Version: 1.2.4
+data source:0.
+[INFO] [1761575139.336441191]: Data Source is raw lidar.
+[INFO] [1761575139.336811123]: Config file : /home/a/ws_livox/src/livox_ros_driver2/config/MID360_config.json
+LdsLidar *GetInstance
+config lidar type: 8
+successfully parse base config, counts: 1
+[2025-10-27 22:25:39.337] [console] [info] set master/slave sdk to master sdk by default  [parse_cfg_file.cpp] [Parse] [82]
+[2025-10-27 22:25:39.337] [console] [info] Livox lidar logger disable.  [parse_cfg_file.cpp] [Parse] [126]
+[2025-10-27 22:25:39.337] [console] [info] Device type:9 point cloud data and IMU data unicast is enabled.  [params_check.cpp] [CheckLidarMulticastIp] [100]
+[2025-10-27 22:25:39.337] [console] [info] Data Handler Init Succ.  [data_handler.cpp] [Init] [49]
+bind failed
+[2025-10-27 22:25:39.338] [console] [error] Create detection socket failed.  [device_manager.cpp] [CreateDetectionChannel] [275]
+[2025-10-27 22:25:39.338] [console] [error] Create detection channel failed.  [device_manager.cpp] [CreateChannel] [242]
+[2025-10-27 22:25:39.338] [console] [error] Create channel failed.  [device_manager.cpp] [Init] [169]
+Failed to init livox lidar sdk.
+[ERROR] [1761575139.338086907]: Init lds lidar failed!
+^C[livox_lidar_publisher2-2] killing on exit
+^C^C[livox_lidar_publisher2-2] escalating to SIGTERM
+^C[rosout-1] killing on exit
+^C^C[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+done
+a@ubuntu:~/ws_livox$ ^C
 
-	<node name="livox_lidar_publisher2" pkg="livox_ros_driver2"
-	      type="livox_ros_driver2_node" required="true"
-	      output="screen" args="$(arg cmdline_arg)"/>
 
-	<group if="$(arg rviz_enable)">  <!-- 由于rviz_enable默认是false，这个group不会执行 -->
-		<node name="livox_rviz" pkg="rviz" type="rviz" respawn="true"
-				args="-d $(find livox_ros_driver2)/config/display_point_cloud_ROS1.rviz"/>
-    </group>
-
-	<group if="$(arg rosbag_enable)">
-    	<node pkg="rosbag" type="record" name="record" output="screen"
-          		args="-a"/>
-    </group>
-
-</launch>
 
 待办：
 1.构建一个action
