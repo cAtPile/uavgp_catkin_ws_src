@@ -113,8 +113,6 @@ bool AvoidPlanner::loadParams() {
     nh_.param("max_elevation_deg", max_el_deg, 50.0);        // 从YAML读取50度
 
     // 单位转换：度 → 弧度
-    double az_res, el_res;
-    double min_az, max_az, min_el, max_el;
     double az_res = az_res_deg * M_PI / 180.0;
     double el_res = el_res_deg * M_PI / 180.0;
     double min_az = min_az_deg * M_PI / 180.0;
