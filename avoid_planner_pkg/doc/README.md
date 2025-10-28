@@ -1,56 +1,35 @@
 ### 文件结构
 
 ### save
-[ 88%] Building CXX object avoid_planner_pkg/CMakeFiles/avoid_planner_lib.dir/lib/updatePFpoint.cpp.o
-In file included from /opt/ros/noetic/include/ros/ros.h:40,
-                 from /home/a/catkin_ws/src/avoid_planner_pkg/include/avoid_planner_pkg/avoid_planner.h:13,
-                 from /home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp:8:
-/home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp: In member function ‘void AvoidPlanner::updatePFpoint(double, double, double)’:
-/home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp:24:14: warning: unknown conversion type character ‘/’ in format [-Wformat=]
-   24 |     ROS_INFO("distance %0/2f",distance);
-      |              ^~~~~~~~~~~~~~~~
-/opt/ros/noetic/include/ros/console.h:351:165: note: in definition of macro ‘ROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER’
-  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, __VA_ARGS__)
-      |                                                                                                                                                                     ^~~~~~~~~~~
-/opt/ros/noetic/include/ros/console.h:390:7: note: in expansion of macro ‘ROSCONSOLE_PRINT_AT_LOCATION’
-  390 |       ROSCONSOLE_PRINT_AT_LOCATION(__VA_ARGS__); \
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/opt/ros/noetic/include/ros/console.h:575:35: note: in expansion of macro ‘ROS_LOG_COND’
-  575 | #define ROS_LOG(level, name, ...) ROS_LOG_COND(true, level, name, __VA_ARGS__)
-      |                                   ^~~~~~~~~~~~
-/opt/ros/noetic/include/rosconsole/macros_generated.h:110:23: note: in expansion of macro ‘ROS_LOG’
-  110 | #define ROS_INFO(...) ROS_LOG(::ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
-      |                       ^~~~~~~
-/home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp:24:5: note: in expansion of macro ‘ROS_INFO’
-   24 |     ROS_INFO("distance %0/2f",distance);
-      |     ^~~~~~~~
-/home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp:24:26: note: format string is defined here
-   24 |     ROS_INFO("distance %0/2f",distance);
-      |                          ^
-In file included from /opt/ros/noetic/include/ros/ros.h:40,
-                 from /home/a/catkin_ws/src/avoid_planner_pkg/include/avoid_planner_pkg/avoid_planner.h:13,
-                 from /home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp:8:
-/home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp:24:14: warning: too many arguments for format [-Wformat-extra-args]
-   24 |     ROS_INFO("distance %0/2f",distance);
-      |              ^~~~~~~~~~~~~~~~
-/opt/ros/noetic/include/ros/console.h:351:165: note: in definition of macro ‘ROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER’
-  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, __VA_ARGS__)
-      |                                                                                                                                                                     ^~~~~~~~~~~
-/opt/ros/noetic/include/ros/console.h:390:7: note: in expansion of macro ‘ROSCONSOLE_PRINT_AT_LOCATION’
-  390 |       ROSCONSOLE_PRINT_AT_LOCATION(__VA_ARGS__); \
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/opt/ros/noetic/include/ros/console.h:575:35: note: in expansion of macro ‘ROS_LOG_COND’
-  575 | #define ROS_LOG(level, name, ...) ROS_LOG_COND(true, level, name, __VA_ARGS__)
-      |                                   ^~~~~~~~~~~~
-/opt/ros/noetic/include/rosconsole/macros_generated.h:110:23: note: in expansion of macro ‘ROS_LOG’
-  110 | #define ROS_INFO(...) ROS_LOG(::ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
-      |                       ^~~~~~~
-/home/a/catkin_ws/src/avoid_planner_pkg/lib/updatePFpoint.cpp:24:5: note: in expansion of macro ‘ROS_INFO’
-   24 |     ROS_INFO("distance %0/2f",distance);
-      |     ^~~~~~~~
-[ 89%] Linking CXX shared library /home/a/catkin_ws/devel/lib/libavoid_planner_lib.so
-[ 97%] Built target avoid_planner_lib
-[ 98%] Linking CXX executable /home/a/catkin_ws/devel/lib/avoid_planner_pkg/pcp_test_node
+---
+^Cheader: 
+  seq: 114
+  stamp: 
+    secs: 1761660783
+    nsecs:  95768806
+  frame_id: "base_link"
+azimuth_resolution: 0.17453292519943295
+elevation_resolution: 0.08726646259971647
+min_azimuth: -3.141592653589793
+max_azimuth: 3.141592653589793
+min_elevation: 0.0
+max_elevation: 0.8726646259971648
+max_range: 2.0
+min_range: 0.0
+num_azimuth_bins: 37
+num_elevation_bins: 11
+obstacle_distances: []
+pot_map: []
+force_vector: 
+  x: 0.0
+  y: 0.0
+  z: 0.0
+local_position: 
+  x: 0.0
+  y: 0.0
+  z: 0.0
+---
+a@ubuntu:~/catkin_ws$ 
 
 待办：
 1.构建一个action
