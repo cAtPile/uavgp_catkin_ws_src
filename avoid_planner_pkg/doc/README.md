@@ -1,35 +1,17 @@
 ### 文件结构
 
 ### save
----
-^Cheader: 
-  seq: 114
-  stamp: 
-    secs: 1761660783
-    nsecs:  95768806
-  frame_id: "base_link"
-azimuth_resolution: 0.17453292519943295
-elevation_resolution: 0.08726646259971647
-min_azimuth: -3.141592653589793
-max_azimuth: 3.141592653589793
-min_elevation: 0.0
-max_elevation: 0.8726646259971648
-max_range: 2.0
-min_range: 0.0
-num_azimuth_bins: 37
-num_elevation_bins: 11
-obstacle_distances: []
-pot_map: []
-force_vector: 
-  x: 0.0
-  y: 0.0
-  z: 0.0
-local_position: 
-  x: 0.0
-  y: 0.0
-  z: 0.0
----
+ubuntu:~/catkin_ws$ roslaunch avoid_planner_pkg test_dis_debug.py
+... logging to /home/a/.ros/log/d768aa9c-b409-11f0-9564-3c6d661ed63d/roslaunch-ubuntu-15243.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+WARNING: disk usage in log directory [/home/a/.ros/log] is over 1GB.
+It's recommended that you use the 'rosclean' command.
+
+RLException: Invalid roslaunch XML syntax: not well-formed (invalid token): line 1, column 1
+The traceback for the exception was written to the log file
 a@ubuntu:~/catkin_ws$ 
+
 
 待办：
 1.构建一个action
