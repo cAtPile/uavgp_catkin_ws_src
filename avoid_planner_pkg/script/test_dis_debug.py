@@ -112,8 +112,8 @@ def main():
     rospy.init_node('dismap_visualizer', anonymous=True)
     
     # 订阅极坐标场话题（包含dismap数据）
-    rospy.Subscriber('/polar_field', PolarFieldMsg, callback)
-    rospy.loginfo("已订阅 /polar_field 话题，等待dismap数据...")
+    rospy.Subscriber('/polar_field_test', PolarFieldMsg, callback)
+    rospy.loginfo("已订阅 /polar_field_test 话题，等待dismap数据...")
     
     # 创建3D图形
     fig = plt.figure(figsize=(12, 10))
