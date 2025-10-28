@@ -46,6 +46,28 @@ int main(int argc, char**argv) {
             msg.num_azimuth_bins = field.num_azimuth_bins;
             msg.num_elevation_bins = field.num_elevation_bins;
 
+            //
+            // 填充障碍物距离数组 
+            msg.obstacle_distances.clear();  // 清空原有数据
+            for (const auto& az_bin : field.dis_map) {  // 遍历方位角维度
+                for (double distance : az_bin) {         // 遍历仰角维度
+                    // 将无穷大值替换为最大范围
+                    if (std::isinf(distance)) {
+                        msg.obstacle_distances.push_back(field.max_range);
+                    } else {
+                        msg.obstacle_distances.push_back(distance);
+                    }
+                }
+            }
+
+            // 填充势场数组 (pot_map)
+            msg.pot_map.clear();  // 清空原有数据
+            for (const auto& az_bin : field.pot_map) {  // 遍历方位角维度
+                for (double pot_value : az_bin) {       // 遍历仰角维度
+                    msg.pot_map.push_back(pot_value);
+                }
+            }
+
             // 发布消息
             field_pub.publish(msg);
 
