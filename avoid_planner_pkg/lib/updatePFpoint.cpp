@@ -21,13 +21,14 @@ void AvoidPlanner::updatePFpoint(double x, double y, double z) {
 
     // 计算距离
     double distance = std::sqrt(x*x + y*y + z*z);
-    ROS_INFO("distance %0.2f",distance);
     
-    // 计算方位角 (绕z轴，x正方向为0，逆时针为正)
+    // 计算方位角
     double azimuth = std::atan2(y, x);  // 范围[-π, π]
+    ROS_INFO("az %0.2f",azimuth);
     
     // 计算仰角 (与xy平面的夹角，向上为正)
     double elevation = std::atan2(z, std::sqrt(x*x + y*y));  // 范围[-π/2, π/2]
+    ROS_INFO("el %0.2f",elevation);
     
     // 映射到直方图网格
     int az_index = anglebinIndex(azimuth, current_polar_field_.min_azimuth, 
