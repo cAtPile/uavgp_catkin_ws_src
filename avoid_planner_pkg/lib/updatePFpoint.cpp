@@ -33,7 +33,7 @@ void AvoidPlanner::updatePFpoint(double x, double y, double z) {
                                   current_polar_field_.max_azimuth, current_polar_field_.num_azimuth_bins);
     int el_index = anglebinIndex(elevation, current_polar_field_.min_elevation, 
                                   current_polar_field_.max_elevation, current_polar_field_.num_elevation_bins);
-    ROS_INFO("azi %d eli %d",az_index,az_index);
+    ROS_INFO("azi %d eli %d",az_index,el_index);
     // 检查索引有效性
     if (az_index < 0 || az_index >= static_cast<int>(current_polar_field_.num_azimuth_bins) ||
         el_index < 0 || el_index >= static_cast<int>(current_polar_field_.num_elevation_bins)) {
