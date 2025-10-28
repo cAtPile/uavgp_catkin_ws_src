@@ -5,7 +5,10 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 from avoid_planner_pkg.msg import PolarFieldMsg  # 极坐标场消息类型（包含势场数据）
-import math
+# 导入Action相关消息类型（请根据实际包名调整）
+from avoid_planner_pkg.msg import AvoidPlannerActionGoal, AvoidPlannerGoal
+import actionlib
+import threading
 
 # 全局变量存储最新的势场数据
 latest_potmap = None
@@ -118,10 +121,43 @@ def update_plot(frame, ax, surf, cbar, text):
     
     return surf, cbar, text
 
+def send_goal_client():
+    """发送虚拟目标位置的客户端函数"""
+    # 等待动作服务器就绪
+    client = actionlib.SimpleActionClient('avoid_planner_action', AvoidPlannerActionGoal)
+    rospy.loginfo("等待动作服务器连接...")
+    client.wait_for_server()
+    
+    # 创建目标消息
+    goal = AvoidPlannerGoal()
+    # 设置当前位置(0, 0, 1)
+    goal.current_pose_x = 0.0
+    goal.current_pose_y = 0.0
+    goal.current_pose_z = 1.0
+    # 设置目标位置(10, 0, 1)（根据你的描述"101"推测为x=10,y=0,z=1）
+    goal.goal_x = 10.0
+    goal.goal_y = 0.0
+    goal.goal_z = 1.0
+    # 发送启动命令（1为启动命令，参考goalCB.cpp中的逻辑）
+    goal.cmd = 1
+    
+    rospy.loginfo("发送虚拟目标位置: 当前(0,0,1) -> 目标(10,0,1)")
+    client.send_goal(goal)
+    
+    # 等待结果（超时时间30秒）
+    client.wait_for_result(rospy.Duration(30.0))
+    return client.get_result()
+
 def main():
-    rospy.init_node('potmap_visualizer', anonymous=True)
+    rospy.init_node('potmap_visualizer_with_goal', anonymous=True)
+    
+    # 在单独线程发送目标，避免阻塞可视化
+    goal_thread = threading.Thread(target=send_goal_client)
+    goal_thread.daemon = True
+    goal_thread.start()
     
     # 订阅极坐标场话题（包含势场数据）
+    # 注意：如果发布端用的是/polar_field_test，请修改此处话题名
     rospy.Subscriber('/polar_field', PolarFieldMsg, callback)
     rospy.loginfo("已订阅 /polar_field 话题，等待势场数据...")
     
