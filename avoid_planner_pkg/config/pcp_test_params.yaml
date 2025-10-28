@@ -1,7 +1,7 @@
 pcp_test_node:
   # 传感器参数
-  max_sensor_range: 2.0
-  min_sensor_range: 0.0
+  max_sensor_range: 5.0
+  min_sensor_range: 0.5
   voxel_grid_size: 0.01
   statistical_filter_mean_k: 12
   statistical_filter_std_dev: 0.3
@@ -14,5 +14,5 @@ pcp_test_node:
   elevation_resolution_deg: 5.0  # 俯仰角步长（度）
   min_azimuth_deg: -180.0  # 最小方位角
   max_azimuth_deg: 180.0  # 最大方位角
-  min_elevation_deg: 0.0  # 最小俯仰角
+  min_elevation_deg: 10.0  # 最小俯仰角
   max_elevation_deg: 50.0  # 最大俯仰角
