@@ -24,18 +24,16 @@ void AvoidPlanner::updatePFpoint(double x, double y, double z) {
     
     // 计算方位角
     double azimuth = std::atan2(y, x);  // 范围[-π, π]
-    ROS_INFO("az %0.2f",azimuth);
     
-    // 计算仰角 (与xy平面的夹角，向上为正)
+    // 计算仰角 
     double elevation = std::atan2(z, std::sqrt(x*x + y*y));  // 范围[-π/2, π/2]
-    ROS_INFO("el %0.2f",elevation);
     
     // 映射到直方图网格
     int az_index = anglebinIndex(azimuth, current_polar_field_.min_azimuth, 
                                   current_polar_field_.max_azimuth, current_polar_field_.num_azimuth_bins);
     int el_index = anglebinIndex(elevation, current_polar_field_.min_elevation, 
                                   current_polar_field_.max_elevation, current_polar_field_.num_elevation_bins);
-    
+    ROS_INFO("azi %d eli %d",az_index,az_index);
     // 检查索引有效性
     if (az_index < 0 || az_index >= static_cast<int>(current_polar_field_.num_azimuth_bins) ||
         el_index < 0 || el_index >= static_cast<int>(current_polar_field_.num_elevation_bins)) {
