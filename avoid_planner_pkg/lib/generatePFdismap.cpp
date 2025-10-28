@@ -36,7 +36,6 @@ void AvoidPlanner::generatePFdismap(const pcl::PointCloud<pcl::PointXYZ>& cloud)
         if (distance < min_sensor_range_ || distance > max_sensor_range_) {
             continue;
         }
-        ROS_INFO("dismap/A");
         // 更新直方图
         updatePFpoint(point.x, point.y, point.z);
     }

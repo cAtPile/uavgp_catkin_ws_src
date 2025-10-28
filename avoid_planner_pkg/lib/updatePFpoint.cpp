@@ -21,6 +21,7 @@ void AvoidPlanner::updatePFpoint(double x, double y, double z) {
 
     // 计算距离
     double distance = std::sqrt(x*x + y*y + z*z);
+    ROS_INFO("distance %0/2f",distance);
     
     // 计算方位角 (绕z轴，x正方向为0，逆时针为正)
     double azimuth = std::atan2(y, x);  // 范围[-π, π]
