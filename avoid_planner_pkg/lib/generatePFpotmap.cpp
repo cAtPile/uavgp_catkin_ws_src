@@ -24,24 +24,29 @@ void AvoidPlanner::generatePFpotmap(double goal_az, double goal_el, double goal_
     size_t el_num = current_polar_field_.num_elevation_bins;
     size_t az_num = current_polar_field_.num_azimuth_bins;
 
-    //将goal_az/el转换成bin
-    size_t goal_az_idx = anglebinIndex(goal_az, 
+    // 将目标角度转换为网格索引
+    int goal_az_idx = anglebinIndex(goal_az, 
                                   current_polar_field_.min_azimuth, 
                                   current_polar_field_.max_azimuth, 
                                   current_polar_field_.num_azimuth_bins);
-    size_t goal_el_idx = anglebinIndex(goal_el, 
+    int goal_el_idx = anglebinIndex(goal_el, 
                                   current_polar_field_.min_elevation, 
                                   current_polar_field_.max_elevation, 
                                   current_polar_field_.num_elevation_bins);
-    
+
+    // 索引有效性检查
+    goal_az_idx = std::max(0, std::min(static_cast<int>(az_num) - 1, goal_az_idx));
+    goal_el_idx = std::max(0, std::min(static_cast<int>(el_num) - 1, goal_el_idx));
+
     // 初始化势图存储容器
     pot_map_.resize(az_num, std::vector<double>(el_num, 0.0));
     
     // 遍历所有角度网格计算势场
     for (size_t el_idx = 0; el_idx < el_num; ++el_idx) {
         for (size_t az_idx = 0; az_idx < az_num; ++az_idx) {
-            // 计算引力（仅目标方向有引力）
+            // 计算引力（仅目标方向网格有引力）
             double attractive_force = 0.0;
+            // 修复括号缺失问题：在条件判断末尾添加闭合括号
             if (az_idx == static_cast<size_t>(goal_az_idx) && el_idx == static_cast<size_t>(goal_el_idx)) {
                 attractive_force = calculateAtt(goal_dis);
             }
