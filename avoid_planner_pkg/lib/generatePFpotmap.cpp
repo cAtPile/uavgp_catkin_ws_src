@@ -25,11 +25,11 @@ void AvoidPlanner::generatePFpotmap(double goal_az, double goal_el, double goal_
     size_t az_num = current_polar_field_.num_azimuth_bins;
 
     //将goal_az/el转换成bin
-    int goal_az_idx = anglebinIndex(goal_az, 
+    size_t goal_az_idx = anglebinIndex(goal_az, 
                                   current_polar_field_.min_azimuth, 
                                   current_polar_field_.max_azimuth, 
                                   current_polar_field_.num_azimuth_bins);
-    int goal_el_idx = anglebinIndex(goal_el, 
+    size_t goal_el_idx = anglebinIndex(goal_el, 
                                   current_polar_field_.min_elevation, 
                                   current_polar_field_.max_elevation, 
                                   current_polar_field_.num_elevation_bins);
