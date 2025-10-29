@@ -1,16 +1,41 @@
 ### 文件结构
 
 ### save
-ubuntu:~/catkin_ws$ roslaunch avoid_planner_pkg test_dis_debug.py
-... logging to /home/a/.ros/log/d768aa9c-b409-11f0-9564-3c6d661ed63d/roslaunch-ubuntu-15243.log
-Checking log directory for disk usage. This may take a while.
-Press Ctrl-C to interrupt
-WARNING: disk usage in log directory [/home/a/.ros/log] is over 1GB.
-It's recommended that you use the 'rosclean' command.
+^Ca@ubuntu:~$ rostopic list
+/avoid_planner_action/cancel
+/avoid_planner_action/feedback
+/avoid_planner_action/goal
+/avoid_planner_action/result
+/avoid_planner_action/status
+/livox/imu
+/livox/lidar
+/pcp_test_node/avoid_planner_action/cancel
+/pcp_test_node/avoid_planner_action/feedback
+/pcp_test_node/avoid_planner_action/goal
+/pcp_test_node/avoid_planner_action/result
+/pcp_test_node/avoid_planner_action/status
+/polar_field_test
+/rosout
+/rosout_agg
+/tf
+/tf_static
+a@ubuntu:~$ rostopic /avoid_planner_action/goal
+rostopic is a command-line tool for printing information about ROS Topics.
 
-RLException: Invalid roslaunch XML syntax: not well-formed (invalid token): line 1, column 1
-The traceback for the exception was written to the log file
-a@ubuntu:~/catkin_ws$ 
+Commands:
+	rostopic bw	display bandwidth used by topic
+	rostopic delay	display delay of topic from timestamp in header
+	rostopic echo	print messages to screen
+	rostopic find	find topics by type
+	rostopic hz	display publishing rate of topic    
+	rostopic info	print information about active topic
+	rostopic list	list active topics
+	rostopic pub	publish data to topic
+	rostopic type	print topic or field type
+
+Type rostopic <command> -h for more detailed usage, e.g. 'rostopic echo -h'
+
+a@ubuntu:~$ rostopic echo /avoid_planner_action/goal
 
 
 待办：
