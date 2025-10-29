@@ -20,8 +20,7 @@ double AvoidPlanner::calculateRep(size_t az_idx, size_t el_idx) {
     static double safe_dis = 5.0;    // 安全距离
     static double max_rep_force = 20.0;  // 最大斥力阈值
 
-    // 从极坐标直方图获取当前网格的障碍物距离（假设存储在obstacle_distances中）
-    // obstacle_distances[az_idx][el_idx]表示该角度方向上最近障碍物的距离
+    // 从极坐标直方图获取当前网格的障碍物距离
     double obs_dis = current_polar_field_.dis_map[az_idx][el_idx];
 
     // 若该方向无障碍物或大于安全距离，斥力为0
@@ -30,16 +29,18 @@ double AvoidPlanner::calculateRep(size_t az_idx, size_t el_idx) {
     }
 
     // 斥力计算模型：基于距离倒数的非线性模型
-    // 距离越近，斥力增长越快（F = k*(1/d - 1/safe) / d²，d为障碍物距离）
     double rep_force = rep_k * (1.0 / obs_dis - 1.0 / safe_dis) / (obs_dis * obs_dis);
-    ROS_INFO("azBin: %d ,elBin: %d, obs_dis= %0.2f , rep_force=%0.2f",az_idx,el_idx,rep_force);
+
+    //
+    ROS_INFO("azBin: %zu ,elBin: %zu, obs_dis= %0.2f , rep_force=%0.2f",
+             az_idx, el_idx, obs_dis, rep_force);
 
     // 确保斥力为正值
     if (rep_force < 0.0) {
         rep_force = 0.0;
     }
 
-    // 限制最大斥力，避免因过近障碍物导致斥力过大
+    // 限制最大斥力
     if (rep_force > max_rep_force) {
         rep_force = max_rep_force;
     }
