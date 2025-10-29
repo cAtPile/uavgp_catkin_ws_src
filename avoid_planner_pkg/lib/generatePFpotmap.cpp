@@ -42,7 +42,7 @@ void AvoidPlanner::generatePFpotmap(double goal_az, double goal_el, double goal_
         for (size_t az_idx = 0; az_idx < az_num; ++az_idx) {
             // 计算引力（仅目标方向有引力）
             double attractive_force = 0.0;
-            if (az_idx == static_cast<size_t>(goal_az_idx) &x& el_idx == static_cast<size_t>(goal_el_idx)) {
+            if (az_idx == static_cast<size_t>(goal_az_idx) && el_idx == static_cast<size_t>(goal_el_idxss) {
                 attractive_force = calculateAtt(goal_dis);
             }
             
