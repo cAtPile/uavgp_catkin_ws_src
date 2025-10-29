@@ -70,13 +70,6 @@ int main(int argc, char**argv) {
 
             // 发布消息
             field_pub.publish(msg);
-
-            // 打印日志
-            if (count % 10 == 0) {
-                ROS_INFO("published: %d  | az bins: %zu, el bins: %zu",
-                         count, field.num_azimuth_bins, field.num_elevation_bins);
-            }
-
             ros::spinOnce();
             rate.sleep();
             count++;

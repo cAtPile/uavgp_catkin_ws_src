@@ -14,5 +14,5 @@ pcp_test_node:
   elevation_resolution_deg: 5.0  # 俯仰角步长（度）
   min_azimuth_deg: -180.0  # 最小方位角
   max_azimuth_deg: 180.0  # 最大方位角
-  min_elevation_deg: 10.0  # 最小俯仰角
-  max_elevation_deg: 50.0  # 最大俯仰角
+  min_elevation_deg: -7.0  # 最小俯仰角
+  max_elevation_deg: 53.0  # 最大俯仰角
