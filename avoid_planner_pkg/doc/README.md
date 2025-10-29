@@ -1,15 +1,30 @@
 ### 文件结构
 
 ### save
-[INFO] [1761743314.776913347]: Goal preempted
-[WARN] [1761743314.777638365]: GenerateForceDir: Total force is near zero, use default goal direction
-[INFO] [1761743314.876889803]: published: 770  | az bins: 37, el bins: 9
-[INFO] [1761743315.776930383]: Goal preempted
-[WARN] [1761743315.777261065]: GenerateForceDir: Total force is near zero, use default goal direction
-[INFO] [1761743315.777648840]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
-[INFO] [1761743315.876866101]: published: 780  | az bins: 37, el bins: 9
-[INFO] [1761743316.776980267]: Goal preempted
-[WARN] [1761743316.777318950]: GenerateForceDir: Total force is near zero, use default goal direction
+ 84%] Building CXX object avoid_planner_pkg/CMakeFiles/avoid_planner_lib.dir/lib/generatePFpotmap.cpp.o
+/home/a/catkin_ws/src/avoid_planner_pkg/lib/generatePFpotmap.cpp: In member function ‘void AvoidPlanner::generatePFpotmap(double, double, double)’:
+/home/a/catkin_ws/src/avoid_planner_pkg/lib/generatePFpotmap.cpp:45:17: warning: init-statement in selection statements only available with ‘-std=c++17’ or ‘-std=gnu++17’
+   45 |             if (az_idx == static_cast<size_t>(goal_az_idx) && el_idx == static_cast<size_t>(goal_el_idx) {
+      |                 ^~~~~~
+/home/a/catkin_ws/src/avoid_planner_pkg/lib/generatePFpotmap.cpp:45:105: error: expected ‘;’ before ‘{’ token
+   45 |             if (az_idx == static_cast<size_t>(goal_az_idx) && el_idx == static_cast<size_t>(goal_el_idx) {
+      |                                                                                                         ^~
+      |                                                                                                         ;
+/home/a/catkin_ws/src/avoid_planner_pkg/lib/generatePFpotmap.cpp:50:66: error: expected ‘)’ before ‘;’ token
+   50 |             double repulsive_force = calculateRep(az_idx, el_idx);
+      |                                                                  ^
+      |                                                                  )
+/home/a/catkin_ws/src/avoid_planner_pkg/lib/generatePFpotmap.cpp:45:16: note: to match this ‘(’
+   45 |             if (az_idx == static_cast<size_t>(goal_az_idx) && el_idx == static_cast<size_t>(goal_el_idx) {
+      |                ^
+/home/a/catkin_ws/src/avoid_planner_pkg/lib/generatePFpotmap.cpp:53:62: error: ‘repulsive_force’ was not declared in this scope
+   53 |             calculateTotal(az_idx, el_idx, attractive_force, repulsive_force);
+      |                                                              ^~~~~~~~~~~~~~~
+make[2]: *** [avoid_planner_pkg/CMakeFiles/avoid_planner_lib.dir/build.make:167: avoid_planner_pkg/CMakeFiles/avoid_planner_lib.dir/lib/generatePFpotmap.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:2150: avoid_planner_pkg/CMakeFiles/avoid_planner_lib.dir/all] Error 2
+make: *** [Makefile:141: all] Error 2
+Invoking "make -j6 -l6" failed
+a@ubuntu:~/catkin_ws$ 
 
 
 
