@@ -32,7 +32,7 @@ double AvoidPlanner::calculateRep(size_t az_idx, size_t el_idx) {
     // 斥力计算模型：基于距离倒数的非线性模型
     // 距离越近，斥力增长越快（F = k*(1/d - 1/safe) / d²，d为障碍物距离）
     double rep_force = rep_k * (1.0 / obs_dis - 1.0 / safe_dis) / (obs_dis * obs_dis);
-    ROS_INFO("azBin: %d ,elBin: %d, rep_force=%0.2f",az_idx,el_idx,rep_force);
+    ROS_INFO("azBin: %d ,elBin: %d, obs_dis= %0.2f , rep_force=%0.2f",az_idx,el_idx,rep_force);
 
     // 确保斥力为正值
     if (rep_force < 0.0) {
