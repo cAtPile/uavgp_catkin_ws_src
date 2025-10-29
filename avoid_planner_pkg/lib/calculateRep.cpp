@@ -17,7 +17,7 @@
 double AvoidPlanner::calculateRep(size_t az_idx, size_t el_idx) {
     // 斥力参数
     static double rep_k = 5.0;       // 斥力比例系数
-    static double safe_dis = 1.0;    // 安全距离
+    static double safe_dis = 5.0;    // 安全距离
     static double max_rep_force = 20.0;  // 最大斥力阈值
 
     // 从极坐标直方图获取当前网格的障碍物距离（假设存储在obstacle_distances中）
