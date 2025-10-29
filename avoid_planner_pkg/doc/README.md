@@ -1,7 +1,13 @@
 ### 文件结构
 
 ### save
-^Ca@ubuntu:~$ rostopic list
+lanner_action/feedback
+/pcp_test_node/avoid_planner_action/goal
+/pcp_test_node/avoid_planner_action/result
+/pcp_test_node/avoid_planner_action/status
+/polar_field_test
+/rosout
+/rosout_agg^Ca@ubuntu:~$ rostopic list
 /avoid_planner_action/cancel
 /avoid_planner_action/feedback
 /avoid_planner_action/goal
@@ -10,13 +16,7 @@
 /livox/imu
 /livox/lidar
 /pcp_test_node/avoid_planner_action/cancel
-/pcp_test_node/avoid_planner_action/feedback
-/pcp_test_node/avoid_planner_action/goal
-/pcp_test_node/avoid_planner_action/result
-/pcp_test_node/avoid_planner_action/status
-/polar_field_test
-/rosout
-/rosout_agg
+/pcp_test_node/avoid_p
 /tf
 /tf_static
 a@ubuntu:~$ rostopic /avoid_planner_action/goal

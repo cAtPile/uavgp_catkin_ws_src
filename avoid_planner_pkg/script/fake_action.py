@@ -8,7 +8,7 @@ def send_continuous_goals():
     rospy.init_node('continuous_goal_sender', anonymous=True)
     
     # 创建Action客户端，连接到avoid_planner_action服务器
-    client = actionlib.SimpleActionClient('avoid_planner_action', ApocAvoidAction)
+    client = actionlib.SimpleActionClient('/pcp_test_node/avoid_planner_action', ApocAvoidAction)
     
     # 等待服务器连接
     rospy.loginfo("等待avoid_planner_action服务器连接...")
