@@ -19,9 +19,20 @@
  * @see generateForceDir 生成合力方向
  */
 void AvoidPlanner::generatePFpotmap(double goal_az, double goal_el, double goal_dis){
+    
     // 获取势场网格尺寸
     size_t el_num = current_polar_field_.num_elevation_bins;
     size_t az_num = current_polar_field_.num_azimuth_bins;
+
+    //将goal_az/el转换成bin
+    int goal_az_idx = anglebinIndex(goal_az, 
+                                  current_polar_field_.min_azimuth, 
+                                  current_polar_field_.max_azimuth, 
+                                  current_polar_field_.num_azimuth_bins);
+    int goal_el_idx = anglebinIndex(goal_el, 
+                                  current_polar_field_.min_elevation, 
+                                  current_polar_field_.max_elevation, 
+                                  current_polar_field_.num_elevation_bins);
     
     // 初始化势图存储容器
     pot_map_.resize(az_num, std::vector<double>(el_num, 0.0));
@@ -31,7 +42,7 @@ void AvoidPlanner::generatePFpotmap(double goal_az, double goal_el, double goal_
         for (size_t az_idx = 0; az_idx < az_num; ++az_idx) {
             // 计算引力（仅目标方向有引力）
             double attractive_force = 0.0;
-            if (az_idx == static_cast<size_t>(goal_az) && el_idx == static_cast<size_t>(goal_el)) {
+            if (az_idx == static_cast<size_t>(goal_az_idx) &x& el_idx == static_cast<size_t>(goal_el_idx)) {
                 attractive_force = calculateAtt(goal_dis);
             }
             

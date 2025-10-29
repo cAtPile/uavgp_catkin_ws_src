@@ -48,7 +48,6 @@ void AvoidPlanner::goalCB(){
     double distance = relative_pos.norm();
     double azimuth = atan2(relative_pos.y(), relative_pos.x());  // 方位角（绕z轴）
     double elevation = atan2(relative_pos.z(), relative_pos.head<2>().norm());  // 仰角（绕y轴）
-    ROS_INFO("goal distance %0.2f,%0.2f,%0.2f",distance,azimuth,elevation);
 
     // 生成势场图
     generatePFpotmap(azimuth, elevation, distance);
