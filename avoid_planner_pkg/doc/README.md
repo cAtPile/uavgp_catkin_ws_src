@@ -1,41 +1,16 @@
 ### 文件结构
 
 ### save
-lanner_action/feedback
-/pcp_test_node/avoid_planner_action/goal
-/pcp_test_node/avoid_planner_action/result
-/pcp_test_node/avoid_planner_action/status
-/polar_field_test
-/rosout
-/rosout_agg^Ca@ubuntu:~$ rostopic list
-/avoid_planner_action/cancel
-/avoid_planner_action/feedback
-/avoid_planner_action/goal
-/avoid_planner_action/result
-/avoid_planner_action/status
-/livox/imu
-/livox/lidar
-/pcp_test_node/avoid_planner_action/cancel
-/pcp_test_node/avoid_p
-/tf
-/tf_static
-a@ubuntu:~$ rostopic /avoid_planner_action/goal
-rostopic is a command-line tool for printing information about ROS Topics.
+[INFO] [1761743314.776913347]: Goal preempted
+[WARN] [1761743314.777638365]: GenerateForceDir: Total force is near zero, use default goal direction
+[INFO] [1761743314.876889803]: published: 770  | az bins: 37, el bins: 9
+[INFO] [1761743315.776930383]: Goal preempted
+[WARN] [1761743315.777261065]: GenerateForceDir: Total force is near zero, use default goal direction
+[INFO] [1761743315.777648840]: resive PointsCloud,wide=20064,high=1,pointsNum=20064
+[INFO] [1761743315.876866101]: published: 780  | az bins: 37, el bins: 9
+[INFO] [1761743316.776980267]: Goal preempted
+[WARN] [1761743316.777318950]: GenerateForceDir: Total force is near zero, use default goal direction
 
-Commands:
-	rostopic bw	display bandwidth used by topic
-	rostopic delay	display delay of topic from timestamp in header
-	rostopic echo	print messages to screen
-	rostopic find	find topics by type
-	rostopic hz	display publishing rate of topic    
-	rostopic info	print information about active topic
-	rostopic list	list active topics
-	rostopic pub	publish data to topic
-	rostopic type	print topic or field type
-
-Type rostopic <command> -h for more detailed usage, e.g. 'rostopic echo -h'
-
-a@ubuntu:~$ rostopic echo /avoid_planner_action/goal
 
 
 待办：
