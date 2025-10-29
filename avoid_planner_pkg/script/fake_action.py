@@ -30,7 +30,7 @@ def send_continuous_goals():
         
         # 设置目标位置
         goal.goal_x = 1.0
-        goal.goal_y = 0.0
+        goal.goal_y = 1.0
         goal.goal_z = 1.0
         
         # 设置命令（1为启动命令）
