@@ -17,12 +17,8 @@
  */
 void AvoidPlanner::calculateTotal(size_t az_idx, size_t el_idx, double att_force, double rep_force) {
     // 合力计算：引力（指向目标为正）与斥力（背离障碍物为正）的矢量叠加
-    double total_force = att_force - rep_force;  // 斥力抵消引力，实现避障
 
-    // 边界处理：确保合力不为负
-    if (total_force < 0.0) {
-        total_force = 0.0;
-    }
+    double total_force = att_force - rep_force;  // 斥力抵消引力，实现避障
 
     // 将合力存储到势场图对应网格
     current_polar_field_.pot_map[az_idx][el_idx] = total_force;

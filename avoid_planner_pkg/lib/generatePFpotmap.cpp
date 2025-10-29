@@ -44,15 +44,15 @@ void AvoidPlanner::generatePFpotmap(double goal_az, double goal_el, double goal_
     // 遍历所有角度网格计算势场
     for (size_t el_idx = 0; el_idx < el_num; ++el_idx) {
         for (size_t az_idx = 0; az_idx < az_num; ++az_idx) {
-            // 计算引力（仅目标方向网格有引力）
+            // 计算引力
             double attractive_force = 0.0;
-            // 修复括号缺失问题：在条件判断末尾添加闭合括号
             if (az_idx == static_cast<size_t>(goal_az_idx) && el_idx == static_cast<size_t>(goal_el_idx)) {
                 attractive_force = calculateAtt(goal_dis);
             }
             
             // 计算斥力
             double repulsive_force = calculateRep(az_idx, el_idx);
+            ROS_INFO("REP= %0.2f",repulsive_force);
             
             // 计算合力并存储到势图
             calculateTotal(az_idx, el_idx, attractive_force, repulsive_force);
