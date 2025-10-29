@@ -10,7 +10,7 @@ pcp_test_node:
   lidar_topic: "/livox/lidar"
 
   # 直方图参数
-  azimuth_resolution_deg: 10.0  # 方位角步长（度）
+  azimuth_resolution_deg: 5.0  # 方位角步长（度）
   elevation_resolution_deg: 5.0  # 俯仰角步长（度）
   min_azimuth_deg: -180.0  # 最小方位角
   max_azimuth_deg: 180.0  # 最大方位角
