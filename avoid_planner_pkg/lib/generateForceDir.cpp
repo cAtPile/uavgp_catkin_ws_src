@@ -48,14 +48,13 @@ void AvoidPlanner::generateForceDir() {
             double y_force = grid_force_vec.y();
             double z_force = grid_force_vec.z();
 
-
-            ROS_INFO("force=(%0.2f,%0.2f,%0.2f)",x_force,y_force,z_force);
             // 4. 累加至总体合力矢量
             total_force += grid_force_vec;
         }
     }
 
     // 5. 处理总体合力：若合力接近零（无有效方向），默认指向目标方向
+    ROS_INFO("TOTAL_FORCE=%0.2f",total_force);
     const double force_threshold = 1e-6;
     if (total_force.norm() < force_threshold) {
         ROS_WARN("GenerateForceDir: Total force is near zero, use default goal direction");
