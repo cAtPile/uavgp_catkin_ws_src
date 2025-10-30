@@ -49,7 +49,7 @@ void AvoidPlanner::generateForceDir() {
             double z_force = grid_force_vec.z();
 
 
-            ROS_INFO("force[%0.2f][%0.2f]=(%0.2f,%0.2f,%0.2f)",az_idx,el_idx,x_force,y_force,z_force);
+            ROS_INFO("force[%d][%d]=(%0.2f,%0.2f,%0.2f)",az_idx,el_idx,x_force,y_force,z_force);
             // 4. 累加至总体合力矢量
             total_force += grid_force_vec;
         }
