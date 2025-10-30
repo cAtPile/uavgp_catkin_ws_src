@@ -49,9 +49,9 @@ void AvoidPlanner::generateForceDir() {
         }
     }
 
-    double x_force = grid_force_vec.x();
-    double y_force = grid_force_vec.y();
-    double z_force = grid_force_vec.z();
+    double x_force = total_force.x();
+    double y_force = total_force.y();
+    double z_force = total_force.z();
 
     // 5. 处理总体合力：若合力接近零（无有效方向），默认指向目标方向
 
