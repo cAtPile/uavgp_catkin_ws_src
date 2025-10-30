@@ -29,7 +29,7 @@ void AvoidPlanner::generateForceDir() {
         for (size_t el_idx = 0; el_idx < num_el_bins; ++el_idx) {
 
             // 1. 获取当前网格的合力大
-            double grid_force = pot_map_[az_idx][el_idx];
+            double grid_force = current_polar_field_.pot_map[az_idx][el_idx];
 
             // 2. 计算当前网格对应的实际角度（弧度）
             double current_az = min_az + az_idx * az_res;  // 方位角（绕z轴，-π~π）
