@@ -52,7 +52,7 @@ void AvoidPlanner::generatePFpotmap(double goal_az, double goal_el, double goal_
             
             // 计算斥力
             double repulsive_force = calculateRep(az_idx, el_idx);
-            ROS_INFO("REP= %0.2f",repulsive_force);
+            //ROS_INFO("REP= %0.2f",repulsive_force);
             
             // 计算合力并存储到势图
             calculateTotal(az_idx, el_idx, attractive_force, repulsive_force);
