@@ -54,7 +54,7 @@ void AvoidPlanner::generateForceDir() {
     }
 
     // 5. 处理总体合力：若合力接近零（无有效方向），默认指向目标方向
-    ROS_INFO("TOTAL_FORCE=%0.2f",total_force);
+    ROS_INFO("TOTAL_FORCE=(%0.2f,%0.2f,%0.2f)",total_force.x(),tota_force.y(),total_force.z());
     const double force_threshold = 1e-6;
     if (total_force.norm() < force_threshold) {
         ROS_WARN("GenerateForceDir: Total force is near zero, use default goal direction");
