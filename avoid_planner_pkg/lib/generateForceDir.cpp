@@ -44,17 +44,18 @@ void AvoidPlanner::generateForceDir() {
             // z分量：垂直方向（俯仰角正弦 × 合力大小）
             grid_force_vec.z() = grid_force * sin(current_el);
 
-            double x_force = grid_force_vec.x();
-            double y_force = grid_force_vec.y();
-            double z_force = grid_force_vec.z();
-
             // 4. 累加至总体合力矢量
             total_force += grid_force_vec;
         }
     }
 
+    double x_force = grid_force_vec.x();
+    double y_force = grid_force_vec.y();
+    double z_force = grid_force_vec.z();
+
     // 5. 处理总体合力：若合力接近零（无有效方向），默认指向目标方向
-    ROS_INFO("TOTAL_FORCE=(%0.2f,%0.2f,%0.2f)",total_force.x(),tota_force.y(),total_force.z());
+
+    ROS_INFO("TOTAL_FORCE=(%0.2f,%0.2f,%0.2f)",x_force,y_force,z_force);
     const double force_threshold = 1e-6;
     if (total_force.norm() < force_threshold) {
         ROS_WARN("GenerateForceDir: Total force is near zero, use default goal direction");
