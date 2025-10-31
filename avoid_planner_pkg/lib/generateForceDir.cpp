@@ -68,8 +68,5 @@ void AvoidPlanner::generateForceDir() {
     // 6. 归一化合力矢量，得到最终运动方向（单位向量）
     Eigen::Vector3d final_dir = total_force.normalized();
 
-    // 7. 线程安全更新当前方向（加锁保护共享数据）
-    std::lock_guard<std::mutex> lock(data_mutex_);
-    current_direction_ = final_dir;
     current_polar_field_.force_vector = total_force;  // 存储原始合力，用于后续调试或反馈
 }
