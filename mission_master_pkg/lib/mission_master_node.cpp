@@ -1,4 +1,9 @@
-#include "mission_master_node.h"
+/**
+ * @file mission_master_node.cpp
+ * @brief 
+ * @date 2025/11/1
+ */
+#include "mission_master_pkg/mission_master_node.h"
 #include <cmath>
 #include <ros/console.h>
 
@@ -60,4 +65,9 @@ bool MissionMaster::isReachTarget(const geometry_msgs::PoseStamped& target_pose)
     double dz = current_pose_.pose.position.z - target_pose.pose.position.z;
     double distance = sqrt(dx*dx + dy*dy + dz*dz);
     return distance < waypoint_tolerance_;
+}
+
+void MissionMaster::loadParams(){
+
+    //
 }

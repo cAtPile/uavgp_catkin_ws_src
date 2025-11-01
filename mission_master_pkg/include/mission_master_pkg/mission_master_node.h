@@ -73,11 +73,14 @@ private:
     double waypoint_tolerance_;         //航点到达容忍距离(m)
 
     //目标点坐标
-    geometry_msgs::PoseStamped pickup_point_;    //拾取点
-    geometry_msgs::PoseStamped avoid_point_;     //避障点
-    geometry_msgs::PoseStamped trace_point_;     //追踪点
-    geometry_msgs::PoseStamped land_point_;      //降落点
-    geometry_msgs::PoseStamped home_point_;      // home点
+    geometry_msgs::PoseStamped home_pose;           //home点
+    geometry_msgs::PoseStamped takeoff_pose;        //起飞点
+    geometry_msgs::PoseStamped pickup_start_pose;   //拾取开始点
+    geometry_msgs::PoseStamped pickup_end_pose;     //拾取终止点
+    geometry_msgs::PoseStamped avoid_start_pose;    //避障开始点
+    geometry_msgs::PoseStamped avoid_end_pose;      //避障终止点    
+    geometry_msgs::PoseStamped trace_start_pose;    //跟踪开始点
+    geometry_msgs::PoseStamped trace_end_pose;      //跟踪终止点
 
     //当前状态
     mission_state current_mission_state_;  //当前任务状态
@@ -93,92 +96,21 @@ private:
     //--------(数据缓存)------------
 
     //=========私有函数=============
-    /**
-     * @brief 加载参数配置
-     * @details 从参数服务器加载任务相关参数
-     */
-    void loadParams();
-
-    /**
-     * @brief 无人机状态回调
-     * @param msg 无人机状态消息
-     */
-    void stateCB(const mavros_msgs::State::ConstPtr& msg);
-
-    /**
-     * @brief 本地位置回调
-     * @param msg 本地位置消息
-     */
-    void localPoseCB(const geometry_msgs::PoseStamped::ConstPtr& msg);
-
-    /**
-     * @brief 解锁检查回调
-     * @details 检查无人机是否解锁成功
-     */
-    void armCheckCB();
-
-    /**
-     * @brief 状态检测
-     * @param target_state 目标状态
-     * @return 是否达到目标状态
-     */
-    bool stateCheck(mission_state target_state);
-
-    /**
-     * @brief 调用拾取服务
-     * @return 服务调用是否成功
-     */
-    bool pickCilent();
-
-    /**
-     * @brief 调用避障服务
-     * @return 服务调用是否成功
-     */
-    bool avoidCilent();
-
-    /**
-     * @brief 调用跟踪服务
-     * @return 服务调用是否成功
-     */
-    bool traceCilent();
-
-    /**
-     * @brief 检查是否到达目标点
-     * @param target_pose 目标位置
-     * @return 是否到达
-     */
-    bool isReachTarget(const geometry_msgs::PoseStamped& target_pose);
-
+    void loadParams();//参数导入
+    void stateCheckCB(const mavros_msgs::State::ConstPtr& msg);//无人机状态回调
+    void localPoseCB(const geometry_msgs::PoseStamped::ConstPtr& msg);//本地位置回调
+    bool isReachTarget(const geometry_msgs::PoseStamped& target_pose);//到达点检查
+    bool missionStateCheck(mission_state target_state);//任务状态检查
+    bool pickCilent();//拾取服务
+    bool avoidCilent();//避障服务
+    bool traceCilent();//追踪服务
     //---------(私有函数)-----------
 
 public:
-    /**
-     * @brief 构造函数
-     */
-    MissionMaster();
 
-    /**
-     * @brief 析构函数
-     */
-    ~MissionMaster();
-
-    /**
-     * @brief 任务状态机运行
-     * @details 主循环函数，处理任务状态转换与执行
-     */
-    void run();
-
-    /**
-     * @brief 初始化任务
-     * @param home_pose 起始点位置
-     * @return 初始化是否成功
-     */
-    bool initMission(const geometry_msgs::PoseStamped& home_pose);
-
-    /**
-     * @brief 获取状态
-     */
-    void getState();
+    MissionMaster();//构造函数
+    ~MissionMaster();//析构函数
+    void getState();//获取状态
 
 };
 
