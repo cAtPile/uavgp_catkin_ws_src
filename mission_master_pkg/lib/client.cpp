@@ -1,18 +1,18 @@
 /**
- * @file  cilent.cpp
+ * @file  client.cpp
  * @brief 
  */
 #include"mission_master_pkg/mission_master_node.h"
 
-bool MissionMaster::pickCilent(){
+bool MissionMaster::pickClient(){
     
 }
-bool MissionMaster::avoidCilent(){
+bool MissionMaster::avoidClient(){
     
 }
-bool MissionMaster::traceCilent(){
+bool MissionMaster::traceClient(){
     
 }
-bool MissionMaster::landCilent(){
+bool MissionMaster::landClient(){
     
 }

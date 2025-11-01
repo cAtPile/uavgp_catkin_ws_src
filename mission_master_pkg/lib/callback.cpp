@@ -42,7 +42,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr& msg){
                 break;
 
             case 'ENUM_PICKUP_POINT':
-                if(pickCilent())current_mission_state_=ENUM_PICKUP_SUCCEED;
+                if(pickClient())current_mission_state_=ENUM_PICKUP_SUCCEED;
                 break;
 
             case 'ENUM_PICKUP_SUCCEED':
@@ -56,7 +56,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr& msg){
                 break;
 
             case 'ENUM_AVOID_POINT':
-                if(pickCilent())current_mission_state_=ENUM_AVOID_SUCCEED;
+                if(pickClient())current_mission_state_=ENUM_AVOID_SUCCEED;
                 break;
 
             case 'ENUM_AVOID_SUCCEED':
@@ -70,7 +70,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr& msg){
                 break;
 
             case 'ENUM_TRACE_POINT':
-                if(avoidCilent())current_mission_state_=ENUM_TRACE_SUCCEED;
+                if(avoidClient())current_mission_state_=ENUM_TRACE_SUCCEED;
                 break;
 
             case 'ENUM_TRACE_SUCCEED':                
@@ -84,7 +84,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr& msg){
                 break;            
                 
             case 'ENUM_LAND_POINT':
-                if(landCilent())current_mission_state_=ENUM_LAND_SUCCEED;
+                if(landClient())current_mission_state_=ENUM_LAND_SUCCEED;
                 break;            
                 
             case 'ENUM_LAND_SUCCEED':
