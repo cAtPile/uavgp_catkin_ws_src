@@ -106,7 +106,7 @@ private:
     bool pickCilent();//拾取服务
     bool avoidCilent();//避障服务
     bool traceCilent();//追踪服务
-    bool landCilent();
+    bool landCilent();//降落服务
     //---------(私有函数)-----------
 
 public:
