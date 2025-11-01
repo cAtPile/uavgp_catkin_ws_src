@@ -81,6 +81,8 @@ private:
     geometry_msgs::PoseStamped avoid_end_pose;      //避障终止点    
     geometry_msgs::PoseStamped trace_start_pose;    //跟踪开始点
     geometry_msgs::PoseStamped trace_end_pose;      //跟踪终止点
+    geometry_msgs::PoseStamped land_pose;           //降落点
+
 
     //当前状态
     mission_state current_mission_state_;  //当前任务状态
@@ -104,6 +106,7 @@ private:
     bool pickCilent();//拾取服务
     bool avoidCilent();//避障服务
     bool traceCilent();//追踪服务
+    bool landCilent();
     //---------(私有函数)-----------
 
 public:

@@ -8,73 +8,92 @@
 void MissionMaster::localPoseCB(const geometry_msgs::PoseStamped::ConstPtr& msg){
     current_pose_ = msg;
 }
+
 void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr& msg){
+
+    //记录无人机状态
     current_vehicle_state_=msg;
-    if (current_state.armed == ARM){
-        switch (mission_state) {
+
+    //判断解锁
+    if (current_vehicle_state_.armed == ARM){
+
+        //判断当前状态
+        switch (current_mission_state_) {
+
             case 'ENUM_WATTING_TAKEOFF':
-                //准备起飞
+                home_pose = current_pose_;
+                local_pos_pub.publish(takeoff_pose);
+                current_mission_state_=ENUM_TAKEOFF;
                 break;
 
             case 'ENUM_TAKEOFF':
-                //起飞任务
+                local_pos_pub.publish(takeoff_pose);
+                if(missionStateCheck(takeoff_pose)) current_mission_state_=ENUM_TAKEOFF_SUCCEED;
                 break;
 
             case 'ENUM_TAKEOFF_SUCCEED':
-                //起飞成功
+                local_pos_pub.publish(pickup_start_pose);
+                current_mission_state_=ENUM_FLYTO_PICKUP_POINT;
                 break;
 
             case 'ENUM_FLYTO_PICKUP_POINT':
-                //飞到拾取点
+                local_pos_pub.publish(pickup_start_pose);
+                if(missionStateCheck(pickup_start_pose)) current_mission_state_=ENUM_PICKUP_POINT;
                 break;
 
             case 'ENUM_PICKUP_POINT':
-                //进行拾取
+                if(pickCilent())current_mission_state_=ENUM_PICKUP_SUCCEED;
                 break;
 
             case 'ENUM_PICKUP_SUCCEED':
-                //拾取成功
+                local_pos_pub.publish(pickup_end_pose);
+                if(missionStateCheck(pickup_end_pose)) current_mission_state_=ENUM_FLYTO_AVOID_POINT;
                 break;
 
             case 'ENUM_FLYTO_AVOID_POINT':
-                //飞到避障
+                local_pos_pub.publish(avoid_start_pose);
+                if(missionStateCheck(avoid_start_pose)) current_mission_state_=ENUM_AVOID_POINT;
                 break;
 
             case 'ENUM_AVOID_POINT':
-                //进行避障
+                if(pickCilent())current_mission_state_=ENUM_AVOID_SUCCEED;
                 break;
 
             case 'ENUM_AVOID_SUCCEED':
-                //完成避障
+                local_pos_pub.publish(avoid_end_pose);
+                if(missionStateCheck(avoid_end_pose)) current_mission_state_=ENUM_FLYTO_TRACE_POINT;
                 break;
 
             case 'ENUM_FLYTO_TRACE_POINT':
-                //飞到跟踪点
+                local_pos_pub.publish(trace_start_pose);
+                if(missionStateCheck(trace_start_pose)) current_mission_state_=ENUM_TRACE_POINT;
                 break;
 
             case 'ENUM_TRACE_POINT':
-                //进行跟踪
-                break;  
+                if(avoidCilent())current_mission_state_=ENUM_TRACE_SUCCEED;
+                break;
 
-            case 'ENUM_TRACE_SUCCEED':
-                //追踪成功
+            case 'ENUM_TRACE_SUCCEED':                
+                local_pos_pub.publish(trace_end_pose);
+                if(missionStateCheck(trace_end_pose)) current_mission_state_=ENUM_FLYTO_LAND_POINT;
                 break;            
                 
             case 'ENUM_FLYTO_LAND_POINT':
-                //飞到降落点
+                local_pos_pub.publish(land_pose);
+                if(missionStateCheck(land_pose)) current_mission_state_=ENUM_LAND_POINT;
                 break;            
                 
             case 'ENUM_LAND_POINT':
-                //进行降落
+                if(landCilent())current_mission_state_=ENUM_LAND_SUCCEED;
                 break;            
                 
             case 'ENUM_LAND_SUCCEED':
-                //降落成功
+                //切降落
+                ROS_INFO("Mission Succeed!!");
                 break;           
 
             default:
-                //维持当前位置
-                //超时后自动降落
+                local_pos_pub.publish(trace_start_pose);
                 break;
         }
 
