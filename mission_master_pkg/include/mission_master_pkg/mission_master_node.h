@@ -22,27 +22,28 @@
 #include <mutex>
 #include <vector>
 
-//构建任务枚举
-enum mission_state{
-    ENUM_WATTING_TAKEOFF,    //等待起飞
-    ENUM_TAKEOFF,            //起飞中
-    ENUM_TAKEOFF_SUCCEED,    //起飞成功
+// 构建任务枚举
+enum mission_state
+{
+    ENUM_WATTING_TAKEOFF, // 等待起飞
+    ENUM_TAKEOFF,         // 起飞中
+    ENUM_TAKEOFF_SUCCEED, // 起飞成功
 
-    ENUM_FLYTO_PICKUP_POINT, //飞往拾取点
-    ENUM_PICKUP_POINT,       //执行拾取
-    ENUM_PICKUP_SUCCEED,     //拾取成功
+    ENUM_FLYTO_PICKUP_POINT, // 飞往拾取点
+    ENUM_PICKUP_POINT,       // 执行拾取
+    ENUM_PICKUP_SUCCEED,     // 拾取成功
 
-    ENUM_FLYTO_AVOID_POINT,  //飞往避障点
-    ENUM_AVOID_POINT,        //执行避障
-    ENUM_AVOID_SUCCEED,      //避障成功
+    ENUM_FLYTO_AVOID_POINT, // 飞往避障点
+    ENUM_AVOID_POINT,       // 执行避障
+    ENUM_AVOID_SUCCEED,     // 避障成功
 
-    ENUM_FLYTO_TRACE_POINT,  //飞往追踪点
-    ENUM_TRACE_POINT,        //执行追踪
-    ENUM_TRACE_SUCCEED,      //追踪成功
+    ENUM_FLYTO_TRACE_POINT, // 飞往追踪点
+    ENUM_TRACE_POINT,       // 执行追踪
+    ENUM_TRACE_SUCCEED,     // 追踪成功
 
-    ENUM_FLYTO_LAND_POINT,   //飞往降落点
-    ENUM_LAND_POINT,         //执行降落
-    ENUM_LAND_SUCCEED        //降落成功
+    ENUM_FLYTO_LAND_POINT, // 飞往降落点
+    ENUM_LAND_POINT,       // 执行降落
+    ENUM_LAND_SUCCEED      // 降落成功
 };
 
 /**
@@ -50,52 +51,51 @@ enum mission_state{
  * @brief 任务主控类
  * @details 负责管理无人机任务流程，协调各功能模块执行任务
  */
-class MissionMaster{
+class MissionMaster
+{
 private:
-
     //=========数据缓存=============
     ros::NodeHandle nh;
-    ros::Subscriber state_sub;          //无人机状态订阅
-    ros::Subscriber local_pos_sub;      //本地位置订阅
-    ros::Publisher local_pos_pub;       //定点发布
-    ros::ServiceClient pickup_client;   //拾取服务客户端
-    ros::ServiceClient avoid_client;    //避障服务客户端
-    ros::ServiceClient trace_client;    //追踪服务客户端
+    ros::Subscriber state_sub;        // 无人机状态订阅
+    ros::Subscriber local_pos_sub;    // 本地位置订阅
+    ros::Publisher local_pos_pub;     // 定点发布
+    ros::ServiceClient pickup_client; // 拾取服务客户端
+    ros::ServiceClient avoid_client;  // 避障服务客户端
+    ros::ServiceClient trace_client;  // 追踪服务客户端
 
+    // 目标点坐标
+    Eigen::Vector3d TAKEOFF_POSE_XYZ;
+    Eigen::Vector3d PICKUP_START_POSE_XYZ;
+    Eigen::Vector3d PICKUP_END_POSE_XYZ;
+    Eigen::Vector3d AVOID_START_POSE_XYZ;
+    Eigen::Vector3d AVOID_END_POSE_XYZ;
+    Eigen::Vector3d TRACE_START_POSE_XYZ;
+    Eigen::Vector3d TRACE_END_POSE_XYZ;
+    geometry_msgs::PoseStamped home_pose;     // home点
+    geometry_msgs::PoseStamped current_pose_; // 当前位置
 
-    //目标点坐标
-    geometry_msgs::PoseStamped home_pose;           //home点
-    geometry_msgs::PoseStamped takeoff_pose;        //起飞点
-    geometry_msgs::PoseStamped pickup_start_pose;   //拾取开始点
-    geometry_msgs::PoseStamped pickup_end_pose;     //拾取终止点
-    geometry_msgs::PoseStamped avoid_start_pose;    //避障开始点
-    geometry_msgs::PoseStamped avoid_end_pose;      //避障终止点    
-    geometry_msgs::PoseStamped trace_start_pose;    //跟踪开始点
-    geometry_msgs::PoseStamped trace_end_pose;      //跟踪终止点
-    geometry_msgs::PoseStamped land_pose;           //降落点
+    mission_state current_mission_state_;      // 当前任务状态
+    mavros_msgs::State current_vehicle_state_; // 无人机状态
 
-    mission_state current_mission_state_;  //当前任务状态
-    mavros_msgs::State current_vehicle_state_;  //无人机状态
-    geometry_msgs::PoseStamped current_pose_;   //当前位置
-    ros::Time mission_start_time_;       //任务开始时间
-    ros::Time state_start_time_;         //当前状态开始时间
-    ros::Rate rate_;                     //循环频率(Hz)
+    ros::Time mission_start_time_; // 任务开始时间
+    ros::Time state_start_time_;   // 当前状态开始时间
+    ros::Rate rate_;               // 循环频率(Hz)
     //--------(数据缓存)------------
 
     //=========私有函数=============
-    void loadParams();//参数导入
-    void stateCheckCB(const mavros_msgs::State::ConstPtr& msg);//无人机状态回调
-    void localPoseCB(const geometry_msgs::PoseStamped::ConstPtr& msg);//本地位置回调
-    bool isReachTarget(const geometry_msgs::PoseStamped& target_pose);//到达点检查
-    bool missionStateCheck(mission_state target_state);//任务状态检查
-    bool pickCilent();//拾取服务
-    bool avoidCilent();//避障服务
-    bool traceCilent();//追踪服务
-    bool landCilent();//降落服务
+    void loadParams();                                                 // 参数导入
+    void stateCheckCB(const mavros_msgs::State::ConstPtr &msg);        // 无人机状态回调
+    void localPoseCB(const geometry_msgs::PoseStamped::ConstPtr &msg); // 本地位置回调
+    bool isReachTarget(const geometry_msgs::PoseStamped &target_pose); // 到达点检查
+    bool missionStateCheck(mission_state target_state);                // 任务状态检查
+    bool pickCilent();                                                 // 拾取服务
+    bool avoidCilent();                                                // 避障服务
+    bool traceCilent();                                                // 追踪服务
+    bool landCilent();                                                 // 降落服务
     //---------(私有函数)-----------
 
     //=========全局参数=============
-    double TOLERANCE_WAYPOINT;         //航点到达容忍距离(m)
+    double TOLERANCE_WAYPOINT; // 航点到达容忍距离(m)
     double TAKEOFF_POSE_X;
     double TAKEOFF_POSE_Y;
     double TAKEOFF_POSE_Z;
@@ -117,16 +117,12 @@ private:
     double TRACE_END_POSE_X;
     double TRACE_END_POSE_Y;
     double TRACE_END_POSE_Z;
-
     //--------(全局参数)------------
 
-
 public:
-
-    MissionMaster();//构造函数
-    ~MissionMaster();//析构函数
-    void getState();//获取状态
-
+    MissionMaster();  // 构造函数
+    ~MissionMaster(); // 析构函数
+    void getState();  // 获取状态
 };
 
 #endif // MISSION_MASTER_NODE_H
