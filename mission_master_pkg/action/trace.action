@@ -1,0 +1,14 @@
+#trace.action
+#goal
+bool trace_enable#启动抓取
+---
+#result
+bool trace_success#抓取成功
+---
+#feedback
+uint8 pick_current_step#当前步骤
+#float32 ball_current_altitude
+#float32 ball_target_x
+#float32 ball_target_y
+#bool ball_detected
+#uint8 pick_error_code

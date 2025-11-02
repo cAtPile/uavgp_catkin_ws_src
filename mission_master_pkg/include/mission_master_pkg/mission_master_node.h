@@ -54,23 +54,14 @@ class MissionMaster{
 private:
 
     //=========数据缓存=============
-    //ros句柄
     ros::NodeHandle nh;
-
-    //订阅器
     ros::Subscriber state_sub;          //无人机状态订阅
     ros::Subscriber local_pos_sub;      //本地位置订阅
-
-    //发布器
     ros::Publisher local_pos_pub;       //定点发布
-
-    //服务客户端
     ros::ServiceClient pickup_client;   //拾取服务客户端
     ros::ServiceClient avoid_client;    //避障服务客户端
     ros::ServiceClient trace_client;    //追踪服务客户端
 
-    //任务参数
-    double waypoint_tolerance_;         //航点到达容忍距离(m)
 
     //目标点坐标
     geometry_msgs::PoseStamped home_pose;           //home点
@@ -83,17 +74,11 @@ private:
     geometry_msgs::PoseStamped trace_end_pose;      //跟踪终止点
     geometry_msgs::PoseStamped land_pose;           //降落点
 
-
-    //当前状态
     mission_state current_mission_state_;  //当前任务状态
     mavros_msgs::State current_vehicle_state_;  //无人机状态
     geometry_msgs::PoseStamped current_pose_;   //当前位置
-
-    //超时计时器
     ros::Time mission_start_time_;       //任务开始时间
     ros::Time state_start_time_;         //当前状态开始时间
-
-    //控制频率
     ros::Rate rate_;                     //循环频率(Hz)
     //--------(数据缓存)------------
 
@@ -108,6 +93,33 @@ private:
     bool traceCilent();//追踪服务
     bool landCilent();//降落服务
     //---------(私有函数)-----------
+
+    //=========全局参数=============
+    double TOLERANCE_WAYPOINT;         //航点到达容忍距离(m)
+    double TAKEOFF_POSE_X;
+    double TAKEOFF_POSE_Y;
+    double TAKEOFF_POSE_Z;
+    double PICKUP_START_POSE_X;
+    double PICKUP_START_POSE_Y;
+    double PICKUP_START_POSE_Z;
+    double PICKUP_END_POSE_X;
+    double PICKUP_END_POSE_Y;
+    double PICKUP_END_POSE_Z;
+    double AVOID_START_POSE_X;
+    double AVOID_START_POSE_Y;
+    double AVOID_START_POSE_Z;
+    double AVOID_END_POSE_X;
+    double AVOID_END_POSE_Y;
+    double AVOID_END_POSE_Z;
+    double TRACE_START_POSE_X;
+    double TRACE_START_POSE_Y;
+    double TRACE_START_POSE_Z;
+    double TRACE_END_POSE_X;
+    double TRACE_END_POSE_Y;
+    double TRACE_END_POSE_Z;
+
+    //--------(全局参数)------------
+
 
 public:
 

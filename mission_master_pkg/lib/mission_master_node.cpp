@@ -25,6 +25,8 @@ MissionMaster::MissionMaster() : rate_(20.0), current_mission_state_(ENUM_WATTIN
         
     // 创建Action客户端，连接到/pick_server/pick服务
     actionlib::SimpleActionClient<pick_server::PickAction> client("/pick_server/pick", true);
+    actionlib::SimpleActionClient<trace_server::PickAction> client("/trace_server/trace", true);
+    actionlib::SimpleActionClient<pavoid_server::PickAction> client("/aavoid_server/pick", true);
 
 }
 
@@ -70,6 +72,35 @@ bool MissionMaster::isReachTarget(const geometry_msgs::PoseStamped& target_pose)
 }
 
 void MissionMaster::loadParams(){
+    //========飞行参数
+    nh.setParam("tolerance_waypoint",TOLERANCE_WAYPOINT,0.03);
 
-    //
+    //========航点参数
+    nh.setParam("takeoff_pose_x",TAKEOFF_POSE_X,0.0);
+    nh.setParam("takeoff_pose_y",TAKEOFF_POSE_Y,0.0);
+    nh.setParam("takeoff_pose_z",TAKEOFF_POSE_Z,0.0);
+    nh.setParam("pickup_start_pose_x",PICKUP_START_POSE_X,0.0);
+    nh.setParam("pickup_start_pose_y",PICKUP_START_POSE_Y,0.0);
+    nh.setParam("pickup_start_pose_z",PICKUP_START_POSE_Z,0.0);
+    nh.setParam("pickup_end_pose_x",PICKUP_END_POSE_X,0.0);
+    nh.setParam("pickup_end_pose_y",PICKUP_END_POSE_Y,0.0);
+    nh.setParam("pickup_end_pose_z",PICKUP_END_POSE_Z,0.0);
+    nh.setParam("avoid_start_pose_x",AVOID_START_POSE_X,0.0);
+    nh.setParam("avoid_start_pose_y",AVOID_START_POSE_Y,0.0);
+    nh.setParam("avoid_start_pose_z",AVOID_START_POSE_Z,0.0);
+    nh.setParam("avoid_end_pose_x",AVOID_END_POSE_X,0.0);
+    nh.setParam("avoid_end_pose_y",AVOID_END_POSE_Y,0.0);
+    nh.setParam("avoid_end_pose_z",AVOID_END_POSE_Z,0.0);
+    nh.setParam("trace_start_pose_x",TRACE_START_POSE_X,0.0);
+    nh.setParam("trace_start_pose_y",TRACE_START_POSE_Y,0.0);
+    nh.setParam("trace_start_pose_z",TRACE_START_POSE_Z,0.0);
+    nh.setParam("trace_end_pose_x",TRACE_END_POSE_X,0.0);
+    nh.setParam("trace_end_pose_y",TRACE_END_POSE_Y,0.0);
+    nh.setParam("trace_end_pose_z",TRACE_END_POSE_Z,0.0);
+
+}
+
+void MissionMaster::loadWaypoints(){
+
+
 }

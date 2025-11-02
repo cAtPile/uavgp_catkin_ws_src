@@ -6,22 +6,23 @@
 #include"mission_master_pkg/mission_master_node.h"
 
 bool MissionMaster::pickClient() {
-    /*
-    #pick.action
-    #gaol
-    bool pick_enable#启动抓取
-    ---
-    #result
-    bool pick_success#抓取成功
-    ---
-    #feedback
-    uint8 pick_curret_step #当前步骤
-    float32 current_altitude  # 当前高度
-    float32 target_x  # 目标X坐标
-    float32 target_y  # 目标Y坐标
-    bool ball_detected  # 是否检测到球
-    */
-   
+
+    // 首次调用
+    if (client.getState().isDone()) {  
+        pick_server::PickGoal goal;
+        goal.pick_enable = true;
+        client.sendGoal(goal);
+        return false; 
+    }
+
+    // 非首次调用
+    pick_server::PickResultConstPtr result = client.getResult();
+    if (!result) {  
+        return false;
+    }
+
+    bool success = result->pick_success;
+    return success;
 }
 
 bool MissionMaster::avoidClient(){
