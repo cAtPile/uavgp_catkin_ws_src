@@ -22,8 +22,10 @@ MissionMaster::MissionMaster() : rate_(20.0), current_mission_state_(ENUM_WATTIN
 
     // 加载参数配置
     loadParams();
+        
+    // 创建Action客户端，连接到/pick_server/pick服务
+    actionlib::SimpleActionClient<pick_server::PickAction> client("/pick_server/pick", true);
 
-    ROS_INFO("MissionMaster initialized");
 }
 
 MissionMaster::~MissionMaster() {
