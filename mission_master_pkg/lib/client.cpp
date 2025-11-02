@@ -5,8 +5,9 @@
 #include"mission_master_pkg/mission_master_node.h"
 
 bool MissionMaster::pickClient(){
-    
+    //调用pick
 }
+
 bool MissionMaster::avoidClient(){
     
 }
