@@ -20,74 +20,74 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr& msg){
         //判断当前状态
         switch (current_mission_state_) {
 
-            case 'ENUM_WATTING_TAKEOFF':
+            case ENUM_WATTING_TAKEOFF:
                 loadWaypoints();
                 setPoint(TAKEOFF_POSE_XYZ);
                 current_mission_state_=ENUM_TAKEOFF;
                 break;
 
-            case 'ENUM_TAKEOFF':
+            case ENUM_TAKEOFF:
                 setPoint(TAKEOFF_POSE_XYZ);
                 if(reachCheck(TAKEOFF_POSE_XYZ)) current_mission_state_=ENUM_TAKEOFF_SUCCEED;
                 break;
 
-            case 'ENUM_TAKEOFF_SUCCEED':
+            case ENUM_TAKEOFF_SUCCEED:
                 setPoint(PICKUP_START_POSE_XYZ);
                 current_mission_state_=ENUM_FLYTO_PICKUP_POINT;
                 break;
 
-            case 'ENUM_FLYTO_PICKUP_POINT':
+            case ENUM_FLYTO_PICKUP_POINT:
                 setPoint(PICKUP_START_POSE_XYZ);
                 if(reachCheck(PICKUP_START_POSE_XYZ)) current_mission_state_=ENUM_PICKUP_POINT;
                 break;
 
-            case 'ENUM_PICKUP_POINT':
+            case ENUM_PICKUP_POINT:
                 if(pickClient())current_mission_state_=ENUM_PICKUP_SUCCEED;
                 break;
 
-            case 'ENUM_PICKUP_SUCCEED':
+            case ENUM_PICKUP_SUCCEED:
                 setPoint(PICKUP_END_POSE_XYZ);
                 if(reachCheck(PICKUP_END_POSE_XYZ)) current_mission_state_=ENUM_FLYTO_AVOID_POINT;
                 break;
 
-            case 'ENUM_FLYTO_AVOID_POINT':
+            case ENUM_FLYTO_AVOID_POINT:
                 setPoint(AVOID_START_POSE_XYZ);
                 if(reachCheck(AVOID_START_POSE_XYZ)) current_mission_state_=ENUM_AVOID_POINT;
                 break;
 
-            case 'ENUM_AVOID_POINT':
+            case ENUM_AVOID_POINT:
                 if(pickClient())current_mission_state_=ENUM_AVOID_SUCCEED;
                 break;
 
-            case 'ENUM_AVOID_SUCCEED':
+            case ENUM_AVOID_SUCCEED:
                 setPoint(AVOID_END_POSE_XYZ);
                 if(reachCheck(AVOID_END_POSE_XYZ)) current_mission_state_=ENUM_FLYTO_TRACE_POINT;
                 break;
 
-            case 'ENUM_FLYTO_TRACE_POINT':
+            case ENUM_FLYTO_TRACE_POINT:
                 setPoint(TRACE_START_POSE_XYZ)
                 if(reachCheck(TRACE_START_POSE_XYZ)) current_mission_state_=ENUM_TRACE_POINT;
                 break;
 
-            case 'ENUM_TRACE_POINT':
+            case ENUM_TRACE_POINT:
                 if(avoidClient())current_mission_state_=ENUM_TRACE_SUCCEED;
                 break;
 
-            case 'ENUM_TRACE_SUCCEED': 
+            case ENUM_TRACE_SUCCEED: 
                 setPoint(TRACE_END_POSE_XYZ);
                 if(reachCheck(TRACE_END_POSE_XYZ)) current_mission_state_=ENUM_FLYTO_LAND_POINT;
                 break;            
                 
-            case 'ENUM_FLYTO_LAND_POINT':
+            case ENUM_FLYTO_LAND_POINT:
                 setPoint(TAKEOFF_POSE_XYZ );
                 if(reachCheck(TAKEOFF_POSE_XYZ)) current_mission_state_=ENUM_LAND_POINT;
                 break;            
                 
-            case 'ENUM_LAND_POINT':
+            case ENUM_LAND_POINT:
                 if(landClient())current_mission_state_=ENUM_LAND_SUCCEED;
                 break;            
                 
-            case 'ENUM_LAND_SUCCEED':
+            case ENUM_LAND_SUCCEED:
                 //切降落
                 ROS_INFO("Mission Succeed!!");
                 break;           

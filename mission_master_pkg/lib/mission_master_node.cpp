@@ -98,11 +98,11 @@ void MissionMaster::getState()
              current_pose_.pose.position.z);
 }
 
-bool MissionMaster::reachCheck(const geometry_msgs::PoseStamped &target_pose)
+bool MissionMaster::reachCheck(Eigen::Vector3d pose_v3d)
 {
-    double dx = current_pose_.pose.position.x - target_pose.pose.position.x;
-    double dy = current_pose_.pose.position.y - target_pose.pose.position.y;
-    double dz = current_pose_.pose.position.z - target_pose.pose.position.z;
+    double dx = current_pose_.pose.position.x - pose_v3d.x();
+    double dy = current_pose_.pose.position.y - pose_v3d.y();
+    double dz = current_pose_.pose.position.z - pose_v3d.z();
     double distance = sqrt(dx * dx + dy * dy + dz * dz);
     return distance < waypoint_tolerance_;
 }
@@ -110,30 +110,30 @@ bool MissionMaster::reachCheck(const geometry_msgs::PoseStamped &target_pose)
 void MissionMaster::loadParams()
 {
     //========飞行参数
-    nh.setParam("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.03);
+    nh.getParam("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.03);
 
     //========航点参数
-    nh.setParam("takeoff_pose_x", TAKEOFF_POSE_X, 0.0);
-    nh.setParam("takeoff_pose_y", TAKEOFF_POSE_Y, 0.0);
-    nh.setParam("takeoff_pose_z", TAKEOFF_POSE_Z, 0.0);
-    nh.setParam("pickup_start_pose_x", PICKUP_START_POSE_X, 0.0);
-    nh.setParam("pickup_start_pose_y", PICKUP_START_POSE_Y, 0.0);
-    nh.setParam("pickup_start_pose_z", PICKUP_START_POSE_Z, 0.0);
-    nh.setParam("pickup_end_pose_x", PICKUP_END_POSE_X, 0.0);
-    nh.setParam("pickup_end_pose_y", PICKUP_END_POSE_Y, 0.0);
-    nh.setParam("pickup_end_pose_z", PICKUP_END_POSE_Z, 0.0);
-    nh.setParam("avoid_start_pose_x", AVOID_START_POSE_X, 0.0);
-    nh.setParam("avoid_start_pose_y", AVOID_START_POSE_Y, 0.0);
-    nh.setParam("avoid_start_pose_z", AVOID_START_POSE_Z, 0.0);
-    nh.setParam("avoid_end_pose_x", AVOID_END_POSE_X, 0.0);
-    nh.setParam("avoid_end_pose_y", AVOID_END_POSE_Y, 0.0);
-    nh.setParam("avoid_end_pose_z", AVOID_END_POSE_Z, 0.0);
-    nh.setParam("trace_start_pose_x", TRACE_START_POSE_X, 0.0);
-    nh.setParam("trace_start_pose_y", TRACE_START_POSE_Y, 0.0);
-    nh.setParam("trace_start_pose_z", TRACE_START_POSE_Z, 0.0);
-    nh.setParam("trace_end_pose_x", TRACE_END_POSE_X, 0.0);
-    nh.setParam("trace_end_pose_y", TRACE_END_POSE_Y, 0.0);
-    nh.setParam("trace_end_pose_z", TRACE_END_POSE_Z, 0.0);
+    nh.getParam("takeoff_pose_x", TAKEOFF_POSE_X, 0.0);
+    nh.getParam("takeoff_pose_y", TAKEOFF_POSE_Y, 0.0);
+    nh.getParam("takeoff_pose_z", TAKEOFF_POSE_Z, 0.0);
+    nh.getParam("pickup_start_pose_x", PICKUP_START_POSE_X, 0.0);
+    nh.getParam("pickup_start_pose_y", PICKUP_START_POSE_Y, 0.0);
+    nh.getParam("pickup_start_pose_z", PICKUP_START_POSE_Z, 0.0);
+    nh.getParam("pickup_end_pose_x", PICKUP_END_POSE_X, 0.0);
+    nh.getParam("pickup_end_pose_y", PICKUP_END_POSE_Y, 0.0);
+    nh.getParam("pickup_end_pose_z", PICKUP_END_POSE_Z, 0.0);
+    nh.getParam("avoid_start_pose_x", AVOID_START_POSE_X, 0.0);
+    nh.getParam("avoid_start_pose_y", AVOID_START_POSE_Y, 0.0);
+    nh.getParam("avoid_start_pose_z", AVOID_START_POSE_Z, 0.0);
+    nh.getParam("avoid_end_pose_x", AVOID_END_POSE_X, 0.0);
+    nh.getParam("avoid_end_pose_y", AVOID_END_POSE_Y, 0.0);
+    nh.getParam("avoid_end_pose_z", AVOID_END_POSE_Z, 0.0);
+    nh.getParam("trace_start_pose_x", TRACE_START_POSE_X, 0.0);
+    nh.getParam("trace_start_pose_y", TRACE_START_POSE_Y, 0.0);
+    nh.getParam("trace_start_pose_z", TRACE_START_POSE_Z, 0.0);
+    nh.getParam("trace_end_pose_x", TRACE_END_POSE_X, 0.0);
+    nh.getParam("trace_end_pose_y", TRACE_END_POSE_Y, 0.0);
+    nh.getParam("trace_end_pose_z", TRACE_END_POSE_Z, 0.0);
 }
 
 void MissionMaster::loadWaypoints()

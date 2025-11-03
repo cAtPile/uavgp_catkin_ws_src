@@ -25,16 +25,16 @@ bool MissionMaster::pickClient()
         bool success = result->pick_success;
         return success;
         */
-    retrn true;
+    return true;
 }
 
 bool MissionMaster::avoidClient()
 {
-    retrn true;
+    return true;
 }
 bool MissionMaster::traceClient()
 {
-    retrn true;
+    return true;
 }
 bool MissionMaster::landClient()
 {
