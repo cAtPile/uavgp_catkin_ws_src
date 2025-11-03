@@ -62,6 +62,7 @@ private:
     ros::ServiceClient pickup_client; // 拾取服务客户端
     ros::ServiceClient avoid_client;  // 避障服务客户端
     ros::ServiceClient trace_client;  // 追踪服务客户端
+    ros::ServiceClient set_mode_client;
 
     // 目标点坐标
     Eigen::Vector3d TAKEOFF_POSE_XYZ;

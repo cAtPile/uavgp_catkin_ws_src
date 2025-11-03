@@ -27,7 +27,8 @@ MissionMaster::MissionMaster() : rate_(20.0), current_mission_state_(ENUM_WATTIN
     // 创建Action客户端，连接到/pick_server/pick服务
     actionlib::SimpleActionClient<pick_server::PickAction> client("/pick_server/pick", true);
     actionlib::SimpleActionClient<trace_server::PickAction> client("/trace_server/trace", true);
-    actionlib::SimpleActionClient<pavoid_server::PickAction> client("/aavoid_server/pick", true);
+    actionlib::SimpleActionClient<pavoid_server::PickAction> client("/avoid_server/pick", true);
+    set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
 }
 
 MissionMaster::~MissionMaster()

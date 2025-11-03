@@ -1,0 +1,11 @@
+<launch>
+  <!-- 节点名称 -->
+  <node name="mission_master_node" pkg="mission_master_pkg" type="mission_master_node" output="screen">
+    <!-- 加载参数配置文件 -->
+    <rosparam file="$(find mission_master_pkg)/config/param.yaml" command="load"/>
+    
+    <!-- 可选：覆盖参数（如需在launch中临时修改） -->
+    <!-- <param name="tolerance_waypoint" value="0.05"/> -->
+  </node>
+
+</launch>
