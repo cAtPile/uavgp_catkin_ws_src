@@ -15,12 +15,10 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <mavros_msgs/State.h>
 #include <std_msgs/Bool.h>
-#include <apoc_pkg/detection_data.h>
-#include <apoc_pkg/pickup_service.h>
-#include <apoc_pkg/avoid_service.h>
-#include <apoc_pkg/trace_service.h>
-#include <mutex>
 #include <vector>
+#include "mission_master_pkg/AvoidAction.h"
+#include "mission_master_pkg/PickAction.h"
+#include "mission_master_pkg/TraceAction.h"
 
 // 构建任务枚举
 enum mission_state
@@ -56,13 +54,10 @@ class MissionMaster
 private:
     //=========数据缓存=============
     ros::NodeHandle nh;
-    ros::Subscriber state_sub;        // 无人机状态订阅
-    ros::Subscriber local_pos_sub;    // 本地位置订阅
-    ros::Publisher local_pos_pub;     // 定点发布
-    ros::ServiceClient pickup_client; // 拾取服务客户端
-    ros::ServiceClient avoid_client;  // 避障服务客户端
-    ros::ServiceClient trace_client;  // 追踪服务客户端
-    ros::ServiceClient set_mode_client;
+    ros::Subscriber state_sub;          // 无人机状态订阅
+    ros::Subscriber local_pos_sub;      // 本地位置订阅
+    ros::Publisher local_pos_pub;       // 定点发布
+    ros::ServiceClient set_mode_client; // 目标设置
 
     // 目标点坐标
     Eigen::Vector3d TAKEOFF_POSE_XYZ;
@@ -87,12 +82,20 @@ private:
     void loadParams();                                                 // 参数导入
     void stateCheckCB(const mavros_msgs::State::ConstPtr &msg);        // 无人机状态回调
     void localPoseCB(const geometry_msgs::PoseStamped::ConstPtr &msg); // 本地位置回调
-    bool isReachTarget(const geometry_msgs::PoseStamped &target_pose); // 到达点检查
-    bool missionStateCheck(mission_state target_state);                // 任务状态检查
+    bool reachCheck(Eigen::Vector3d pose_v3d);                         // 到达检查
+    void loadParams();                                                 // 导入参数
+    void loadWaypoints();                                              // 导入航点
+    void setPoint(Eigen::Vector3d pose_v3d);                           // 到达检查
     bool pickCilent();                                                 // 拾取服务
     bool avoidCilent();                                                // 避障服务
     bool traceCilent();                                                // 追踪服务
     bool landCilent();                                                 // 降落服务
+    void pickFBCB();                                                   // pick反馈
+    void pickDoneCB();                                                 // pick结果反馈
+    void avoidFBCB();                                                  // avoid & trace
+    void avoidDoneCB();
+    void traceFBCB();
+    void traceDoneCB();
     //---------(私有函数)-----------
 
     //=========全局参数=============

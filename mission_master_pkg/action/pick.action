@@ -6,9 +6,4 @@ bool pick_enable#启动抓取
 bool pick_success#抓取成功
 ---
 #feedback
-uint8 pick_current_step
-float32 ball_current_altitude
-float32 ball_target_x
-float32 ball_target_y
-bool ball_detected
-uint8 pick_error_code
+uint8 pick_error_code#错误代码
