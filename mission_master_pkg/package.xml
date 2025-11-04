@@ -32,6 +32,7 @@
   <build_export_depend>actionlib</build_export_depend>
   <build_export_depend>actionlib_msgs</build_export_depend>
   <build_export_depend>eigen_conversions</build_export_depend>
+  <exec_depend>message_runtime</exec_depend>
 
   <!-- 运行时依赖 -->
   <exec_depend>roscpp</exec_depend>
