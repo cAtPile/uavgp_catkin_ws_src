@@ -86,10 +86,10 @@ private:
     void loadParams();                                                 // 导入参数
     void loadWaypoints();                                              // 导入航点
     void setPoint(Eigen::Vector3d pose_v3d);                           // 到达检查
-    bool pickCilent();                                                 // 拾取服务
-    bool avoidCilent();                                                // 避障服务
-    bool traceCilent();                                                // 追踪服务
-    bool landCilent();                                                 // 降落服务
+    bool pickAct();                                                    // 拾取服务
+    bool avoidAct();                                                   // 避障服务
+    bool traceAct();                                                   // 追踪服务
+    bool landAct();                                                    // 降落服务
     void pickFBCB();                                                   // pick反馈
     void pickDoneCB();                                                 // pick结果反馈
     void avoidFBCB();                                                  // avoid & trace
