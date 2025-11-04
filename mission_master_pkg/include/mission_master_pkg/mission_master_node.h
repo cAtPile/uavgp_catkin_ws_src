@@ -11,7 +11,6 @@
 #define MISSION_MASTER_NODE_H
 
 #include <ros/ros.h>
-#include <apoc.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <mavros_msgs/State.h>
 #include <std_msgs/Bool.h>
