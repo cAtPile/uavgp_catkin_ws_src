@@ -25,6 +25,7 @@ MissionMaster::MissionMaster() : rate_(20.0),
 
     // 初始化模式设置客户端
     set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
+    arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
 }
 
 MissionMaster::~MissionMaster()

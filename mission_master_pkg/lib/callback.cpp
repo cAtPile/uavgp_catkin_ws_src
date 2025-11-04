@@ -111,5 +111,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             // local_pos_pub.publish(trace_start_pose);
             break;
         }
+    }else{
+        arming_client.call(arm_cmd);
     }
 }

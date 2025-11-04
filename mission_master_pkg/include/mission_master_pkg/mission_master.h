@@ -85,6 +85,7 @@ private:
     ros::Subscriber local_pos_sub;      // 本地位置订阅
     ros::Publisher local_pos_pub;       // 定点发布
     ros::ServiceClient set_mode_client; // 模式设置客户端
+    ros::ServiceClient arming_client;
 
     // 目标点坐标
     Eigen::Vector3d TAKEOFF_POSE_XYZ;
