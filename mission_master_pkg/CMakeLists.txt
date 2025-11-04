@@ -58,7 +58,6 @@ include_directories(
 add_library(mission_master_lib
   lib/callback.cpp
   lib/mission_master_node.cpp
-  lib/client.cpp
   lib/pickAct.cpp    # 拾取动作实现
   lib/avoidAct.cpp   # 避障动作实现
   lib/traceAct.cpp   # 追踪动作实现
