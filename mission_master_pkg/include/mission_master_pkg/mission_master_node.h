@@ -20,9 +20,6 @@
 #include "mission_master_pkg/AvoidAction.h"
 #include "mission_master_pkg/PickAction.h"
 #include "mission_master_pkg/TraceAction.h"
-#include "apoc_pkg/pickup_service.h"
-#include "apoc_pkg/avoid_service.h"
-#include "apoc_pkg/trace_service.h"
 #include "mavros_msgs/SetMode.h"
 
 // 构建任务枚举
