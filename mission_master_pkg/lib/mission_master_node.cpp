@@ -192,7 +192,7 @@ bool MissionMaster::landExecute() {
     // 检查当前高度是否低于航点容忍距离（判断是否已着陆）
     // 假设高度小于等于容忍距离时视为着陆成功
     if (current_pose_.pose.position.z <= TOLERANCE_WAYPOINT) {
-        ROS_INFO("Landing completed (height: %.2f m)", current_pose_.pose.position.z);
+        ROS_INFO("Landing completed (height: %.2f m)", current_pose.pose.position.z);
         return true;
     } else {
         ROS_INFO("Landing in progress (current height: %.2f m)", current_pose_.pose.position.z);
