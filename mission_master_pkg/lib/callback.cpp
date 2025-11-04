@@ -7,17 +7,17 @@
 
 void MissionMaster::localPoseCB(const geometry_msgs::PoseStamped::ConstPtr &msg)
 {
-    current_pose = msg;
+    current_pose = *msg;
 }
 
 void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
 {
 
     // 记录无人机状态
-    current_vehicle_state_ = msg;
+    current_vehicle_state_ = *msg;
 
     // 判断解锁
-    if (current_vehicle_state_.armed == ARM)
+    if (current_vehicle_state_.armed)
     {
 
         // 判断当前状态
