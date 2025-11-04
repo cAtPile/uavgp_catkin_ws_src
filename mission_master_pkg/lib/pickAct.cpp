@@ -82,7 +82,7 @@ void MissionMaster::pickAct() {
  */
 bool MissionMaster::pickExecute() {
     // 判断拾取Action客户端是否正在运行任务
-    if (pick_clientor.getState().isActive()) {
+    if (pick_clientor.getState().state_ == actionlib::SimpleClientGoalState::ACTIVE) {
         ROS_INFO("Previous pick action is still active, waiting for completion...");
         return false; // 上个拾取未完成，不重复执行
     }
