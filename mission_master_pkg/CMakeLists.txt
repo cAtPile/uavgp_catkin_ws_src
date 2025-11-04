@@ -42,6 +42,7 @@ catkin_package(
     geometry_msgs 
     mavros_msgs 
     actionlib 
+    actionlib_msgs
     eigen_conversions
     message_runtime  # 新增：对应message_generation的运行时依赖
   DEPENDS EIGEN3
