@@ -3,7 +3,7 @@
  * @brief 回调函数
  * @date 2025/11/2
  */
-#include <mission_master_pkg/mission_master_node.h>
+#include <mission_master_pkg/mission_master.h>
 
 void MissionMaster::localPoseCB(const geometry_msgs::PoseStamped::ConstPtr &msg)
 {
