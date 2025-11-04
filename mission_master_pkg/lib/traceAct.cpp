@@ -82,7 +82,7 @@ void MissionMaster::traceAct() {
  */
 bool MissionMaster::traceExecute() {
     // 判断追踪Action客户端是否正在运行任务
-    if (trace_clientor.getState().isActive()) {
+    if (trace_clientor.getState().state_ == actionlib::SimpleClientGoalState::ACTIVE) {
         ROS_INFO("Previous trace action is still active, waiting for completion...");
         return false; // 上个追踪未完成，不重复执行
     }
