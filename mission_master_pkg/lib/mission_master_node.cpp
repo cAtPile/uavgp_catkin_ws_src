@@ -7,7 +7,11 @@
 #include <cmath>
 #include <ros/console.h>
 
-MissionMaster::MissionMaster() : rate_(20.0), current_mission_state_(ENUM_WATTING_TAKEOFF)
+MissionMaster::MissionMaster() : rate_(20.0), 
+                                 current_mission_state_(ENUM_WATTING_TAKEOFF),
+                                 pick_clientor("/pick_server/pick", true),
+                                 trace_clientor("/trace_server/trace", true),
+                                 avoid_clientor("/avoid_server/avoid", true)
 {
     // 初始化订阅器
     state_sub = nh.subscribe<mavros_msgs::State>("/mavros/state", 10, &MissionMaster::stateCB, this);
@@ -16,18 +20,10 @@ MissionMaster::MissionMaster() : rate_(20.0), current_mission_state_(ENUM_WATTIN
     // 初始化发布器
     local_pos_pub = nh.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 10);
 
-    // 初始化服务客户端
-    pickup_client = nh.serviceClient<apoc_pkg::pickup_service>("/pickup_service");
-    avoid_client = nh.serviceClient<apoc_pkg::avoid_service>("/avoid_service");
-    trace_client = nh.serviceClient<apoc_pkg::trace_service>("/trace_service");
-
     // 加载参数配置
     loadParams();
 
-    // 创建Action客户端，连接到/pick_server/pick服务
-    actionlib::SimpleActionClient<pick_server::PickAction> client("/pick_server/pick", true);
-    actionlib::SimpleActionClient<trace_server::PickAction> client("/trace_server/trace", true);
-    actionlib::SimpleActionClient<pavoid_server::PickAction> client("/avoid_server/pick", true);
+    // 初始化模式设置客户端
     set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
 }
 
@@ -176,4 +172,30 @@ void MissionMaster::setPoint(Eigen::Vector3d pose_v3d)
     temp_pose.pose.orientation.w = 1.0;
 
     local_pos_pub.publish(temp_pose);
+}
+
+bool MissionMaster::landExecute() {
+    // 检查当前模式是否为AUTO.LAND，若不是则切换
+    if (current_vehicle_state_.mode != "AUTO.LAND") {
+        mavros_msgs::SetMode set_mode_srv;
+        set_mode_srv.request.custom_mode = "AUTO.LAND"; // 设置为自动降落模式
+
+        // 调用服务切换模式
+        if (set_mode_client.call(set_mode_srv) && set_mode_srv.response.mode_sent) {
+            ROS_INFO("Successfully switched to AUTO.LAND mode");
+        } else {
+            ROS_ERROR("Failed to switch to AUTO.LAND mode");
+            return false; // 模式切换失败，返回false
+        }
+    }
+
+    // 检查当前高度是否低于航点容忍距离（判断是否已着陆）
+    // 假设高度小于等于容忍距离时视为着陆成功
+    if (current_pose_.pose.position.z <= TOLERANCE_WAYPOINT) {
+        ROS_INFO("Landing completed (height: %.2f m)", current_pose_.pose.position.z);
+        return true;
+    } else {
+        ROS_INFO("Landing in progress (current height: %.2f m)", current_pose_.pose.position.z);
+        return false;
+    }
 }

@@ -9,10 +9,7 @@ void MissionMaster::localPoseCB(const geometry_msgs::PoseStamped::ConstPtr &msg)
 {
     current_pose_ = msg;
 }
-void stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
-{
-    current_vehicle_state_=msg;
-}
+
 void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
 {
 
@@ -51,7 +48,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             break;
 
         case ENUM_PICKUP_POINT:
-            if (pickClient())
+            if (pickExecute())
                 current_mission_state_ = ENUM_PICKUP_SUCCEED;
             break;
 
@@ -68,7 +65,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             break;
 
         case ENUM_AVOID_POINT:
-            if (pickClient())
+            if (avoidExecute())
                 current_mission_state_ = ENUM_AVOID_SUCCEED;
             break;
 
@@ -79,11 +76,12 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             break;
 
         case ENUM_FLYTO_TRACE_POINT:
-            setPoint(TRACE_START_POSE_XYZ) if (reachCheck(TRACE_START_POSE_XYZ)) current_mission_state_ = ENUM_TRACE_POINT;
+            setPoint(TRACE_START_POSE_XYZ);
+            if (reachCheck(TRACE_START_POSE_XYZ)) current_mission_state_ = ENUM_TRACE_POINT;
             break;
 
         case ENUM_TRACE_POINT:
-            if (avoidClient())
+            if (traceExecute())
                 current_mission_state_ = ENUM_TRACE_SUCCEED;
             break;
 
@@ -100,7 +98,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             break;
 
         case ENUM_LAND_POINT:
-            if (landClient())
+            if (landExecute())
                 current_mission_state_ = ENUM_LAND_SUCCEED;
             break;
 
