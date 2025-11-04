@@ -155,18 +155,6 @@ public:
     ~MissionMaster(); // 析构函数
     void getState();  // 获取状态
 
-    // 外部调用的任务执行接口
-    void traceFBCB();   // 追踪反馈回调
-    void traceDoneCB(); // 追踪完成回调
-    bool traceAct();    // 启动追踪任务
-
-    void pickFBCB();   // 拾取反馈回调
-    void pickDoneCB(); // 拾取完成回调
-    bool pickAct();    // 启动拾取任务
-
-    void avoidFBCB();   // 避障反馈回调
-    void avoidDoneCB(); // 避障完成回调
-    bool avoidAct();    // 启动避障任务
 };
 
 #endif // MISSION_MASTER_NODE_H
