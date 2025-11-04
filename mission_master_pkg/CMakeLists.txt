@@ -62,7 +62,7 @@ include_directories(
 ## 声明库文件（包含所有源文件）
 add_library(mission_master_lib
   lib/callback.cpp
-  lib/mission_master_node.cpp
+  lib/mission_master.cpp
   lib/pickAct.cpp
   lib/avoidAct.cpp
   lib/traceAct.cpp

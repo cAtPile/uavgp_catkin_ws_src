@@ -2,7 +2,7 @@
  * @file avoidAct.cpp
  * @brief avoid相关action
  */
-#include "mission_master_pkg/mission_master_node.h"
+#include "mission_master_pkg/mission_master.h"
 #include <ros/console.h>
 
 /**

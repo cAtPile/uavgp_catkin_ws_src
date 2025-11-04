@@ -3,7 +3,7 @@
  * @brief 任务管理主节点入口
  * @date 2025/11/2
  */
-#include "mission_master_pkg/mission_master_node.h"
+#include "mission_master_pkg/mission_master.h"
 #include <ros/ros.h>
 
 int main(int argc, char**argv)
