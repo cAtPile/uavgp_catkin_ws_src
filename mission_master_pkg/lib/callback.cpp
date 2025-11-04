@@ -7,7 +7,7 @@
 
 void MissionMaster::localPoseCB(const geometry_msgs::PoseStamped::ConstPtr &msg)
 {
-    current_pose_ = msg;
+    current_pose = msg;
 }
 
 void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
