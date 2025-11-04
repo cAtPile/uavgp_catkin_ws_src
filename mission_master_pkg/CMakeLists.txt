@@ -11,9 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   mavros_msgs
   actionlib
-  pick_server
-  trace_server
-  avoid_server
   eigen_conversions
   message_generation  # 新增：支持自定义Action消息生成
 )
@@ -45,9 +42,6 @@ catkin_package(
     geometry_msgs 
     mavros_msgs 
     actionlib 
-    pick_server 
-    trace_server 
-    avoid_server
     eigen_conversions
     message_runtime  # 新增：对应message_generation的运行时依赖
   DEPENDS EIGEN3
