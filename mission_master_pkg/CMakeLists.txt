@@ -11,15 +11,30 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   mavros_msgs
   actionlib
-  apoc_pkg
   pick_server
   trace_server
   avoid_server
   eigen_conversions
+  message_generation  # 新增：支持自定义Action消息生成
 )
 
 ## System dependencies
 find_package(Eigen3 REQUIRED)
+
+## 生成自定义Action消息（根据你的代码中使用的Action类型）
+add_action_files(
+  FILES
+  AvoidAction.action
+  PickAction.action
+  TraceAction.action
+)
+
+generate_messages(
+  DEPENDENCIES
+  actionlib_msgs
+  std_msgs
+  geometry_msgs
+)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -30,11 +45,11 @@ catkin_package(
     geometry_msgs 
     mavros_msgs 
     actionlib 
-    apoc_pkg 
     pick_server 
     trace_server 
     avoid_server
     eigen_conversions
+    message_runtime  # 新增：对应message_generation的运行时依赖
   DEPENDS EIGEN3
 )
 
@@ -45,14 +60,17 @@ include_directories(
   ${EIGEN3_INCLUDE_DIRS}
 )
 
-## Declare C++ library
+## Declare C++ library（包含所有实现文件）
 add_library(mission_master_lib
   lib/callback.cpp
   lib/mission_master_node.cpp
   lib/client.cpp
+  lib/pickAct.cpp    # 拾取动作实现
+  lib/avoidAct.cpp   # 避障动作实现
+  lib/traceAct.cpp   # 追踪动作实现
 )
 
-## Add dependencies to the library
+## Add dependencies to the library（确保消息生成先于编译）
 add_dependencies(mission_master_lib 
   ${${PROJECT_NAME}_EXPORTED_TARGETS} 
   ${catkin_EXPORTED_TARGETS}
@@ -96,4 +114,10 @@ install(TARGETS mission_master_lib mission_master_node
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
+)
+
+## Install configuration files
+install(FILES
+  config/params.yaml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
 )
