@@ -13,6 +13,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <mavros_msgs/State.h>
+#include <mavros_msgs/CommandBool.h>
 #include <std_msgs/Bool.h>
 #include <vector>
 #include <Eigen/Dense>
