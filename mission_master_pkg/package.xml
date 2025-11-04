@@ -2,51 +2,50 @@
 <package format="2">
   <name>mission_master_pkg</name>
   <version>0.0.0</version>
-  <description>无人机任务管理主控节点包，负责协调拾取、避障和追踪等任务流程</description>
+  <description>无人机任务管理主控包，处理拾取、避障、追踪等动作</description>
 
-  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <!-- 维护者信息（请替换为你的信息） -->
+  <maintainer email="your_name@example.com">Your Name</maintainer>
   <license>BSD</license>
 
-  <url type="website">http://wiki.ros.org/mission_master_pkg</url>
-
+  <!-- 依赖声明（严格按编译/运行时分类） -->
   <buildtool_depend>catkin</buildtool_depend>
-  
-  <!-- 编译依赖 -->
+
+  <!-- 编译时必须的依赖（包括消息生成工具） -->
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>mavros_msgs</build_depend>
   <build_depend>actionlib</build_depend>
-  <build_depend>actionlib_msgs</build_depend>
+  <build_depend>actionlib_msgs</build_depend>  <!-- Action 消息基础依赖 -->
+  <build_depend>eigen_conversions</build_depend>
+  <build_depend>message_generation</build_depend>  <!-- 消息生成工具（关键） -->
   <build_depend>pick_server</build_depend>
   <build_depend>trace_server</build_depend>
   <build_depend>avoid_server</build_depend>
-  <build_depend>eigen_conversions</build_depend>
-  <build_depend>message_generation</build_depend>
 
-  <!-- 导出依赖 -->
+  <!-- 编译导出依赖（其他包编译时依赖本包需要） -->
   <build_export_depend>roscpp</build_export_depend>
-  <build_export_depend>rospy</build_export_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>mavros_msgs</build_export_depend>
   <build_export_depend>actionlib</build_export_depend>
-  <build_export_depend>actionlib_msgs</build_export_depend>
+  <build_export_depend>actionlib_msgs</build_export_depend>  <!-- 导出 Action 依赖 -->
   <build_export_depend>eigen_conversions</build_export_depend>
-  <exec_depend>message_runtime</exec_depend>
 
-  <!-- 运行时依赖 -->
+  <!-- 运行时必须的依赖（包括消息运行时） -->
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>mavros_msgs</exec_depend>
   <exec_depend>actionlib</exec_depend>
-  <exec_depend>actionlib_msgs</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>  <!-- Action 运行时依赖 -->
+  <exec_depend>eigen_conversions</exec_depend>
+  <exec_depend>message_runtime</exec_depend>  <!-- 消息运行时（关键，生成头文件必需） -->
   <exec_depend>pick_server</exec_depend>
   <exec_depend>trace_server</exec_depend>
   <exec_depend>avoid_server</exec_depend>
-  <exec_depend>eigen_conversions</exec_depend>
-  <exec_depend>message_runtime</exec_depend>
 
+  <!-- 导出配置 -->
   <export>
     <build_type>catkin</build_type>
   </export>
