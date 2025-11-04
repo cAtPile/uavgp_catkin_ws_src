@@ -6,4 +6,4 @@ bool trace_enable#启动抓取
 bool trace_success#抓取成功
 ---
 #feedback
-uint8 pick_current_step#当前步骤
+uint8 trace_current_step#当前步骤
