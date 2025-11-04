@@ -1,107 +1,33 @@
-opt/ros/noetic/include/ros/node_handle.h:1828:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::map<std::__cxx11::basic_string<char>, int>&) const’
- 1828 |   bool getParam(const std::string& key, std::map<std::string, int>& map) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1828:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1839:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::map<std::__cxx11::basic_string<char>, bool>&) const’
- 1839 |   bool getParam(const std::string& key, std::map<std::string, bool>& map) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1839:8: note:   candidate expects 2 arguments, 3 provided
-/home/a/catkin/src/mission_master_pkg/lib/mission_master.cpp:129:62: error: no matching function for call to ‘ros::NodeHandle::getParam(const char [19], double&, double)’
-  129 |     nh.getParam("trace_start_pose_z", TRACE_START_POSE_Z, 0.0);
-      |                                                              ^
-In file included from /opt/ros/noetic/include/ros/ros.h:45,
-                 from /home/a/catkin/src/mission_master_pkg/include/mission_master_pkg/mission_master.h:13,
-                 from /home/a/catkin/src/mission_master_pkg/lib/mission_master.cpp:6:
-/opt/ros/noetic/include/ros/node_handle.h:1672:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::string&) const’
- 1672 |   bool getParam(const std::string& key, std::string& s) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1672:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1683:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, double&) const’
- 1683 |   bool getParam(const std::string& key, double& d) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1683:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1694:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, float&) const’
- 1694 |   bool getParam(const std::string& key, float& f) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1694:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1705:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, int&) const’
- 1705 |   bool getParam(const std::string& key, int& i) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1705:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1716:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, bool&) const’
- 1716 |   bool getParam(const std::string& key, bool& b) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1716:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1727:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, XmlRpc::XmlRpcValue&) const’
- 1727 |   bool getParam(const std::string& key, XmlRpc::XmlRpcValue& v) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1727:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1739:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::vector<std::__cxx11::basic_string<char> >&) const’
- 1739 |   bool getParam(const std::string& key, std::vector<std::string>& vec) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1739:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1750:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::vector<double>&) const’
- 1750 |   bool getParam(const std::string& key, std::vector<double>& vec) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1750:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1761:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::vector<float>&) const’
- 1761 |   bool getParam(const std::string& key, std::vector<float>& vec) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1761:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1772:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::vector<int>&) const’
- 1772 |   bool getParam(const std::string& key, std::vector<int>& vec) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1772:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1783:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::vector<bool>&) const’
- 1783 |   bool getParam(const std::string& key, std::vector<bool>& vec) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1783:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1795:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&) const’
- 1795 |   bool getParam(const std::string& key, std::map<std::string, std::string>& map) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1795:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1806:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::map<std::__cxx11::basic_string<char>, double>&) const’
- 1806 |   bool getParam(const std::string& key, std::map<std::string, double>& map) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1806:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1817:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::map<std::__cxx11::basic_string<char>, float>&) const’
- 1817 |   bool getParam(const std::string& key, std::map<std::string, float>& map) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1817:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1828:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::map<std::__cxx11::basic_string<char>, int>&) const’
- 1828 |   bool getParam(const std::string& key, std::map<std::string, int>& map) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1828:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1839:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::map<std::__cxx11::basic_string<char>, bool>&) const’
- 1839 |   bool getParam(const std::string& key, std::map<std::string, bool>& map) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1839:8: note:   candidate expects 2 arguments, 3 provided
-/home/a/catkin/src/mission_master_pkg/lib/mission_master.cpp:130:58: error: no matching function for call to ‘ros::NodeHandle::getParam(const char [17], double&, double)’
-  130 |     nh.getParam("trace_end_pose_x", TRACE_END_POSE_X, 0.0);
-      |                                                          ^
-In file included from /opt/ros/noetic/include/ros/ros.h:45,
-                 from /home/a/catkin/src/mission_master_pkg/include/mission_master_pkg/mission_master.h:13,
-                 from /home/a/catkin/src/mission_master_pkg/lib/mission_master.cpp:6:
-/opt/ros/noetic/include/ros/node_handle.h:1672:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, std::string&) const’
- 1672 |   bool getParam(const std::string& key, std::string& s) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1672:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1683:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, double&) const’
- 1683 |   bool getParam(const std::string& key, double& d) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1683:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1694:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, float&) const’
- 1694 |   bool getParam(const std::string& key, float& f) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1694:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1705:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, int&) const’
- 1705 |   bool getParam(const std::string& key, int& i) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1705:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1716:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, bool&) const’
- 1716 |   bool getParam(const std::string& key, bool& b) const;
-      |        ^~~~~~~~
-/opt/ros/noetic/include/ros/node_handle.h:1716:8: note:   candidate expects 2 arguments, 3 provided
-/opt/ros/noetic/include/ros/node_handle.h:1727:8: note: candidate: ‘bool ros::NodeHandle::getParam(const string&, XmlRpc::XmlRpcValue&) const’
- 1727 |   bool getParam(const std::string& key, XmlRpc::XmlRpcValue& v) const;
-
+lib/mission_master.cpp.o
+/home/a/catkin/src/mission_master_pkg/lib/callback.cpp: In member function ‘void MissionMaster::localPoseCB(const ConstPtr&)’:
+/home/a/catkin/src/mission_master_pkg/lib/callback.cpp:10:20: error: no match for ‘operator=’ (operand types are ‘geometry_msgs::PoseStamped’ {aka ‘geometry_msgs::PoseStamped_<std::allocator<void> >’} and ‘const ConstPtr’ {aka ‘const boost::shared_ptr<const geometry_msgs::PoseStamped_<std::allocator<void> > >’})
+   10 |     current_pose = msg;
+      |                    ^~~
+In file included from /home/a/catkin/src/mission_master_pkg/include/mission_master_pkg/mission_master.h:14,
+                 from /home/a/catkin/src/mission_master_pkg/lib/callback.cpp:6:
+/opt/ros/noetic/include/geometry_msgs/PoseStamped.h:24:8: note: candidate: ‘geometry_msgs::PoseStamped_<std::allocator<void> >& geometry_msgs::PoseStamped_<std::allocator<void> >::operator=(const geometry_msgs::PoseStamped_<std::allocator<void> >&)’
+   24 | struct PoseStamped_
+      |        ^~~~~~~~~~~~
+/opt/ros/noetic/include/geometry_msgs/PoseStamped.h:24:8: note:   no known conversion for argument 1 from ‘const ConstPtr’ {aka ‘const boost::shared_ptr<const geometry_msgs::PoseStamped_<std::allocator<void> > >’} to ‘const geometry_msgs::PoseStamped_<std::allocator<void> >&’
+/opt/ros/noetic/include/geometry_msgs/PoseStamped.h:24:8: note: candidate: ‘geometry_msgs::PoseStamped_<std::allocator<void> >& geometry_msgs::PoseStamped_<std::allocator<void> >::operator=(geometry_msgs::PoseStamped_<std::allocator<void> >&&)’
+/opt/ros/noetic/include/geometry_msgs/PoseStamped.h:24:8: note:   no known conversion for argument 1 from ‘const ConstPtr’ {aka ‘const boost::shared_ptr<const geometry_msgs::PoseStamped_<std::allocator<void> > >’} to ‘geometry_msgs::PoseStamped_<std::allocator<void> >&&’
+/home/a/catkin/src/mission_master_pkg/lib/callback.cpp: In member function ‘void MissionMaster::stateCheckCB(const ConstPtr&)’:
+/home/a/catkin/src/mission_master_pkg/lib/callback.cpp:17:30: error: no match for ‘operator=’ (operand types are ‘mavros_msgs::State’ {aka ‘mavros_msgs::State_<std::allocator<void> >’} and ‘const ConstPtr’ {aka ‘const boost::shared_ptr<const mavros_msgs::State_<std::allocator<void> > >’})
+   17 |     current_vehicle_state_ = msg;
+      |                              ^~~
+In file included from /home/a/catkin/src/mission_master_pkg/include/mission_master_pkg/mission_master.h:15,
+                 from /home/a/catkin/src/mission_master_pkg/lib/callback.cpp:6:
+/opt/ros/noetic/include/mavros_msgs/State.h:23:8: note: candidate: ‘mavros_msgs::State_<std::allocator<void> >& mavros_msgs::State_<std::allocator<void> >::operator=(const mavros_msgs::State_<std::allocator<void> >&)’
+   23 | struct State_
+      |        ^~~~~~
+/opt/ros/noetic/include/mavros_msgs/State.h:23:8: note:   no known conversion for argument 1 from ‘const ConstPtr’ {aka ‘const boost::shared_ptr<const mavros_msgs::State_<std::allocator<void> > >’} to ‘const mavros_msgs::State_<std::allocator<void> >&’
+/opt/ros/noetic/include/mavros_msgs/State.h:23:8: note: candidate: ‘mavros_msgs::State_<std::allocator<void> >& mavros_msgs::State_<std::allocator<void> >::operator=(mavros_msgs::State_<std::allocator<void> >&&)’
+/opt/ros/noetic/include/mavros_msgs/State.h:23:8: note:   no known conversion for argument 1 from ‘const ConstPtr’ {aka ‘const boost::shared_ptr<const mavros_msgs::State_<std::allocator<void> > >’} to ‘mavros_msgs::State_<std::allocator<void> >&&’
+/home/a/catkin/src/mission_master_pkg/lib/callback.cpp:20:41: error: ‘ARM’ was not declared in this scope
+   20 |     if (current_vehicle_state_.armed == ARM)
+      |                                         ^~~
+make[2]: *** [mission_master_pkg/CMakeFiles/mission_master_lib.dir/build.make:63: mission_master_pkg/CMakeFiles/mission_master_lib.dir/lib/callback.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:1391: mission_master_pkg/CMakeFiles/mission_master_lib.dir/all] Error 2
+make: *** [Makefile:141: all] Error 2
+Invoking "make -j2 -l2" f
