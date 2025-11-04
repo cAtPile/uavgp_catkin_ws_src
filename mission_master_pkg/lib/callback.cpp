@@ -112,6 +112,18 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             break;
         }
     }else{
-        arming_client.call(arm_cmd);
+        // 解锁无人机
+        ROS_INFO("Attempting to arm the vehicle...");
+
+        // 创建解锁服务请求
+        mavros_msgs::CommandBool arm_cmd;
+        arm_cmd.request.value = true;  // true表示解锁，false表示上锁
+
+        // 发送解锁请求（等待服务响应，超时5秒）
+        if (arming_client_.call(arm_cmd) && arm_cmd.response.success) {
+            ROS_INFO("Vehicle armed successfully!");
+        } else {
+            ROS_ERROR("Failed to arm the vehicle!");
+    }
     }
 }
