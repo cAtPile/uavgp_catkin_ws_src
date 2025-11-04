@@ -95,7 +95,7 @@ private:
     Eigen::Vector3d TRACE_START_POSE_XYZ;
     Eigen::Vector3d TRACE_END_POSE_XYZ;
     geometry_msgs::PoseStamped home_pose;     // home点
-    geometry_msgs::PoseStamped current_pose_; // 当前位置
+    geometry_msgs::PoseStamped current_pose; // 当前位置
 
     mission_state current_mission_state_;      // 当前任务状态
     mavros_msgs::State current_vehicle_state_; // 无人机状态
@@ -121,6 +121,8 @@ private:
     bool reachCheck(Eigen::Vector3d pose_v3d);                         // 到达检查
     void loadWaypoints();                                              // 导入航点
     void setPoint(Eigen::Vector3d pose_v3d);                           // 设置目标点
+
+    bool landExecute();
 
     // Avoid相关回调与执行函数
     void avoidActiveCB();
