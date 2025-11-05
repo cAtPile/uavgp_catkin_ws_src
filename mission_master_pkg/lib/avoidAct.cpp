@@ -99,4 +99,8 @@ bool MissionMaster::avoidExecute(){
         ROS_ERROR("Avoid action failed with state: %s", state.toString().c_str());
         return false;
     }
+    /*
+    //测试
+    return true;
+    */
 }
