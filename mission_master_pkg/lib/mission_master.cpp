@@ -112,25 +112,25 @@ void MissionMaster::loadParams()
     //========航点参数
     nh.param("takeoff_pose_x", TAKEOFF_POSE_X, 0.0);
     nh.param("takeoff_pose_y", TAKEOFF_POSE_Y, 0.0);
-    nh.param("takeoff_pose_z", TAKEOFF_POSE_Z, 0.0);
-    nh.param("pickup_start_pose_x", PICKUP_START_POSE_X, 0.0);
+    nh.param("takeoff_pose_z", TAKEOFF_POSE_Z, 1.0);
+    nh.param("pickup_start_pose_x", PICKUP_START_POSE_X, 1.0);
     nh.param("pickup_start_pose_y", PICKUP_START_POSE_Y, 0.0);
-    nh.param("pickup_start_pose_z", PICKUP_START_POSE_Z, 0.0);
-    nh.param("pickup_end_pose_x", PICKUP_END_POSE_X, 0.0);
-    nh.param("pickup_end_pose_y", PICKUP_END_POSE_Y, 0.0);
-    nh.param("pickup_end_pose_z", PICKUP_END_POSE_Z, 0.0);
+    nh.param("pickup_start_pose_z", PICKUP_START_POSE_Z, 1.0);
+    nh.param("pickup_end_pose_x", PICKUP_END_POSE_X, 1.0);
+    nh.param("pickup_end_pose_y", PICKUP_END_POSE_Y, 1.0);
+    nh.param("pickup_end_pose_z", PICKUP_END_POSE_Z, 1.0);
     nh.param("avoid_start_pose_x", AVOID_START_POSE_X, 0.0);
-    nh.param("avoid_start_pose_y", AVOID_START_POSE_Y, 0.0);
-    nh.param("avoid_start_pose_z", AVOID_START_POSE_Z, 0.0);
-    nh.param("avoid_end_pose_x", AVOID_END_POSE_X, 0.0);
+    nh.param("avoid_start_pose_y", AVOID_START_POSE_Y, 1.0);
+    nh.param("avoid_start_pose_z", AVOID_START_POSE_Z, 1.0);
+    nh.param("avoid_end_pose_x", AVOID_END_POSE_X, 1.0);
     nh.param("avoid_end_pose_y", AVOID_END_POSE_Y, 0.0);
-    nh.param("avoid_end_pose_z", AVOID_END_POSE_Z, 0.0);
-    nh.param("trace_start_pose_x", TRACE_START_POSE_X, 0.0);
-    nh.param("trace_start_pose_y", TRACE_START_POSE_Y, 0.0);
-    nh.param("trace_start_pose_z", TRACE_START_POSE_Z, 0.0);
+    nh.param("avoid_end_pose_z", AVOID_END_POSE_Z, 1.0);
+    nh.param("trace_start_pose_x", TRACE_START_POSE_X, 1.0);
+    nh.param("trace_start_pose_y", TRACE_START_POSE_Y, 1.0);
+    nh.param("trace_start_pose_z", TRACE_START_POSE_Z, 1.0);
     nh.param("trace_end_pose_x", TRACE_END_POSE_X, 0.0);
     nh.param("trace_end_pose_y", TRACE_END_POSE_Y, 0.0);
-    nh.param("trace_end_pose_z", TRACE_END_POSE_Z, 0.0);
+    nh.param("trace_end_pose_z", TRACE_END_POSE_Z, 1.0);
 }
 
 void MissionMaster::loadWaypoints()
@@ -176,6 +176,9 @@ void MissionMaster::setPoint(Eigen::Vector3d pose_v3d)
 }
 
 bool MissionMaster::landExecute() {
+    //飞到降落点
+    //略
+
     // 检查当前模式是否为AUTO.LAND，若不是则切换
     if (current_vehicle_state_.mode != "AUTO.LAND") {
         mavros_msgs::SetMode set_mode_srv;
