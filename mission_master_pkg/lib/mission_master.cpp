@@ -118,7 +118,7 @@ bool MissionMaster::reachCheck(Eigen::Vector3d pose_v3d)
 void MissionMaster::loadParams()
 {
     //========飞行参数
-    nh.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.03);
+    nh.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
 
     //========航点参数
     nh.param("takeoff_pose_x", TAKEOFF_POSE_X, 0.0);
