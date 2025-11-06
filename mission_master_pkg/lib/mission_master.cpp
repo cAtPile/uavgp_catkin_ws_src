@@ -26,6 +26,17 @@ MissionMaster::MissionMaster() : rate_(20.0),
     // 初始化模式设置客户端
     set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
     arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
+
+    current_pose.header.frame_id = "map";
+    current_pose.pose.position.x = 0.0;
+    current_pose.pose.position.y = 0.0;
+    current_pose.pose.position.z = 0.0;
+    current_pose.pose.orientation.x = 0.0;
+    current_pose.pose.orientation.y = 0.0;
+    current_pose.pose.orientation.z = 0.0;
+    current_pose.pose.orientation.w = 1.0;
+    current_pose.header.stamp = ros::Time::now(); 
+
 }
 
 MissionMaster::~MissionMaster()

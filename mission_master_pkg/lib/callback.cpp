@@ -127,5 +127,6 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
     else
     {
         ROS_INFO("Waiting OFFBOARD");
+        local_pos_pub.publish(current_pose); 
     }
 }
