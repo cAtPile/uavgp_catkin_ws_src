@@ -115,7 +115,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             break;
 
         case ENUM_LAND_SUCCEED:
-            // 切降落
+            // disarm
             ROS_INFO("Mission Succeed!!");
             break;
 
