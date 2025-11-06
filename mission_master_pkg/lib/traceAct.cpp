@@ -81,6 +81,7 @@ void MissionMaster::traceAct() {
  * @return 追踪是否成功
  */
 bool MissionMaster::traceExecute() {
+    /*
     // 判断追踪Action客户端是否正在运行任务
     if (trace_clientor.getState().state_ == actionlib::SimpleClientGoalState::ACTIVE) {
         ROS_INFO("Previous trace action is still active, waiting for completion...");
@@ -112,4 +113,6 @@ bool MissionMaster::traceExecute() {
         ROS_ERROR("Trace action failed with state: %s", state.toString().c_str());
         return false;
     }
+        */
+    return true;
 }
