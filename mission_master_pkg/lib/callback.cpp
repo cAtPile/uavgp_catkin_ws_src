@@ -28,7 +28,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
         {
 
             loadWaypoints();
-            local_pos_pub.publish(curret_pose);
+            local_pos_pub.publish(current_pose);
 
             // 解锁无人机
             ROS_INFO("Attempting to arm the vehicle...");
