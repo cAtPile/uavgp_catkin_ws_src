@@ -26,7 +26,9 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
 
         case ENUM_WATTING_TAKEOFF:
         {
+
             loadWaypoints();
+            local_pos_pub.publish(curret_pose);
 
             // 解锁无人机
             ROS_INFO("Attempting to arm the vehicle...");
