@@ -101,6 +101,7 @@ bool MissionMaster::avoidExecute(){
     }
     */
     //测试
+    local_pos_pub.publish(current_pose); 
     return true;
 
 }

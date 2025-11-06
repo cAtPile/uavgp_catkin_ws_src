@@ -114,5 +114,6 @@ bool MissionMaster::pickExecute() {
         return false;
     }
         */
+       local_pos_pub.publish(current_pose); 
        return true;
 }
