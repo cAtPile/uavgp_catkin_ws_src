@@ -88,7 +88,7 @@ add_executable(mission_master_node
 ## 设置可执行文件名称
 #set_target_properties(mission_master_node PROPERTIES OUTPUT_NAME node PREFIX "")
 
-## 可执行文件依赖（同样依赖消息目标）
+## 可执行文件依赖
 add_dependencies(mission_master_node 
   ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 关键：确保消息生成后再编译本节点
   ${catkin_EXPORTED_TARGETS}
