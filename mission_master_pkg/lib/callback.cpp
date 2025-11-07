@@ -17,7 +17,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
     current_vehicle_state_ = *msg;
 
     // 判断解锁
-    if (current_vehicle_state_.mode=="OFFBOARD")
+    if (current_vehicle_state_.mode == "OFFBOARD")
     {
 
         // 判断当前状态
@@ -25,19 +25,22 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
         {
 
         case ENUM_WATTING_TAKEOFF:
+        {
+
             loadWaypoints();
+            local_pos_pub.publish(current_pose);
 
             // 解锁无人机
             ROS_INFO("Attempting to arm the vehicle...");
 
             // 创建解锁服务请求
             mavros_msgs::CommandBool arm_cmd;
-            arm_cmd.request.value = true;  // true表示解锁，false表示上锁
+            arm_cmd.request.value = true; // true表示解锁，false表示上锁
             arming_client.call(arm_cmd);
             setPoint(TAKEOFF_POSE_XYZ);
             current_mission_state_ = ENUM_TAKEOFF;
             break;
-
+        }
         case ENUM_TAKEOFF:
             setPoint(TAKEOFF_POSE_XYZ);
             if (reachCheck(TAKEOFF_POSE_XYZ))
@@ -85,7 +88,8 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
 
         case ENUM_FLYTO_TRACE_POINT:
             setPoint(TRACE_START_POSE_XYZ);
-            if (reachCheck(TRACE_START_POSE_XYZ)) current_mission_state_ = ENUM_TRACE_POINT;
+            if (reachCheck(TRACE_START_POSE_XYZ))
+                current_mission_state_ = ENUM_TRACE_POINT;
             break;
 
         case ENUM_TRACE_POINT:
@@ -111,7 +115,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             break;
 
         case ENUM_LAND_SUCCEED:
-            // 切降落
+            // disarm
             ROS_INFO("Mission Succeed!!");
             break;
 
@@ -119,5 +123,10 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
             // local_pos_pub.publish(trace_start_pose);
             break;
         }
+    }
+    else
+    {
+        ROS_INFO("Waiting OFFBOARD");
+        local_pos_pub.publish(current_pose); 
     }
 }

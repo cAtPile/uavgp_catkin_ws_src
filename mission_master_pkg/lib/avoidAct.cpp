@@ -80,7 +80,7 @@ void MissionMaster::avoidAct() {
  * 
  */
 bool MissionMaster::avoidExecute(){
-    
+    /*
     // 判断避障Action客户端是否正在运行任务
     if (avoid_clientor.getState().state_ == actionlib::SimpleClientGoalState::ACTIVE) {
         ROS_INFO("Previous avoid action is still active, waiting for completion...");
@@ -99,8 +99,9 @@ bool MissionMaster::avoidExecute(){
         ROS_ERROR("Avoid action failed with state: %s", state.toString().c_str());
         return false;
     }
-    /*
-    //测试
-    return true;
     */
+    //测试
+    local_pos_pub.publish(current_pose); 
+    return true;
+
 }

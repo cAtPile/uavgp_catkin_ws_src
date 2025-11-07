@@ -81,6 +81,7 @@ void MissionMaster::pickAct() {
  * @return 拾取是否成功
  */
 bool MissionMaster::pickExecute() {
+    /*
     // 判断拾取Action客户端是否正在运行任务
     if (pick_clientor.getState().state_ == actionlib::SimpleClientGoalState::ACTIVE) {
         ROS_INFO("Previous pick action is still active, waiting for completion...");
@@ -112,4 +113,7 @@ bool MissionMaster::pickExecute() {
         ROS_ERROR("Pick action failed with state: %s", state.toString().c_str());
         return false;
     }
+        */
+       local_pos_pub.publish(current_pose); 
+       return true;
 }
