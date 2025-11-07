@@ -143,3 +143,10 @@ uavgp_catkin_ws_src/
 ## 维护者
 - author：apoc
 - 依赖：C++、MAVROS、PX4、ROS Noetic
+
+## 书写规范
+- 包类 包名_下划线命名法_pkg
+- 节点类 节点名_下划线命名法_node
+
+### 缩写
+mm mission_master
