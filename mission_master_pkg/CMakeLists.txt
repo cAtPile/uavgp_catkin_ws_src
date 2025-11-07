@@ -113,7 +113,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
   FILES_MATCHING PATTERN "*.h"
 )
 
-## 安装 Action 定义文件（确保其他包能找到）
+## 安装 Action 定义文件
 install(DIRECTORY action/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/action
   FILES_MATCHING PATTERN "*.action"
