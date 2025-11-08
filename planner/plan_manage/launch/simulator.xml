@@ -10,7 +10,8 @@
   <arg name="p_num"/>
   <arg name="min_dist"/>
   <arg name="odometry_topic"/>
-  <arg name="drone_id"/>
+  <arg name="drone_id" default="0"/>
+  
 
   <!-- There are two kinds of maps you can choose, just comment out the one you don’t need like the follow. Have a try. /-->
 

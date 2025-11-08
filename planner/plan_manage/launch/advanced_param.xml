@@ -35,11 +35,11 @@
   <arg name="point4_z"/>
 
   <arg name="flight_type"/>
-  <arg name="use_distinctive_trajs"/>
+  <arg name="use_distinctive_trajs" default="false"/>
 
   <arg name="obj_num_set"/>
 
-  <arg name="drone_id"/>
+  <arg name="drone_id" default="0"/>
 
 
   <!-- main node -->
