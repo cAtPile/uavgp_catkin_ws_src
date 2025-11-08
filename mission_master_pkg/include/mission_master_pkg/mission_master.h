@@ -17,10 +17,11 @@
 #include <std_msgs/Bool.h>
 #include <vector>
 #include <Eigen/Dense>
-#include <actionlib/client/simple_action_client.h>
-#include "mission_master_pkg/AvoidAction.h"
-#include "mission_master_pkg/PickAction.h"
-#include "mission_master_pkg/TraceAction.h"
+// 暂时注释掉 Action 依赖，用于测试基础飞行
+// #include <actionlib/client/simple_action_client.h>
+// #include "mission_master_pkg/AvoidAction.h"
+// #include "mission_master_pkg/PickAction.h"
+// #include "mission_master_pkg/TraceAction.h"
 #include "mavros_msgs/SetMode.h"
 
 // 构建任务枚举
@@ -56,6 +57,7 @@ class MissionMaster
 {
 private:
     //=========全局参数=============
+    std::string vehicle_namespace_;    // 无人机命名空间（如 /iris_0）
     double TOLERANCE_WAYPOINT; // 航点到达容忍距离(m)
     double TAKEOFF_POSE_X;
     double TAKEOFF_POSE_Y;
@@ -105,15 +107,18 @@ private:
     ros::Time mission_start_time_; // 任务开始时间
     ros::Time state_start_time_;   // 当前状态开始时间
     ros::Rate rate_;               // 循环频率(Hz)
+    
+    bool offboard_ready_;          // OFFBOARD 准备完成标志
     //--------(数据缓存)------------
 
     //========action==============
-    typedef actionlib::SimpleActionClient<mission_master_pkg::AvoidAction> avoid_Client;
-    typedef actionlib::SimpleActionClient<mission_master_pkg::PickAction> pick_Client;
-    typedef actionlib::SimpleActionClient<mission_master_pkg::TraceAction> trace_Client;
-    avoid_Client avoid_clientor;
-    pick_Client pick_clientor;
-    trace_Client trace_clientor;
+    // 暂时注释掉 Action 客户端，用于测试基础飞行
+    // typedef actionlib::SimpleActionClient<mission_master_pkg::AvoidAction> avoid_Client;
+    // typedef actionlib::SimpleActionClient<mission_master_pkg::PickAction> pick_Client;
+    // typedef actionlib::SimpleActionClient<mission_master_pkg::TraceAction> trace_Client;
+    // avoid_Client avoid_clientor;
+    // pick_Client pick_clientor;
+    // trace_Client trace_clientor;
     //-------(action)-------------
 
     //=========私有函数=============
@@ -123,32 +128,33 @@ private:
     bool reachCheck(Eigen::Vector3d pose_v3d);                         // 到达检查
     void loadWaypoints();                                              // 导入航点
     void setPoint(Eigen::Vector3d pose_v3d);                           // 设置目标点
+    void prepareOffboard();                                            // OFFBOARD 模式准备
 
     bool landExecute();
 
-    // Avoid相关回调与执行函数
-    void avoidActiveCB();
-    void avoidDoneCB(const actionlib::SimpleClientGoalState &state,
-                     const mission_master_pkg::AvoidResultConstPtr &result);
-    void avoidFeedbackCB(const mission_master_pkg::AvoidFeedbackConstPtr &feedback);
-    void avoidAct();
-    bool avoidExecute();
+    // Avoid相关回调与执行函数（暂时注释）
+    // void avoidActiveCB();
+    // void avoidDoneCB(const actionlib::SimpleClientGoalState &state,
+    //                  const mission_master_pkg::AvoidResultConstPtr &result);
+    // void avoidFeedbackCB(const mission_master_pkg::AvoidFeedbackConstPtr &feedback);
+    // void avoidAct();
+    bool avoidExecute();  // 保留声明，实现中返回 true
 
-    // Pick相关回调与执行函数
-    void pickActiveCB();
-    void pickDoneCB(const actionlib::SimpleClientGoalState &state,
-                    const mission_master_pkg::PickResultConstPtr &result);
-    void pickFeedbackCB(const mission_master_pkg::PickFeedbackConstPtr &feedback);
-    void pickAct();
-    bool pickExecute();
+    // Pick相关回调与执行函数（暂时注释）
+    // void pickActiveCB();
+    // void pickDoneCB(const actionlib::SimpleClientGoalState &state,
+    //                 const mission_master_pkg::PickResultConstPtr &result);
+    // void pickFeedbackCB(const mission_master_pkg::PickFeedbackConstPtr &feedback);
+    // void pickAct();
+    bool pickExecute();  // 保留声明，实现中返回 true
 
-    // Trace相关回调与执行函数
-    void traceActiveCB();
-    void traceDoneCB(const actionlib::SimpleClientGoalState &state,
-                     const mission_master_pkg::TraceResultConstPtr &result);
-    void traceFeedbackCB(const mission_master_pkg::TraceFeedbackConstPtr &feedback);
-    void traceAct();
-    bool traceExecute();
+    // Trace相关回调与执行函数（暂时注释）
+    // void traceActiveCB();
+    // void traceDoneCB(const actionlib::SimpleClientGoalState &state,
+    //                  const mission_master_pkg::TraceResultConstPtr &result);
+    // void traceFeedbackCB(const mission_master_pkg::TraceFeedbackConstPtr &feedback);
+    // void traceAct();
+    bool traceExecute();  // 保留声明，实现中返回 true
     //---------(私有函数)-----------
 
 public:

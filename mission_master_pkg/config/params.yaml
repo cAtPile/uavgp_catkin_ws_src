@@ -1,0 +1,34 @@
+# 无人机命名空间
+vehicle_namespace: "/iris_0"
+
+# 飞行参数
+tolerance_waypoint: 0.15  # 航点到达容忍距离 (米)
+
+# 航点参数 (相对于 home 点的位置)
+takeoff_pose_x: 0.0
+takeoff_pose_y: 0.0
+takeoff_pose_z: 1.5   # 起飞高度
+
+pickup_start_pose_x: 3.0
+pickup_start_pose_y: 0.0
+pickup_start_pose_z: 1.5
+
+pickup_end_pose_x: 3.0
+pickup_end_pose_y: 3.0
+pickup_end_pose_z: 1.5
+
+avoid_start_pose_x: 0.0
+avoid_start_pose_y: 3.0
+avoid_start_pose_z: 1.5
+
+avoid_end_pose_x: -3.0
+avoid_end_pose_y: 0.0
+avoid_end_pose_z: 1.5
+
+trace_start_pose_x: -3.0
+trace_start_pose_y: -3.0
+trace_start_pose_z: 1.5
+
+trace_end_pose_x: 0.0
+trace_end_pose_y: 0.0
+trace_end_pose_z: 1.5

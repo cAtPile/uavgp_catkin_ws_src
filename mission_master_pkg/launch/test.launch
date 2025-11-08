@@ -1,7 +1,7 @@
 <launch>
-  <!-- 节点名称 -->
-  <node name="mission_master_node" pkg="mission_master_pkg" type="mission_master_node" output="screen">
-    <!-- 加载参数配置文件到全局命名空间 -->
-    <rosparam file="$(find mission_master_pkg)/config/param.yaml" command="load" ns="/"/>
-  </node>
+  <!-- Load parameters from params.yaml -->
+  <rosparam file="$(find mission_master_pkg)/config/params.yaml" command="load" ns="/"/>
+  
+  <!-- Mission Master Node -->
+  <node name="mission_master_node" pkg="mission_master_pkg" type="mission_master_node" output="screen"/>
 </launch>

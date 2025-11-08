@@ -63,9 +63,6 @@ include_directories(
 add_library(mission_master_lib
   lib/callback.cpp
   lib/mission_master.cpp
-  lib/pickAct.cpp
-  lib/avoidAct.cpp
-  lib/traceAct.cpp
 )
 
 ## 库依赖（必须依赖自动生成的消息目标）
