@@ -1,40 +1,42 @@
 <launch>
-  <!-- 配置参数：根据你的激光雷达型号和工程需求修改 -->
-  <arg name="drone_id" default="0" doc="无人机ID，用于多机场景"/>
-  <arg name="lidar_topic" default="/livox/lidar" doc="激光雷达点云话题（2D/3D，需为sensor_msgs/PointCloud2格式）"/>
-  <arg name="odom_topic" default="/mavros/local_position/odom" doc="里程计话题（MAVROS提供）"/>
+  <!-- 核心配置参数：根据实际硬件和场景修改 -->
+  <arg name="drone_id" default="0" doc="无人机ID（多机场景区分用）"/>
+  <arg name="lidar_topic" default="/livox/lidar" doc="激光雷达点云话题（sensor_msgs/PointCloud2格式）"/>
+  <arg name="odom_topic" default="/mavros/local_position/odom" doc="里程计话题（如MAVROS或VIO输出）"/>
   <arg name="use_rviz" default="true" doc="是否启动RViz可视化"/>
-  <arg name="rviz_config" default="$(find plan_manage)/configs/mid_avoid.rviz" doc="RViz配置文件路径"/>
+  <!-- 修正RViz配置文件路径（假设已将plan_manage的config迁移至ego_planner） -->
+  <arg name="rviz_config" default="$(find ego_planner)/configs/mid_avoid.rviz" doc="RViz配置文件路径"/>
 
-  <!-- 3. 启动规划核心模块（ego_planner），直接使用激光雷达点云 -->
-  <node pkg="plan_manage" type="plan_manage_node" name="plan_manage_node_$(arg drone_id)" output="screen">
-    <!-- 重映射规划模块的点云输入为激光雷达话题 -->
+  <!-- 1. 启动规划核心模块（使用ego_planner替代plan_manage） -->
+  <node pkg="ego_planner" type="plan_manage_node" name="plan_manage_node_$(arg drone_id)" output="screen">
+    <!-- 点云输入：重映射为激光雷达话题 -->
     <remap from="~grid_map/cloud" to="$(arg lidar_topic)"/>
-    <!-- 重映射里程计输入为MAVROS提供的里程计 -->
-    <remap from="~odometry" to="/drone_$(arg drone_id)_$(arg odom_topic)"/>
-    <!-- 重映射规划输出的位置指令到转换节点（后续发送给MAVROS） -->
+    <!-- 里程计输入：若MAVROS里程计已带无人机ID，无需重复添加drone_id前缀 -->
+    <remap from="~odometry" to="$(arg odom_topic)"/>
+    <!-- 规划输出：位置指令话题（带无人机ID，方便多机区分） -->
     <remap from="~planning/pos_cmd" to="/drone_$(arg drone_id)_planning/pos_cmd"/>
 
-    <!-- 加载规划模块参数（根据你的工程参数文件路径修改） -->
-    <rosparam file="$(find plan_manage)/configs/advanced_param.xml" command="load"/>
-    <rosparam file="$(find plan_manage)/configs/simulator_param.yaml" command="load"/>
+    <!-- 加载规划参数（使用ego_planner的参数文件） -->
+    <include file="$(find ego_planner)/launch/advanced_param.xml" command="load"/>
+    <include file="$(find ego_planner)/launch/simulator_param.xml" command="load"/>
 
-    <!-- 配置规划模块的坐标系（与激光雷达、MAVROS保持一致） -->
-    <param name="world_frame_id" value="map"/> <!-- 世界坐标系 -->
-    <param name="lidar_frame_id" value="velodyne" /> <!-- 激光雷达坐标系（根据实际TF修改） -->
+    <!-- 坐标系配置（需与激光雷达、MAVROS的TF一致） -->
+    <param name="world_frame_id" value="map"/> <!-- 世界坐标系（与MAVROS的map一致） -->
+    <param name="lidar_frame_id" value="velodyne" /> <!-- 激光雷达坐标系（根据实际TF树修改，如livox_frame） -->
   </node>
 
-  <!-- 4. 启动位置指令转换节点（将规划输出转换为MAVROS可识别的PositionTarget） -->
-  <node pkg="plan_manage" type="poscmd_to_mavros_node" name="poscmd_converter_$(arg drone_id)" output="screen">
-    <remap from="~pos_cmd" to="/drone_$(arg drone_id)_planning/pos_cmd"/>
-    <remap from="~target" to="/mavros/setpoint_raw/local"/>
-    <!-- 配置坐标系转换参数（ENU→NED） -->
-    <param name="z_invert" value="true"/> <!-- ROS ENU的Z轴对应PX4 NED的-Z -->
+  <!-- 2. 位置指令转换节点（将规划输出转为MAVROS可识别的格式） -->
+  <node pkg="ego_planner" type="poscmd_to_mavros_node" name="poscmd_converter_$(arg drone_id)" output="screen">
+    <remap from="~pos_cmd" to="/drone_$(arg drone_id)_planning/pos_cmd"/> <!-- 订阅规划器输出的位置指令 -->
+    <remap from="~target" to="/mavros/setpoint_raw/local"/> <!-- 发布给MAVROS的位置目标 -->
+    <!-- 坐标系转换：ROS默认ENU，PX4使用NED，需反转Z轴 -->
+    <param name="z_invert" value="true"/> <!-- 启用Z轴反转（ENU→NED） -->
   </node>
 
-  <!-- 5. 启动RViz可视化（可选） -->
+  <!-- 3. 启动RViz可视化（可选） -->
   <group if="$(arg use_rviz)">
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" output="screen"/>
   </group>
 
 </launch>
+
