@@ -19,7 +19,7 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
     // 判断解锁
     if (current_vehicle_state_.mode == "OFFBOARD")
     {
-
+        local_pos_pub.publish(current_pose);
         // 判断当前状态
         switch (current_mission_state_)
         {
@@ -28,7 +28,6 @@ void MissionMaster::stateCheckCB(const mavros_msgs::State::ConstPtr &msg)
         {
 
             loadWaypoints();
-            local_pos_pub.publish(current_pose);
 
             // 解锁无人机
             ROS_INFO("Attempting to arm the vehicle...");
