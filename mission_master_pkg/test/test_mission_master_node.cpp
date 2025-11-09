@@ -22,6 +22,9 @@ int main(int argc, char**argv)
         // 输出当前状态信息
         mission_master.getState();
 
+        // 任务循环
+        //mission_master.missionExecutor();
+
         // 处理回调函数
         ros::spinOnce();
 
