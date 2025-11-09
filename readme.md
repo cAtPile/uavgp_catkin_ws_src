@@ -150,3 +150,70 @@ uavgp_catkin_ws_src/
 
 ### 缩写
 mm mission_master
+
+### 任务状态类型枚举
+  ``` cpp
+  ENMU_TAKEOFF_WAITING //等待飞行
+  ENMU_TAKEOFF_EXECUTE //执行起飞
+  ENMU_TAKEOFF_SUCCEED //起飞成功
+
+  ENMU_PICK_START //飞到抓取点
+  ENMU_PICK_EXECUTE //执行抓取
+  ENMU_PICK_SUCCEED //抓取结束
+
+  ENMU_AVOID_START //飞到避障点
+  ENMU_AVOID_EXECUTE //执行避障
+  ENMU_AVOID_SUCCEED //避障成功
+
+  ENMU_TRACE_START //飞到跟踪点
+  ENMU_TRACE_EXECUTE //执行跟踪
+  ENMU_TRACE_SUCCEED //跟踪成功
+
+  ENMU_PASS_TP //起飞抓取中间防撞
+  ENMU_PASS_PA //抓取避障中间防撞
+  ENMU_PASS_AT //避障跟踪中间防撞
+  ENMU_PASS_TPA //跟踪抓取防撞
+  ENMU_PASS_TL //跟踪降落防撞
+
+  ENMU_LAND_START //降落开始
+  ENMU_LAND_EXECUTE //降落执行
+  ENMU_LAND_SUCCEED //降落成功
+
+  ```
+
+### 视觉action
+  ``` action
+  # CamTrack.action
+  #goal
+  bool cam_track_enable #开始反馈消息
+  ---
+  #result
+  bool cam_succeed #任务结束
+  ---
+  #feedback
+  float32 ball_x #球坐标
+  float32 ball_y
+  float32 car_A_x #车A的坐标
+  float32 car_A_y
+  float32 car_B_x #B 
+  float32 car_B_y  
+  float32 car_C_x #C
+  float32 car_C_y
+
+  ```
+
+### 爪子action
+  ``` action
+  #Grip.action
+  #goal
+  bool grip_enable #抓取执行
+  ---
+  #result
+  bool grip_succeed #抓取成功
+  ---
+  #feedback
+  bool grip_state #爪子状态
+
+  #true为爪
+  #false为释放
+  ```
