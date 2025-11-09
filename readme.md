@@ -219,3 +219,8 @@ string message     # 执行结果消息
 # Feedback
 int16 current_position  # 当前位置反馈
   ```
+
+### 任务航点名称列表
+- HOME_POSE;//HOME点
+- TAKEOFF_POSE;//
+- 
