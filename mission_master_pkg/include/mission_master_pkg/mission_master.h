@@ -26,27 +26,32 @@
 // 构建任务枚举
 enum mission_state
 {
-    ENUM_WATTING_TAKEOFF, // 等待起飞
-    ENUM_TAKEOFF,         // 起飞中
-    ENUM_TAKEOFF_SUCCEED, // 起飞成功
+    ENMU_TAKEOFF_WAITING, // 等待飞行
+    ENMU_TAKEOFF_EXECUTE, // 执行起飞
+    ENMU_TAKEOFF_SUCCEED, // 起飞成功
 
-    ENUM_FLYTO_PICKUP_POINT, // 飞往拾取点
-    ENUM_PICKUP_POINT,       // 执行拾取
-    ENUM_PICKUP_SUCCEED,     // 拾取成功
+    ENMU_PICK_START,   // 飞到抓取点
+    ENMU_PICK_EXECUTE, // 执行抓取
+    ENMU_PICK_SUCCEED, // 抓取结束
 
-    ENUM_FLYTO_AVOID_POINT, // 飞往避障点
-    ENUM_AVOID_POINT,       // 执行避障
-    ENUM_AVOID_SUCCEED,     // 避障成功
+    ENMU_AVOID_START,   // 飞到避障点
+    ENMU_AVOID_EXECUTE, // 执行避障
+    ENMU_AVOID_SUCCEED, // 避障成功
 
-    ENUM_FLYTO_TRACE_POINT, // 飞往追踪点
-    ENUM_TRACE_POINT,       // 执行追踪
-    ENUM_TRACE_SUCCEED,     // 追踪成功
+    ENMU_TRACE_START,   // 飞到跟踪点
+    ENMU_TRACE_EXECUTE, // 执行跟踪
+    ENMU_TRACE_SUCCEED, // 跟踪成功
 
-    ENUM_FLYTO_LAND_POINT, // 飞往降落点
-    ENUM_LAND_POINT,       // 执行降落
-    ENUM_LAND_SUCCEED      // 降落成功
+    ENMU_PASS_TP,  // 起飞抓取中间防撞
+    ENMU_PASS_PA,  // 抓取避障中间防撞
+    ENMU_PASS_AT,  // 避障跟踪中间防撞
+    ENMU_PASS_TPA, // 跟踪抓取防撞
+    ENMU_PASS_TL,  // 跟踪降落防撞
+
+    ENMU_LAND_START,   // 降落开始
+    ENMU_LAND_EXECUTE, // 降落执行
+    ENMU_LAND_SUCCEED, // 降落成功
 };
-
 /**
  * @class MissionMaster
  * @brief 任务主控类
@@ -96,7 +101,7 @@ private:
     Eigen::Vector3d AVOID_END_POSE_XYZ;
     Eigen::Vector3d TRACE_START_POSE_XYZ;
     Eigen::Vector3d TRACE_END_POSE_XYZ;
-    geometry_msgs::PoseStamped home_pose;     // home点
+    geometry_msgs::PoseStamped home_pose;    // home点
     geometry_msgs::PoseStamped current_pose; // 当前位置
 
     mission_state current_mission_state_;      // 当前任务状态
@@ -118,7 +123,7 @@ private:
 
     //=========私有函数=============
     void loadParams();                                                 // 参数导入
-    void stateCheckCB(const mavros_msgs::State::ConstPtr &msg);             // 无人机状态回调(原stateCheckCB重命名)
+    void stateCheckCB(const mavros_msgs::State::ConstPtr &msg);        // 无人机状态回调(原stateCheckCB重命名)
     void localPoseCB(const geometry_msgs::PoseStamped::ConstPtr &msg); // 本地位置回调
     bool reachCheck(Eigen::Vector3d pose_v3d);                         // 到达检查
     void loadWaypoints();                                              // 导入航点
@@ -155,7 +160,6 @@ public:
     MissionMaster();  // 构造函数
     ~MissionMaster(); // 析构函数
     void getState();  // 获取状态
-
 };
 
 #endif // MISSION_MASTER_NODE_H

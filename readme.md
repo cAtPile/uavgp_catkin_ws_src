@@ -204,16 +204,18 @@ mm mission_master
 
 ### 爪子action
   ``` action
-  #Grip.action
-  #goal
-  bool grip_enable #抓取执行
-  ---
-  #result
-  bool grip_succeed #抓取成功
-  ---
-  #feedback
-  bool grip_state #爪子状态
+#Grip.action
+# Goal
+uint8 GRIP = 0     # 抓取动作
+uint8 RELEASE = 1  # 释放动作
+uint8 command      # 要执行的命令
 
-  #true为爪
-  #false为释放
+---
+# Result
+bool success       # 是否成功完成
+string message     # 执行结果消息
+
+---
+# Feedback
+int16 current_position  # 当前位置反馈
   ```

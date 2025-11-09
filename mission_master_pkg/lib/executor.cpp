@@ -8,65 +8,85 @@ void MissionMaster::missionExecutor()
 
     switch (current_mission_state_)
     {
-    // 等待起飞
-    case ENUM_WATTING_TAKEOFF:
-        waitingTakeoff(); // 完成航点导入和心跳信号
+    case ENMU_TAKEOFF_WAITING: // 等待飞行
+        waitingTakeoff();
         break;
 
-    // 状态回调更新 offb后跟新到 ENUM_TAKEOFF
-    // 非offb则更新到ENUM_WATTING_TAKEOFF
-
-    // 执行起飞
-    case ENUM_TAKEOFF_EXECUTE:
-        takeoffExcute(); // 定点起飞模式，到达检查后跟新 ENUM_FLYTO_PICKUP_POINT
+    case ENMU_TAKEOFF_EXECUTE: // 执行起飞
+        takeoffExecute();
         break;
 
-    //飞到成功起飞点
-    case ENUM_TAKEOFF_SUCCEED:
-        //飞到 成功起飞点 ，到达检查后更新状态 
-
-    // 成功起飞，飞到下一个航点
-    case ENUM_FLYTO_PICKUP_POINT:
-        flytoExcute(); // 飞行到下一个任务航点，到达检查更新状态 ENUM_PICKUP_POINT
+    case ENMU_TAKEOFF_SUCCEED: // 起飞成功
+        //飞行
         break;
 
-    // 执行抓取任务
-    case ENUM_PICKUP_EXECUTE:
-        pickExecute(); // 执行抓取任务，成功后飞到抓取结束航点，跟新状态
+    case ENMU_PICK_START:   // 飞到抓取点
+        //飞行
         break;
 
-    // 飞到抓取结束点
-    case 
-    // 飞行到避障开始点
-    case ENUM_FLYTO_AVOID_POINT:
-        flytoExcute(); // 飞行到 任务航点 ，到达检查后跟新状态
+    case ENMU_PICK_EXECUTE: // 执行抓取
+        pickExecute();
         break;
 
-    // 执行避障任务
-    case ENUM_AVOID_POINT :
-        avoidExecute();//执行避障任务，完成后更新状态
+    case ENMU_PICK_SUCCEED: // 抓取结束
+        //飞行
         break;
 
-    //飞到避障结束点
+    case ENMU_AVOID_START:  // 飞到避障点
+        //
+        break;
 
-    //飞到跟踪开始点
+    case ENMU_AVOID_EXECUTE: // 执行避障
+        avoidExecute();
+        break;
 
-    //执行跟踪任务
+    case ENMU_AVOID_SUCCEED: // 避障成功
+        //
+        break;
 
-    //飞到跟踪结束点
+    case ENMU_TRACE_START: // 飞到跟踪点
+        //
+        break;
 
-    //飞到途径防撞点
+    case ENMU_TRACE_EXECUTE: // 执行跟踪
+        traceExecute();
+        break;
 
-    //飞到降落点
+    case ENMU_TRACE_SUCCEED: // 跟踪成功
+        //
+        break;
 
-    //执行降落
+    case ENMU_PASS_TP: // 起飞抓取中间防撞
+            //
+        break;
 
+    case ENMU_PASS_PA:  // 抓取避障中间防撞
+            //
+        break;
 
-default:
-    break;
+    case ENMU_PASS_AT:  // 避障跟踪中间防撞
+            //
+        break;
+
+    case ENMU_PASS_TPA: // 跟踪抓取防撞
+            //
+        break;
+
+    case ENMU_PASS_TL: // 跟踪降落防撞
+            //
+        break;
+
+    case ENMU_LAND_START:   // 降落开始
+            //
+        break;
+
+    case ENMU_LAND_EXECUTE: // 降落执行
+            //
+        break;
+
+    case ENMU_LAND_SUCCEED: // 降落成功
+            //
+        break;
+
+    }
 }
-
-}
-
-
-void MissionMaster::waitingTakeoff() {}
