@@ -103,11 +103,89 @@
 | EXECUTE_LAND_STATE        | 执行降落（切换至AUTO.LAND模式）       |
 | SUCCEED_LAND_STATE        | 降落成功（已着陆并上锁）              |
 
+```cpp
+enum mission_state
+{
+    WAITING_TAKEOFF_STATE, // 等待起飞（已初始化，等待OFFBOARD模式）
+    EXECUTE_TAKEOFF_STATE, // 执行起飞（解锁并发布起飞点指令）
+    SUCCEED_TAKEOFF_STATE, // 起飞成功（悬停在起飞点，等待下一步）
 
-## 航点状态表
+    START_PICKUP_STATE,    // 抓取开始（飞往抓取准备点）
+    EXECUTE_PICKUP_STATE,  // 执行抓取（降高、闭合爪子、回巡航高度）
+    SUCCEED_PICKUP_STATE,  // 抓取成功（飞往抓取结束点）
 
-## 函数功能列表
+    START_AVOID_STATE,     // 避障开始（飞往避障起始点）
+    EXECUTE_AVOID_STATE,   // 执行避障（按规划路径避障）
+    SUCCEED_AVOID_STATE,   // 避障成功（飞往避障结束点）
+
+    START_TRACE_STATE,     // 跟踪开始（飞往跟踪起始点）
+    EXECUTE_TRACE_STATE,   // 执行跟踪（动态跟随目标）
+    SUCCEED_TRACE_STATE,   // 跟踪成功（飞往跟踪结束点）
+    
+    START_LAND_STATE,      // 降落开始（飞往降落起始点）
+    EXECUTE_LAND_STATE,    // 执行降落（切换至AUTO.LAND模式）
+    SUCCEED_LAND_STATE,    // 降落成功（已着陆并上锁）
+
+    //PASS_A_STATE,          // 防撞途径点预留
+}
+```
+
+## 航点列表
+
+### 外参数航点
+|TAKEOFF_WAYPOINT|起飞点|
+|PICKUP_START_WAYPOINT|抓取开始点|
+|PICKUP_END_WAYPOINT|抓取结束点|
+|AVOID_START_WAYPOINT|避障开始点|
+|AVOID_END_WAYPOINT|避障结束点|
+|TRACE_START_WAYPOINT|跟踪开始点|
+|TRACE_END_WAYPOINT|跟踪结束点|
+
+### 内部航点
+|home_pose |起飞降落点|
+|current_pose|当前点|
+
+
 
 ## 参数列表
+
+## 函数功能列表
+1. 构造函数
+2. 析构函数
+
+3. missionExecute()
+    - switch
+
+4. loadParam()
+    - 导入外部参数
+
+5. waitingTakeoff()
+    - 发布心跳信号
+    - 记录home点
+
+6. takeoffExecute()
+    - 解锁
+    - setpointPub起飞
+    - reachCheck
+    - 跟新
+
+7. setpointPub()
+    - 航点相对化
+    - 发布
+
+8. pickupExecute()
+    - 略
+
+9. avoidExecute()
+    - 略
+
+10. traceExecute()
+    - 略
+
+11. landExecute()
+    - 切autoland
+
+12. reachCheck()
+    - 略
 
 ## 全局参数列表
