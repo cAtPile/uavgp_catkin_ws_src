@@ -134,7 +134,30 @@ void MissionMaster::takeoffExecute()
     }
 }
 
-void MissionMaster::pickExecute() {}
+/**
+ * @brief 抓取
+ * @details 根据订阅的消息，比例，进行边降落边调整
+ */
+void MissionMaster::pickExecute() {
+
+    //
+
+}
+
+/**
+ * @brief 避障
+ * @details 调用ego服务
+ */
 void MissionMaster::avoidExecute() {}
+
+/**
+ * @brief 跟踪
+ * @details 参考抓取
+ */
 void MissionMaster::traceExecute() {}
+
+/**
+ * @brief 着陆
+ * @details 切land
+ */
 void MissionMaster::landExecute() {}
