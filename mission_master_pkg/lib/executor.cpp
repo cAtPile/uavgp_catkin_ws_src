@@ -122,11 +122,15 @@ void MissionMaster::takeoffExecute()
     arm_cmd.request.value = true; // true表示解锁，false表示上锁
     arming_client.call(arm_cmd);
 
-    // 发布航点
-    // setPoint(TAKEOFF_POSE_XYZ);
-    if (reachCheck(/*起飞目标点*/))
+    while (ros::ok())
     {
-        current_mission_state_ = ENMU_TAKEOFF_SUCCEED;
+        // 发布航点
+        // setPoint(TAKEOFF_POSE_XYZ);
+        if (reachCheck(/*起飞目标点*/))
+        {
+            current_mission_state_ = ENMU_TAKEOFF_SUCCEED;
+            break;
+        }
     }
 }
 
