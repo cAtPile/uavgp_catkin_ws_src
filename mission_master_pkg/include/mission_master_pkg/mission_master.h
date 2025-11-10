@@ -36,6 +36,8 @@ enum mission_state
     START_LAND_STATE,   // 降落开始（飞往降落起始点）
     EXECUTE_LAND_STATE, // 执行降落（切换至AUTO.LAND模式）
     SUCCEED_LAND_STATE  // 降落成功（已着陆并上锁）
+
+    //预留状态
 };
 
 /**
