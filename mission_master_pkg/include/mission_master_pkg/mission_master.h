@@ -156,12 +156,12 @@ private:
     void waitingTakeoff();//等待起飞
     void armSet();//解锁
     void takeoffExecute();//执行起飞
-    void setpointPub(const geometry_msgs::PoseStamped &waypoint);//航点飞行
+    void setPoint(Eigen::Vector3d set_point);//航点飞行
     void pickupExecute();//抓取执行
     void avoidExecute();//避障执行
     void traceExecute();//追踪执行
     void landExecute();//降落执行
-    bool reachCheck(const geometry_msgs::PoseStamped &target);//到达检查
+    bool reachCheck(Eigen::Vector3d check_point);//到达检查
     void missionExecute();//任务执行（主循环）
 
 public:
