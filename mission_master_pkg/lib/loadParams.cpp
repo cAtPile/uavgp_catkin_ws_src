@@ -2,7 +2,9 @@
 /**
  * @brief 参数加载
  */
-voidMissionMaster::loadParam(){
+void MissionMaster::loadParams(){
+
+    home_pose = current_pose;
 
     //飞行参数
     nh.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
@@ -29,6 +31,7 @@ voidMissionMaster::loadParam(){
     nh.param("trace_end_pose_x", TRACE_END_POSE_X, 0.0);
     nh.param("trace_end_pose_y", TRACE_END_POSE_Y, 0.0);
     nh.param("trace_end_pose_z", TRACE_END_POSE_Z, 1.0);
+
 
 
 }

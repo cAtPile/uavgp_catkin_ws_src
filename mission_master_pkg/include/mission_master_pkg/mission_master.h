@@ -78,7 +78,6 @@ private:
     ros::NodeHandle nh_; // 节点句柄
     ros::Rate rate_;               // 循环频率(Hz)
 
-
     //---------订阅者---------------
     ros::Subscriber state_sub_;     // 无人机状态订阅者（/mavros/state）
     ros::Subscriber local_pos_sub_; // 局部位置订阅者（/mavros/local_position/pose）
@@ -92,28 +91,58 @@ private:
     ros::ServiceClient arming_client_;   // 解锁/上锁服务客户端（/mavros/cmd/arming）
     ros::ServiceClient set_mode_client_; // 模式切换服务客户端（/mavros/set_mode）
 
-
     //------------action------------
     // actionlib::SimpleActionClient 避障预留
 
     //=========飞行参数============
-    double pos_tolerance_; // 位置容忍值（到达判定阈值）
+    double TOLERANCE_WAYPOINT; // 位置容忍值（到达判定阈值）
 
     //=========航点参数============
     geometry_msgs::PoseStamped home_pose_;             // 起飞降落点（home位置）
-    geometry_msgs::PoseStamped takeoff_waypoint_;      // 起飞点
-    geometry_msgs::PoseStamped pickup_start_waypoint_; // 抓取开始点
-    geometry_msgs::PoseStamped pickup_end_waypoint_;   // 抓取结束点
-    geometry_msgs::PoseStamped avoid_start_waypoint_;  // 避障开始点
-    geometry_msgs::PoseStamped avoid_end_waypoint_;    // 避障结束点
-    geometry_msgs::PoseStamped trace_start_waypoint_;  // 跟踪开始点
-    geometry_msgs::PoseStamped trace_end_waypoint_;    // 跟踪结束点
+    //geometry_msgs::PoseStamped pickup_start_waypoint_; // 抓取开始点
+    //geometry_msgs::PoseStamped pickup_end_waypoint_;   // 抓取结束点
+    //geometry_msgs::PoseStamped avoid_start_waypoint_;  // 避障开始点
+    //geometry_msgs::PoseStamped avoid_end_waypoint_;    // 避障结束点
+    //geometry_msgs::PoseStamped trace_start_waypoint_;  // 跟踪开始点
+    //geometry_msgs::PoseStamped trace_end_waypoint_;    // 跟踪结束点
     geometry_msgs::PoseStamped land_start_waypoint_;   // 降落开始点
 
+    Eigen::Vector3d TAKEOFF_WAYPOINT;
+    Eigen::Vector3d PICKUP_START_WAYPOINT;
+    Eigen::Vector3d PICKUP_END_WAYPOINT;
+    Eigen::Vector3d AVOID_START_WAYPOINT;
+    Eigen::Vector3d AVOID_END_WAYPOINT;
+    Eigen::Vector3d TRACE_START_WAYPOINT;
+    Eigen::Vector3d TRACE_END_WAYPOINT;
+
+        
+    //--------航点缓存XYZ----------
+    double TAKEOFF_POSE_X;
+    double TAKEOFF_POSE_Y;
+    double TAKEOFF_POSE_Z;
+    double PICKUP_START_POSE_X;
+    double PICKUP_START_POSE_Y;
+    double PICKUP_START_POSE_Z;
+    double PICKUP_END_POSE_X;
+    double PICKUP_END_POSE_Y;
+    double PICKUP_END_POSE_Z;
+    double AVOID_START_POSE_X;
+    double AVOID_START_POSE_Y;
+    double AVOID_START_POSE_Z;
+    double AVOID_END_POSE_X;
+    double AVOID_END_POSE_Y;
+    double AVOID_END_POSE_Z;
+    double TRACE_START_POSE_X;
+    double TRACE_START_POSE_Y;
+    double TRACE_START_POSE_Z;
+    double TRACE_END_POSE_X;
+    double TRACE_END_POSE_Y;
+    double TRACE_END_POSE_Z;
+
     //=========数据缓存============
-    mavros_msgs::State current_state_;        // 当前无人机状态
-    geometry_msgs::PoseStamped current_pose_; // 当前位置姿态
-    mission_state current_mission_state_;     // 当前任务状态
+    mavros_msgs::State current_state;        // 当前无人机状态
+    geometry_msgs::PoseStamped current_pose; // 当前位置姿态
+    mission_state current_mission_state;     // 当前任务状态
 
     //=========回调函数============
     void state_cb(const mavros_msgs::State::ConstPtr &msg);//无人机状态回调
@@ -122,8 +151,10 @@ private:
     // void claw_status_cb(const std_msgs::Bool::ConstPtr& msg);//爪子回调预留
 
     //=========私有函数============
-    void loadParam();//参数导入
+    void loadParams();//参数导入
+    void loadWaypoints();//航点导入
     void waitingTakeoff();//等待起飞
+    void armSet();//解锁
     void takeoffExecute();//执行起飞
     void setpointPub(const geometry_msgs::PoseStamped &waypoint);//航点飞行
     void pickupExecute();//抓取执行

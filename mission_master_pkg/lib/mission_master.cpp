@@ -17,9 +17,6 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0)  // 初始化节点句柄�
     arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
-    //加载参数
-    loadParam();
-
     // 初始化任务状态为等待起飞
     current_mission_state_ = WAITING_TAKEOFF_STATE;
 
@@ -28,6 +25,10 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0)  // 初始化节点句柄�
         ros::spinOnce();
         rate_.sleep();
     }
+    
+    //加载参数
+    loadParam();
+
     ROS_INFO("MissionMaster initialized. Drone connected.");
 }  
 
