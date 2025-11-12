@@ -54,6 +54,7 @@ ROS_INFO ("T c");
         if (reachCheck(TRACE_END_WAYPOINT))
         {
 
+            ROS_INFO("Arrived at trace End Point")
             current_mission_state = START_LAND_STATE;
             break;
         }
