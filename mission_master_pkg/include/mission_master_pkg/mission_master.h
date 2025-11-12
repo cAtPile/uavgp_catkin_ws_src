@@ -61,9 +61,10 @@ enum mission_state
 
     START_LAND_STATE,   // 降落开始（飞往降落起始点）
     EXECUTE_LAND_STATE, // 执行降落（切换至AUTO.LAND模式）
-    SUCCEED_LAND_STATE , // 降落成功（已着陆并上锁）
+    SUCCEED_LAND_STATE, // 降落成功（已着陆并上锁）
 
-    ERROR_ARM_STATE, //解锁异常状态
+    ERROR_STATE,          // 解锁异常状态
+    MISSION_SUCCEED_STATE // 任务完全成功
     // 预留状态
 };
 
@@ -99,13 +100,7 @@ private:
     double TOLERANCE_WAYPOINT; // 位置容忍值（到达判定阈值）
 
     //=========航点参数============
-    geometry_msgs::PoseStamped home_pose_; // 起飞降落点（home位置）
-    // geometry_msgs::PoseStamped pickup_start_waypoint_; // 抓取开始点
-    // geometry_msgs::PoseStamped pickup_end_waypoint_;   // 抓取结束点
-    // geometry_msgs::PoseStamped avoid_start_waypoint_;  // 避障开始点
-    // geometry_msgs::PoseStamped avoid_end_waypoint_;    // 避障结束点
-    // geometry_msgs::PoseStamped trace_start_waypoint_;  // 跟踪开始点
-    // geometry_msgs::PoseStamped trace_end_waypoint_;    // 跟踪结束点
+    geometry_msgs::PoseStamped home_pose_;           // 起飞降落点（home位置）
     geometry_msgs::PoseStamped land_start_waypoint_; // 降落开始点
 
     Eigen::Vector3d TAKEOFF_WAYPOINT;
@@ -146,10 +141,8 @@ private:
     mission_state current_mission_state;     // 当前任务状态
 
     //=========回调函数============
-    void state_cb(const mavros_msgs::State::ConstPtr &msg);             // 无人机状态回调
-    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg); // 本地位置回调
-    // void vision_target_cb(const geometry_msgs::PoseStamped::ConstPtr& msg);//视觉回调预留
-    // void claw_status_cb(const std_msgs::Bool::ConstPtr& msg);//爪子回调预留
+    void state_cb(const mavros_msgs::State::ConstPtr &msg) { current_state = *msg }            // 无人机状态回调
+    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg) { current_pose = *msg } // 本地位置回调
 
     //=========私有函数============
     void loadParams();                            // 参数导入

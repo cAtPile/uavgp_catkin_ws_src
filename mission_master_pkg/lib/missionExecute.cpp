@@ -67,10 +67,13 @@ void MissionMaster::missionExecute()
         landCheck();
         break;
 
-        //其他异常状态
+    case ERROR_STATE :
+        break;
+
+    case MISSION_SUCCEED_STATE:
+        break;
 
     default:
-        // local_pos_pub.publish(trace_start_pose);
         break;
     }
 }
