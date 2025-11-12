@@ -61,11 +61,6 @@ void MissionMaster::takeoffExecute()
             current_mission_state = SUCCEED_TAKEOFF_STATE;
             break;
         }
-        else
-        {
-            // 超时检查预留
-        }
-
         ros::spinOnce();
         rate_.sleep();
     }
@@ -77,8 +72,10 @@ void MissionMaster::takeoffExecute()
 void MissionMaster::takeoffCheck()
 {
 
+    ROS_INFO("T check in");
     while (ros::ok())
     {
+        ROS_INFO("T check loop");
 
         // 保持起飞定点
         setpoint_pub_.publish(temp_pose);
@@ -89,6 +86,9 @@ void MissionMaster::takeoffCheck()
             ROS_INFO("Takeoff Success!");
             break;
         }
+
+        ros::spinOnce();
+        rate_.sleep();
     }
 }
 

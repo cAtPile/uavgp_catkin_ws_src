@@ -4,11 +4,14 @@
  */
 void MissionMaster::pickupStart()
 {
+    ROS_INFO("P start");
 
     setPoint(PICKUP_START_WAYPOINT);
 
     while (ros::ok())
     {
+        ROS_INFO("P loop");
+
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(PICKUP_START_WAYPOINT))
         {
