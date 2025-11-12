@@ -20,7 +20,7 @@ void MissionMaster::waitingTakeoff()
             else
             {
                 ROS_WARN("Arming failed, retrying...");
-                if(ros::Time::now() - arm_start_time > ros::Duration(10.0))
+                if (ros::Time::now() - arm_start_time > ros::Duration(10.0))
                 {
                     ROS_ERROR("Arming timeout, please check the vehicle status");
                     current_mission_state = ERROR_STATE;
@@ -55,12 +55,15 @@ void MissionMaster::takeoffExecute()
     while (ros::ok())
     {
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(TAKEOFF_WAYPOINT)){
+        if (reachCheck(TAKEOFF_WAYPOINT))
+        {
             ROS_INFO("Takeoff set Success!");
             current_mission_state = SUCCEED_TAKEOFF_STATE;
             break;
-        }else{
-            //超时检查预留
+        }
+        else
+        {
+            // 超时检查预留
         }
 
         ros::spinOnce();
@@ -71,26 +74,22 @@ void MissionMaster::takeoffExecute()
 /**
  * @brief 起飞成功
  */
-void MissionMaster::takeoffCheck(){
+void MissionMaster::takeoffCheck()
+{
 
-    ROS_INFO("Takeoff check !");
+    while (ros::ok())
+    {
 
-
-    while(ros::ok()){
-
-        //保持起飞定点
+        // 保持起飞定点
         setpoint_pub_.publish(temp_pose);
 
-            ROS_INFO("Takeoff ing ");
-
-
-        if(reachCheck(TAKEOFF_WAYPOINT)){
+        if (reachCheck(TAKEOFF_WAYPOINT))
+        {
             current_mission_state = START_PICKUP_STATE;
             ROS_INFO("Takeoff Success!");
             break;
         }
     }
-
 }
 
 /**
@@ -117,7 +116,8 @@ bool MissionMaster::armSet()
 /**
  * @brief 航点导入
  */
-void MissionMaster::loadWaypoints(){
+void MissionMaster::loadWaypoints()
+{
 
     TAKEOFF_WAYPOINT = Eigen::Vector3d(TAKEOFF_POSE_X + home_pose.pose.position.x,
                                        TAKEOFF_POSE_Y + home_pose.pose.position.y,
@@ -140,5 +140,4 @@ void MissionMaster::loadWaypoints(){
     TRACE_END_WAYPOINT = Eigen::Vector3d(TRACE_END_POSE_X + home_pose.pose.position.x,
                                          TRACE_END_POSE_Y + home_pose.pose.position.y,
                                          TRACE_END_POSE_Z + home_pose.pose.position.z);
-                                        
 }

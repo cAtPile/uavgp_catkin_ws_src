@@ -33,7 +33,7 @@ void MissionMaster::pickupExecute()
  */
 void MissionMaster::pickupCheck()
 {
-    //setPoint(PICKUP_END_WAYPOINT);
+    setPoint(PICKUP_END_WAYPOINT);
     while (ros::ok())
     {
         setpoint_pub_.publish(temp_pose);
