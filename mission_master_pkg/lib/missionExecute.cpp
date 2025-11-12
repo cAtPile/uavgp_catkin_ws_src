@@ -8,15 +8,15 @@ void MissionMaster::missionExecute()
     switch (current_mission_state)
     {
     case WAITING_TAKEOFF_STATE:
-        waitingTakeoff();//等待起飞
+        waitingTakeoff(); // 等待起飞
         break;
 
     case EXECUTE_TAKEOFF_STATE:
-        takeoffExecute();//执行起飞
+        takeoffExecute(); // 执行起飞
         break;
 
     case SUCCEED_TAKEOFF_STATE:
-        takeoffCheck();//起飞成功检查
+        takeoffCheck(); // 起飞成功检查
         break;
 
     case START_PICKUP_STATE:
@@ -67,7 +67,7 @@ void MissionMaster::missionExecute()
         landCheck();
         break;
 
-    case ERROR_STATE :
+    case ERROR_STATE:
         break;
 
     case MISSION_SUCCEED_STATE:
@@ -75,5 +75,15 @@ void MissionMaster::missionExecute()
 
     default:
         break;
+    }
+}
+
+void MissionMaster::run()
+{
+    while (ros::ok())
+    {
+        missionExecute();
+        ros::spinOnce();
+        rate_.sleep();
     }
 }
