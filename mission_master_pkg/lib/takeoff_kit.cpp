@@ -49,7 +49,7 @@ void MissionMaster::takeoffExecute()
 {
     home_pose = current_pose;
     loadWaypoints();
-    
+
     setPoint(TAKEOFF_WAYPOINT);
 
     while (ros::ok())
@@ -85,7 +85,7 @@ void MissionMaster::takeoffCheck(){
 
 
         if(reachCheck(TAKEOFF_WAYPOINT)){
-            current_mission_state = SUCCEED_TAKEOFF_STATE;
+            current_mission_state = START_PICKUP_STATE;
             ROS_INFO("Takeoff Success!");
             break;
         }
