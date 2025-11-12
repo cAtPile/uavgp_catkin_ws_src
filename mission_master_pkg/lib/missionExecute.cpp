@@ -8,15 +8,15 @@ void MissionMaster::missionExecute()
     switch (current_mission_state)
     {
     case WAITING_TAKEOFF_STATE:
-        waitingTakeoff();
+        waitingTakeoff();//等待起飞
         break;
 
     case EXECUTE_TAKEOFF_STATE:
-        takeoffExecute();
+        takeoffExecute();//执行起飞
         break;
 
     case SUCCEED_TAKEOFF_STATE:
-        takeoffCheck();
+        takeoffCheck();//起飞成功检查
         break;
 
     case START_PICKUP_STATE:

@@ -10,7 +10,11 @@ void MissionMaster::takeoffExecute()
     {
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(TOLERANCE_WAYPOINT)){
-            ROS_INFO("Tak")
+            ROS_INFO("Takeoff Success!");
+            current_mission_state = SUCCEED_TAKEOFF_STATE;
+            break;
+        }else{
+            //超时检查预留
         }
 
         ros::spinOnce();
