@@ -18,7 +18,7 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0)  // 初始化节点句柄�
     set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
     // 初始化任务状态为等待起飞
-    current_mission_state_ = WAITING_TAKEOFF_STATE;
+    current_mission_state = WAITING_TAKEOFF_STATE;
 
     // 等待无人机连接
     while (nh_.ok() && !current_state_.connected) {

@@ -100,8 +100,7 @@ private:
     double TOLERANCE_WAYPOINT; // 位置容忍值（到达判定阈值）
 
     //=========航点参数============
-    geometry_msgs::PoseStamped home_pose_;           // 起飞降落点（home位置）
-    geometry_msgs::PoseStamped land_start_waypoint_; // 降落开始点
+    geometry_msgs::PoseStamped home_pose;           // 起飞降落点（home位置）
 
     Eigen::Vector3d TAKEOFF_WAYPOINT;
     Eigen::Vector3d PICKUP_START_WAYPOINT;
@@ -141,8 +140,8 @@ private:
     mission_state current_mission_state;     // 当前任务状态
 
     //=========回调函数============
-    void state_cb(const mavros_msgs::State::ConstPtr &msg) { current_state = *msg }            // 无人机状态回调
-    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg) { current_pose = *msg } // 本地位置回调
+    void state_cb(const mavros_msgs::State::ConstPtr &msg) { current_state = *msg; }            // 无人机状态回调
+    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg) { current_pose = *msg; } // 本地位置回调
 
     //=========私有函数============
     void loadParams();                            // 参数导入

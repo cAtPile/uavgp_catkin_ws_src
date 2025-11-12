@@ -8,7 +8,7 @@ void MissionMaster::waitingTakeoff()
     while (ros::ok())
     {
 
-        if (current_vehicle_state_.mode == "OFFBOARD")
+        if (current_state.mode == "OFFBOARD")
         {
             ros::Time arm_start_time = ros::Time::now();
             if (armSet())
@@ -23,7 +23,7 @@ void MissionMaster::waitingTakeoff()
                 if(ros::Time::now() - arm_start_time > ros::Duration(10.0))
                 {
                     ROS_ERROR("Arming timeout, please check the vehicle status");
-                    current_mission_state = ERROR_ARM_STATE;
+                    current_mission_state = ERROR_STATE;
 
                     break;
                 }
@@ -33,7 +33,7 @@ void MissionMaster::waitingTakeoff()
         {
 
             // 发送心跳信号
-            local_pos_pub.publish(current_pose);
+            setpoint_pub_.publish(current_pose);
             ROS_INFO("Waiting for taking off...");
         }
 
@@ -73,7 +73,7 @@ void MissionMaster::takeoffCheck(){
     while(ros::ok()){
 
         //保持起飞定点
-        setpoint_pub_.publishi(temp_pose);
+        setpoint_pub_.publish(temp_pose);
 
         if(reachCheck(TAKEOFF_WAYPOINT)){
             current_mission_state = SUCCEED_TAKEOFF_STATE;

@@ -1,7 +1,7 @@
 /**
  * @file 降落相关
  */
-#include "mission_master_pkg/mission_master.h"、
+#include "mission_master_pkg/mission_master.h"
 
 /**
  * @brief 降落任务开始
@@ -23,7 +23,7 @@ void MissionMaster::landStart()
     while (ros::ok())
     {
         setpoint_pub_.publish(land_pose);
-        if (reachCheck(AVOID_START_WAYPOINT))
+        if (reachCheck(Eigen::Vector3d(home_pose_.pose.position.x, home_pose_.pose.position.y, 3.0)))
         {
             ROS_INFO("Arrived at Pickup Start Point");
             current_mission_state = EXECUTE_LAND_STATE;
@@ -56,8 +56,8 @@ void MissionMaster::landExecute()
         else
         {
             ROS_INFO("Already in AUTO.LAND mode");
-            break;
             current_mission_state = SUCCEED_LAND_STATE;
+            break;
         }
 
         ros::spinOnce();

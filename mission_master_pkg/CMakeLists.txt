@@ -59,13 +59,17 @@ include_directories(
   ${EIGEN3_INCLUDE_DIRS}
 )
 
-## 声明库文件（包含所有源文件）
+## 声明库文件（包含所有源文件，补充遗漏的功能模块）
 add_library(mission_master_lib
-  lib/callback.cpp
-  lib/mission_master.cpp
-  lib/pickAct.cpp
-  lib/avoidAct.cpp
-  lib/traceAct.cpp
+  lib/mission_master.cpp       # 核心类实现
+  lib/missionExecute.cpp       # 任务主循环
+  lib/takeoff_kit.cpp          # 起飞相关
+  lib/pickup_kit.cpp           # 抓取相关
+  lib/avoid_kit.cpp            # 避障相关
+  lib/trace_kit.cpp            # 跟踪相关
+  lib/land_kit.cpp             # 降落相关
+  lib/utils.cpp                # 工具函数（定点、到达检查）
+  lib/callback.cpp             # 回调函数实现（若存在）
 )
 
 ## 库依赖（必须依赖自动生成的消息目标）
@@ -80,29 +84,40 @@ target_link_libraries(mission_master_lib
   ${EIGEN3_LIBRARIES}
 )
 
-## 声明可执行文件
-add_executable(mission_master_node 
+## 声明可执行文件（包含测试节点和实际任务节点）
+# 测试节点
+add_executable(test_mission_master_node 
   test/test_mission_master_node.cpp
 )
-
-## 设置可执行文件名称
-#set_target_properties(mission_master_node PROPERTIES OUTPUT_NAME node PREFIX "")
+# 实际任务节点
+add_executable(uavgp25_mission_node 
+  node/uavgp25_mission_node.cpp
+)
 
 ## 可执行文件依赖
-add_dependencies(mission_master_node 
-  ${${PROJECT_NAME}_EXPORTED_TARGETS}  # 关键：确保消息生成后再编译本节点
+add_dependencies(test_mission_master_node 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
+add_dependencies(uavgp25_mission_node 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 
 ## 链接可执行文件
-target_link_libraries(mission_master_node
+target_link_libraries(test_mission_master_node
+  mission_master_lib
+  ${catkin_LIBRARIES}
+  ${EIGEN3_LIBRARIES}
+)
+target_link_libraries(uavgp25_mission_node
   mission_master_lib
   ${catkin_LIBRARIES}
   ${EIGEN3_LIBRARIES}
 )
 
 ## 安装规则
-install(TARGETS mission_master_lib mission_master_node
+install(TARGETS mission_master_lib test_mission_master_node uavgp25_mission_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

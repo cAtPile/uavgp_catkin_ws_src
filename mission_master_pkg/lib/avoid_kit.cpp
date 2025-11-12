@@ -1,7 +1,7 @@
 /**
  * @file 避障相关
  */
-#include "mission_master_pkg/mission_master.h"、
+#include "mission_master_pkg/mission_master.h"
 
 /**
  * @brief 避障任务开始

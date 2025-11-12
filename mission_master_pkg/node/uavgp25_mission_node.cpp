@@ -8,23 +8,8 @@ int main(int argc, char**argv)
 
     // 创建任务管理实例
     MissionMaster mission_master;
-
-    // 主循环
-    ros::Rate loop_rate(20); // 20Hz循环频率
-    while (ros::ok())
-    {
-        // 输出当前状态信息
-        mission_master.getState();
-
-        // 任务循环
-        mission_master.missionExecutor();
-
-        // 处理回调函数
-        ros::spinOnce();
-
-        // 按照循环频率休眠
-        loop_rate.sleep();
-    }
+    // 任务循环
+    mission_master.missionExecute();
 
     ROS_INFO("Mission master node exited");
     return 0;

@@ -6,9 +6,9 @@ void MissionMaster::setPoint(Eigen::Vector3d set_point){
 
     temp_pose.header.frame_id = "map";
     temp_pose.header.stamp = ros::Time::now();
-    temp_pose.pose.position.x = pose_v3d.x();
-    temp_pose.pose.position.y = pose_v3d.y();
-    temp_pose.pose.position.z = pose_v3d.z();
+    temp_pose.pose.position.x = set_point.x();
+    temp_pose.pose.position.y = set_point.y();
+    temp_pose.pose.position.z = set_point.z();
     temp_pose.pose.orientation.x = 0.0;
     temp_pose.pose.orientation.y = 0.0;
     temp_pose.pose.orientation.z = 0.0;

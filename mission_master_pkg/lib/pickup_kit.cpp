@@ -8,7 +8,7 @@ void MissionMaster::pickupStart(){
 
     while(ros::ok()){
         setpoint_pub_.publish(temp_pose);
-        if(reachCheck(TOLERANCE_WAYPOINT)){
+        if(reachCheck(PICKUP_START_WAYPOINT)){
             ROS_INFO("Arrived at Pickup Start Point");
             current_mission_state = EXECUTE_PICKUP_STATE;
             break;

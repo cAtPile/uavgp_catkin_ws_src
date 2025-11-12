@@ -2,7 +2,7 @@
  * @file trace_kit.cpp
  * @brief 跟踪相关
  */
-#include "mission_master_pkg/mission_master.h"、
+#include "mission_master_pkg/mission_master.h"
 
 /**
  * @brief 跟踪任务开始
