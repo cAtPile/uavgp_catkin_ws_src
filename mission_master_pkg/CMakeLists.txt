@@ -86,30 +86,21 @@ target_link_libraries(mission_master_lib
 
 ## 声明可执行文件（包含测试节点和实际任务节点）
 # 测试节点
-add_executable(test_mission_master_node 
-  test/test_mission_master_node.cpp
-)
+
 # 实际任务节点
 add_executable(uavgp25_mission_node 
   node/uavgp25_mission_node.cpp
 )
 
 ## 可执行文件依赖
-add_dependencies(test_mission_master_node 
-  ${${PROJECT_NAME}_EXPORTED_TARGETS}
-  ${catkin_EXPORTED_TARGETS}
-)
+
 add_dependencies(uavgp25_mission_node 
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
 
 ## 链接可执行文件
-target_link_libraries(test_mission_master_node
-  mission_master_lib
-  ${catkin_LIBRARIES}
-  ${EIGEN3_LIBRARIES}
-)
+
 target_link_libraries(uavgp25_mission_node
   mission_master_lib
   ${catkin_LIBRARIES}
@@ -117,7 +108,7 @@ target_link_libraries(uavgp25_mission_node
 )
 
 ## 安装规则
-install(TARGETS mission_master_lib test_mission_master_node uavgp25_mission_node
+install(TARGETS mission_master_lib uavgp25_mission_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
