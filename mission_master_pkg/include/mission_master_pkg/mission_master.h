@@ -38,7 +38,7 @@
 #include <Eigen/Dense>
 #include <actionlib/client/simple_action_client.h>
 #include "mavros_msgs/SetMode.h"
-//#include 避障/爪子/视觉相关 预留
+// #include 避障/爪子/视觉相关 预留
 
 // 任务状态枚举
 enum mission_state
@@ -63,7 +63,7 @@ enum mission_state
     EXECUTE_LAND_STATE, // 执行降落（切换至AUTO.LAND模式）
     SUCCEED_LAND_STATE  // 降落成功（已着陆并上锁）
 
-    //预留状态
+    // 预留状态
 };
 
 /**
@@ -76,7 +76,7 @@ class MissionMaster
 private:
     //=========ROS组件=============
     ros::NodeHandle nh_; // 节点句柄
-    ros::Rate rate_;               // 循环频率(Hz)
+    ros::Rate rate_;     // 循环频率(Hz)
 
     //---------订阅者---------------
     ros::Subscriber state_sub_;     // 无人机状态订阅者（/mavros/state）
@@ -98,14 +98,14 @@ private:
     double TOLERANCE_WAYPOINT; // 位置容忍值（到达判定阈值）
 
     //=========航点参数============
-    geometry_msgs::PoseStamped home_pose_;             // 起飞降落点（home位置）
-    //geometry_msgs::PoseStamped pickup_start_waypoint_; // 抓取开始点
-    //geometry_msgs::PoseStamped pickup_end_waypoint_;   // 抓取结束点
-    //geometry_msgs::PoseStamped avoid_start_waypoint_;  // 避障开始点
-    //geometry_msgs::PoseStamped avoid_end_waypoint_;    // 避障结束点
-    //geometry_msgs::PoseStamped trace_start_waypoint_;  // 跟踪开始点
-    //geometry_msgs::PoseStamped trace_end_waypoint_;    // 跟踪结束点
-    geometry_msgs::PoseStamped land_start_waypoint_;   // 降落开始点
+    geometry_msgs::PoseStamped home_pose_; // 起飞降落点（home位置）
+    // geometry_msgs::PoseStamped pickup_start_waypoint_; // 抓取开始点
+    // geometry_msgs::PoseStamped pickup_end_waypoint_;   // 抓取结束点
+    // geometry_msgs::PoseStamped avoid_start_waypoint_;  // 避障开始点
+    // geometry_msgs::PoseStamped avoid_end_waypoint_;    // 避障结束点
+    // geometry_msgs::PoseStamped trace_start_waypoint_;  // 跟踪开始点
+    // geometry_msgs::PoseStamped trace_end_waypoint_;    // 跟踪结束点
+    geometry_msgs::PoseStamped land_start_waypoint_; // 降落开始点
 
     Eigen::Vector3d TAKEOFF_WAYPOINT;
     Eigen::Vector3d PICKUP_START_WAYPOINT;
@@ -115,7 +115,6 @@ private:
     Eigen::Vector3d TRACE_START_WAYPOINT;
     Eigen::Vector3d TRACE_END_WAYPOINT;
 
-        
     //--------航点缓存XYZ----------
     double TAKEOFF_POSE_X;
     double TAKEOFF_POSE_Y;
@@ -142,31 +141,46 @@ private:
     //=========数据缓存============
     mavros_msgs::State current_state;        // 当前无人机状态
     geometry_msgs::PoseStamped current_pose; // 当前位置姿态
+    geometry_msgs::PoseStamped temp_pose;    // 临时位置姿态
     mission_state current_mission_state;     // 当前任务状态
 
     //=========回调函数============
-    void state_cb(const mavros_msgs::State::ConstPtr &msg);//无人机状态回调
-    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg);//本地位置回调
+    void state_cb(const mavros_msgs::State::ConstPtr &msg);             // 无人机状态回调
+    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg); // 本地位置回调
     // void vision_target_cb(const geometry_msgs::PoseStamped::ConstPtr& msg);//视觉回调预留
     // void claw_status_cb(const std_msgs::Bool::ConstPtr& msg);//爪子回调预留
 
     //=========私有函数============
-    void loadParams();//参数导入
-    void loadWaypoints();//航点导入
-    void waitingTakeoff();//等待起飞
-    void armSet();//解锁
-    void takeoffExecute();//执行起飞
-    void setPoint(Eigen::Vector3d set_point);//航点飞行
-    void pickupExecute();//抓取执行
-    void avoidExecute();//避障执行
-    void traceExecute();//追踪执行
-    void landExecute();//降落执行
-    bool reachCheck(Eigen::Vector3d check_point);//到达检查
-    void missionExecute();//任务执行（主循环）
+    void loadParams();                            // 参数导入
+    void loadWaypoints();                         // 航点导入
+    void waitingTakeoff();                        // 等待起飞
+    void armSet();                                // 解锁
+    void takeoffExecute();                        // 执行起飞
+    void takeoffCheck();                          // 起飞成功检查
+    void setPoint(Eigen::Vector3d set_point);     // 航点飞行
+    bool reachCheck(Eigen::Vector3d check_point); // 到达检查
+
+    void pickupStart();   // 开始拾取
+    void pickupExecute(); // 抓取执行
+    void pickupCheck();   // 拾取成功检查
+
+    void avoidStart();   // 避障开始
+    void avoidExecute(); // 避障执行
+    void avoidCheck();   // 避障检查
+
+    void traceStart();   // 跟踪开始
+    void traceExecute(); // 追踪执行
+    void traceCheck();   // 跟踪检查
+
+    void landStart();   // 降落开始
+    void landExecute(); // 降落执行
+    void landCheck();   // 降落检查
+
+    void missionExecute(); // 任务执行（主循环）
 
 public:
-    MissionMaster();//构造函数
-    ~MissionMaster();//析构函数
+    MissionMaster();  // 构造函数
+    ~MissionMaster(); // 析构函数
 };
 
 #endif // MISSION_MASTER_H
