@@ -47,6 +47,9 @@ void MissionMaster::waitingTakeoff()
  */
 void MissionMaster::takeoffExecute()
 {
+    home_pose = current_pose;
+    loadWaypoints();
+    
     setPoint(TAKEOFF_WAYPOINT);
 
     while (ros::ok())
