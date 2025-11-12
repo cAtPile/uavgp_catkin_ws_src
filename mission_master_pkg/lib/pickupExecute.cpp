@@ -5,4 +5,5 @@
 void MissionMaster::pickupExecute()
 {
     //预留
+    current_mission_state = SUCCEED_PICKUP_STATE;
 }
