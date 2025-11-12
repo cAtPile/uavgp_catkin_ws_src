@@ -52,7 +52,7 @@ void MissionMaster::takeoffExecute()
     while (ros::ok())
     {
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(TOLERANCE_WAYPOINT)){
+        if (reachCheck(TAKEOFF_WAYPOINT)){
             ROS_INFO("Takeoff Success!");
             current_mission_state = SUCCEED_TAKEOFF_STATE;
             break;
