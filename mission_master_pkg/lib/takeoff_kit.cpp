@@ -53,7 +53,7 @@ void MissionMaster::takeoffExecute()
     {
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(TAKEOFF_WAYPOINT)){
-            ROS_INFO("Takeoff Success!");
+            ROS_INFO("Takeoff set Success!");
             current_mission_state = SUCCEED_TAKEOFF_STATE;
             break;
         }else{
@@ -70,13 +70,20 @@ void MissionMaster::takeoffExecute()
  */
 void MissionMaster::takeoffCheck(){
 
+    ROS_INFO("Takeoff check !");
+
+
     while(ros::ok()){
 
         //保持起飞定点
         setpoint_pub_.publish(temp_pose);
 
+            ROS_INFO("Takeoff ing ");
+
+
         if(reachCheck(TAKEOFF_WAYPOINT)){
             current_mission_state = SUCCEED_TAKEOFF_STATE;
+            ROS_INFO("Takeoff Success!");
             break;
         }
     }
