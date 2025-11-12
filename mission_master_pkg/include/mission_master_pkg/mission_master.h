@@ -61,8 +61,9 @@ enum mission_state
 
     START_LAND_STATE,   // 降落开始（飞往降落起始点）
     EXECUTE_LAND_STATE, // 执行降落（切换至AUTO.LAND模式）
-    SUCCEED_LAND_STATE  // 降落成功（已着陆并上锁）
+    SUCCEED_LAND_STATE , // 降落成功（已着陆并上锁）
 
+    ERROR_ARM_STATE, //解锁异常状态
     // 预留状态
 };
 
@@ -154,7 +155,7 @@ private:
     void loadParams();                            // 参数导入
     void loadWaypoints();                         // 航点导入
     void waitingTakeoff();                        // 等待起飞
-    void armSet();                                // 解锁
+    bool armSet();                                // 解锁
     void takeoffExecute();                        // 执行起飞
     void takeoffCheck();                          // 起飞成功检查
     void setPoint(Eigen::Vector3d set_point);     // 航点飞行

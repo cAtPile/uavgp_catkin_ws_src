@@ -2,14 +2,20 @@
 /**
  * @brief 解锁
  */
-void MissionMaster::armSet()
+bool MissionMaster::armSet()
 {
-    //超时检查 
-    // 解锁无人机
-    ROS_INFO("Attempting to arm the vehicle...");
 
-    // 创建解锁服务请求
     mavros_msgs::CommandBool arm_cmd;
-    arm_cmd.request.value = true; // true表示解锁，false表示上锁
-    arming_client.call(arm_cmd);
+    arm_cmd.request.value = true;
+
+    if (arming_client_.call(arm_cmd) && arm_cmd.response.success)
+    {
+        ROS_INFO("Vehicle armed successfully");
+        return true;
+    }
+    else
+    {
+        ROS_ERROR("Failed to arm vehicle");
+        return false;
+    }
 }

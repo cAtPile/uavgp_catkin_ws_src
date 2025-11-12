@@ -67,6 +67,8 @@ void MissionMaster::missionExecute()
         landCheck();
         break;
 
+        //其他异常状态
+
     default:
         // local_pos_pub.publish(trace_start_pose);
         break;
