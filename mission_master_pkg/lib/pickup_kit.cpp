@@ -1,14 +1,17 @@
-#include"mission_master_pkg/mission_master.h"
+#include "mission_master_pkg/mission_master.h"
 /**
  * @brief 抓取开始点
  */
-void MissionMaster::pickupStart(){
+void MissionMaster::pickupStart()
+{
 
     setPoint(PICKUP_START_WAYPOINT);
 
-    while(ros::ok()){
+    while (ros::ok())
+    {
         setpoint_pub_.publish(temp_pose);
-        if(reachCheck(PICKUP_START_WAYPOINT)){
+        if (reachCheck(PICKUP_START_WAYPOINT))
+        {
             ROS_INFO("Arrived at Pickup Start Point");
             current_mission_state = EXECUTE_PICKUP_STATE;
             break;
@@ -24,7 +27,8 @@ void MissionMaster::pickupStart(){
  */
 void MissionMaster::pickupExecute()
 {
-    //预留
+    ROS_INFO("EXE PICKUP");
+    // 预留
     current_mission_state = SUCCEED_PICKUP_STATE;
 }
 
@@ -33,13 +37,20 @@ void MissionMaster::pickupExecute()
  */
 void MissionMaster::pickupCheck()
 {
+    ROS_INFO("EXE PICK END");
+
     setPoint(PICKUP_END_WAYPOINT);
     while (ros::ok())
     {
+        ROS_INFO("EXE PICKUP END LOOP ");
+
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(PICKUP_END_WAYPOINT))
         {
+            ROS_INFO("EXE PICKUP END CHECK ");
+
             current_mission_state = START_AVOID_STATE;
+            break;
         }
 
         ros::spinOnce();
