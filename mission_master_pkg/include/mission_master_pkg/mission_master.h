@@ -174,6 +174,7 @@ private:
 public:
     MissionMaster();  // 构造函数
     ~MissionMaster(); // 析构函数
+    run(){missionExecute();}//主任务
 };
 
 #endif // MISSION_MASTER_H

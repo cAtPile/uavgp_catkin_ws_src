@@ -9,7 +9,7 @@ int main(int argc, char**argv)
     // 创建任务管理实例
     MissionMaster mission_master;
     // 任务循环
-    mission_master.missionExecute();
+    mission_master.run();
 
     ROS_INFO("Mission master node exited");
     return 0;
