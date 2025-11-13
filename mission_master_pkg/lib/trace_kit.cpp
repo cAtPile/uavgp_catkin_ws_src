@@ -192,7 +192,7 @@ bool MissionMaster::gripRelease()
 {
 
     // 等待 Action 服务器启动
-    if (!ac_.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
+    if (!gripper_ac_.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
     {
         ROS_ERROR("Unable to connect to gripper action server!");
         return false; // 连接不到服务器，返回失败
@@ -203,7 +203,7 @@ bool MissionMaster::gripRelease()
     goal.command = mission_master_pkg::GripGoal::RELEASE; // 命令为释放
 
     // 发送目标
-    ac_.sendGoal(goal);
+    gripper_ac_.sendGoal(goal);
 
     // 设置超时时间
     ros::Time start_time = ros::Time::now();
@@ -216,12 +216,12 @@ bool MissionMaster::gripRelease()
         if ((ros::Time::now() - start_time).toSec() > timeout_duration)
         {
             ROS_ERROR("Gripper release action did not finish before the timeout.");
-            ac_.cancelGoal(); // 超时取消目标
-            return false;    // 超时未完成释放，返回失败
+            gripper_ac_.cancelGoal(); // 超时取消目标
+            return false;     // 超时未完成释放，返回失败
         }
 
         // 检查是否完成释放任务
-        if (ac_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        if (gripper_ac_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
         {
             // 获取结果
             const mission_master_pkg::GripResult::ConstPtr &result = ac.getResult();
