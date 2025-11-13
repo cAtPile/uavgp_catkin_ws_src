@@ -4,7 +4,7 @@
  * @brief 构造函数
  */
 MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
-                                 gripper_ac_("gripper_action", true);
+                                 gripper_ac_("gripper_action", true)
 {
     //================初始化订阅者=======================
     state_sub_ = nh_.subscribe<mavros_msgs::State>("/mavros/state", 10, &MissionMaster::state_cb, this);                               // 状态
