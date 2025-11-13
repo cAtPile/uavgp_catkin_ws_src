@@ -39,7 +39,7 @@
 #include <actionlib/client/simple_action_client.h>
 #include "mavros_msgs/SetMode.h"
 #include <actionlib/client/simple_action_client.h>
-#include "mission_master_pkg/GripperAction.h"
+#include "mission_master_pkg/GripAction.h"
 
 // 任务状态枚举
 enum mission_state
