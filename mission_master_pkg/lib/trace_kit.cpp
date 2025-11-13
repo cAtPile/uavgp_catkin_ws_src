@@ -182,7 +182,7 @@ void MissionMaster::traceLoop()
             // 发送调整后的飞行指令
             setpoint_pub_.publish(trace_pose);
         }
-
+ 
         ros::spinOnce();
         rate_.sleep();
     }
