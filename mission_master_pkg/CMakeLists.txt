@@ -24,8 +24,7 @@ add_action_files(
   DIRECTORY action # 明确 Action 文件所在目录（必须存在）
   FILES
   Avoid.action
-  Pick.action
-  Trace.action
+  Grip.action
 )
 
 # # 生成消息（依赖 actionlib_msgs 等基础消息）
