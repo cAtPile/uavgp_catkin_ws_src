@@ -192,18 +192,18 @@ bool MissionMaster::gripRelease()
 {
 
     // 等待 Action 服务器启动
-    if (!ac.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
+    if (!ac_.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
     {
         ROS_ERROR("Unable to connect to gripper action server!");
         return false; // 连接不到服务器，返回失败
     }
 
     // 创建目标消息并设置命令为释放
-    your_package::GripperGoal goal;
-    goal.command = your_package::GripperGoal::RELEASE; // 命令为释放
+    mission_master_pkg::GripGoal goal;
+    goal.command = mission_master_pkg::GripGoal::RELEASE; // 命令为释放
 
     // 发送目标
-    ac.sendGoal(goal);
+    ac_.sendGoal(goal);
 
     // 设置超时时间
     ros::Time start_time = ros::Time::now();
@@ -216,15 +216,15 @@ bool MissionMaster::gripRelease()
         if ((ros::Time::now() - start_time).toSec() > timeout_duration)
         {
             ROS_ERROR("Gripper release action did not finish before the timeout.");
-            ac.cancelGoal(); // 超时取消目标
+            ac_.cancelGoal(); // 超时取消目标
             return false;    // 超时未完成释放，返回失败
         }
 
         // 检查是否完成释放任务
-        if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        if (ac_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
         {
             // 获取结果
-            const your_package::GripperResult::ConstPtr &result = ac.getResult();
+            const mission_master_pkg::GripResult::ConstPtr &result = ac.getResult();
 
             // 根据 cmd_success 判断释放是否成功
             if (result->cmd_success)
@@ -242,7 +242,7 @@ bool MissionMaster::gripRelease()
         // 处理回调函数（在等待过程中继续处理ROS消息）
         ros::spinOnce(); // 调用一次回调函数
 
-        // 控制循环的频率（如果有必要）
+        // 控制循环的频率
         ros::Rate(10).sleep(); // 例如设置频率为 10Hz，控制循环速度
     }
 
