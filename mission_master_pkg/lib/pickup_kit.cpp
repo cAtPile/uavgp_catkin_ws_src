@@ -191,54 +191,47 @@ void MissionMaster::pickLoop()
 
 bool MissionMaster::gripPick()
 {
-    ROS_INFO("Sending grip command via GripperAction...");
+    // 创建抓取的 Action 客户端
+    actionlib::SimpleActionClient<your_package::GripperAction> ac("gripper_action", true);
 
-    // 1. 等待爪子Action服务器连接（超时10秒）
-    if (!gripper_ac_.waitForServer(ros::Duration(10.0)))
+    // 等待 Action 服务器启动
+    if (!ac.waitForServer(ros::Duration(5.0)))  // 等待最多 5 秒
     {
-        ROS_ERROR("Gripper Action server not connected (timeout 10s)");
-        return false;
+        ROS_ERROR("Unable to connect to gripper action server!");
+        return false;  // 连接不到服务器，返回失败
     }
 
-    // 2. 构造抓取Goal（command=GRIP=0）
-    mission_master_pkg::GripperGoal goal;
-    goal.header.stamp = ros::Time::now();
-    goal.command = mission_master_pkg::GripperGoal::GRIP; // 执行抓取动作
+    // 创建目标消息并设置命令为抓取
+    your_package::GripperGoal goal;
+    goal.command = your_package::GripperGoal::GRIP;  // 命令为抓取
 
-    // 3. 发送Goal，并注册反馈回调函数
-    gripper_ac_.sendGoal(
-        goal,
-        actionlib::SimpleActionClient<mission_master_pkg::GripperAction>::SimpleDoneCallback(),
-        actionlib::SimpleActionClient<mission_master_pkg::GripperAction>::SimpleActiveCallback(),
-        boost::bind(&MissionMaster::gripperFeedbackCb, this, _1) // 绑定反馈回调
-    );
+    // 发送目标
+    ac.sendGoal(goal);
 
-    // 4. 等待动作完成（超时15秒，可根据实际爪子动作时间调整）
-    ROS_INFO("Waiting for gripper to complete grip action...");
-    bool finished_before_timeout = gripper_ac_.waitForResult(ros::Duration(15.0));
+    // 等待结果，最多等待 10 秒
+    bool finished_before_timeout = ac.waitForResult(ros::Duration(10.0));
 
-    // 5. 处理执行结果
-    if (!finished_before_timeout)
+    // 获取结果
+    if (finished_before_timeout)
     {
-        ROS_ERROR("Grip action timed out (15s)");
-        gripper_ac_.cancelGoal(); // 超时取消动作
-        return false;
-    }
+        // 获取结果
+        const your_package::GripperResult::ConstPtr& result = ac.getResult();
 
-    // 6. 检查Action执行结果
-    actionlib::SimpleClientGoalState state = gripper_ac_.getState();
-    mission_master_pkg::GripperResultConstPtr result = gripper_ac_.getResult();
-
-    if (state == actionlib::SimpleClientGoalState::SUCCEEDED && result->cmd_success)
-    {
-        ROS_INFO("Grip action succeeded! Gripper closed completely.");
-        return true;
+        // 根据 cmd_success 判断抓取是否成功
+        if (result->cmd_success)
+        {
+            ROS_INFO("Gripper successfully picked up the object!");
+            return true;  // 抓取成功，返回 true
+        }
+        else
+        {
+            ROS_WARN("Gripper failed to pick up the object!");
+            return false;  // 抓取失败，返回 false
+        }
     }
     else
     {
-        ROS_ERROR("Grip action failed! State: %s, Result: %s",
-                  state.toString().c_str(),
-                  result->cmd_success ? "success" : "failed");
-        return false;
+        ROS_ERROR("Gripper action did not finish before the timeout.");
+        return false;  // 超时未完成抓取，返回失败
     }
 }
