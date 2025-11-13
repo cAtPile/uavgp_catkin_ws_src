@@ -83,6 +83,7 @@ private:
     //---------订阅者---------------
     ros::Subscriber state_sub_;     // 无人机状态订阅者（/mavros/state）
     ros::Subscriber local_pos_sub_; // 局部位置订阅者（/mavros/local_position/pose）
+    ros::Subscriber camtrack_sub_; //视觉订阅
     // ros::Subscriber 视觉，爪子 预留
 
     //---------发布者----------------
@@ -138,10 +139,12 @@ private:
     geometry_msgs::PoseStamped current_pose; // 当前位置姿态
     geometry_msgs::PoseStamped temp_pose;    // 临时位置姿态
     mission_state current_mission_state;     // 当前任务状态
+    mission_master_pkg::CamTrack current_camtrack;//当前视觉
 
     //=========回调函数============
     void state_cb(const mavros_msgs::State::ConstPtr &msg) { current_state = *msg; }            // 无人机状态回调
     void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg) { current_pose = *msg; } // 本地位置回调
+    void camtrack_cb(const mission_master_pkg::CamTrack::ConstPtr &msg){ current_camtrack = *msg;}//视觉回调
 
     //=========私有函数============
     void loadParams();                            // 参数导入
