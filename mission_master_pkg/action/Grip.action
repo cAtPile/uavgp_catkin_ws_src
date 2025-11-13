@@ -1,0 +1,12 @@
+# Goal
+std_msgs/Header header    # 时间戳信息
+uint8 GRIP = 0            # 抓取动作
+uint8 RELEASE = 1         # 释放动作
+uint8 command             # 要执行的命令（0=抓取  1=释放）
+---
+# Result
+bool cmd_success          # 动作是否成功完成（True=成功抓取 False=失败（未抓到））
+---
+# Feedback
+std_msgs/Header header    # 时间戳信息（用于记录反馈时间）
+int16 gripper_position_deg    # 当前夹爪位置（角度）

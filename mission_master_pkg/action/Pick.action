@@ -1,9 +1,0 @@
-#pick.action
-#goal
-bool pick_enable#启动抓取
----
-#result
-bool pick_success#抓取成功
----
-#feedback
-uint8 pick_current_step#错误代码

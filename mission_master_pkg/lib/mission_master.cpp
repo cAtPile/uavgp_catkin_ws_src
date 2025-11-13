@@ -18,6 +18,9 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0)  // 初始化节点句柄�
     arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
+    //===============初始化action客户端=====================
+     gripper_ac_("gripper_action", true);
+
     // 初始化任务状态为等待起飞
     current_mission_state = WAITING_TAKEOFF_STATE;
 

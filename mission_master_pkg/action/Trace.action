@@ -1,9 +1,0 @@
-#trace.action
-#goal
-bool trace_enable#启动抓取
----
-#result
-bool trace_success#抓取成功
----
-#feedback
-uint8 trace_current_step#当前步骤

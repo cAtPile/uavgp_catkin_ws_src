@@ -34,42 +34,7 @@ void MissionMaster::traceStart()
 void MissionMaster::traceExecute()
 {
     ROS_INFO("T exe");
-    /*
-      # CamTrack.msg
 
-    std_msgs/Header header   # 时间戳、坐标系等信息，备用。
-    bool system_ok           # 系统健康状态（True=正常运行，False=检测异常）
-
-    int32 ball_num #检测到的ball数量 下面的xy坐标是节点决策后最适合抓取的哪个球的坐标 所以只输出一个坐标
-    float32 ball_x
-    float32 ball_y
-    float32 ball_dis #到ball的距离，由d455测量，留作后续开发的接口，现在都输出0
-
-    int32 car_num #检测到的car数量 下面的
-    float32[] car_x
-    float32[] car_y
-    float32[] car_dis #到car的距离，由d455测量，留作后续开发的接口，现在都输出0
-
-    bool in_gripper #用于检测夹爪是否成功抓取，True为夹爪有球，False为夹爪无球
-
-     */
-    //
-   // while (ros::ok())
-    {
-
-        /*
-                if (current_camtrack.system_ok && current_camtrack.car_num > 0)
-                {
-
-                    //汽车位置读取
-                    double car_x = current_camtrack.car_x[0];
-                    double car_y = current_camtrack.car_x[0];
-
-
-                }*/
-    }
-
-    // 预留
     current_mission_state = SUCCEED_TRACE_STATE;
 }
 
@@ -91,6 +56,115 @@ void MissionMaster::traceCheck()
             ROS_INFO("Arrived at trace End Point")
             current_mission_state = START_LAND_STATE;
             break;
+        }
+
+        ros::spinOnce();
+        rate_.sleep();
+    }
+}
+void MissionMaster::pickLoop()
+{
+    ROS_INFO("PICK LOOP IN");
+
+    // pick_pose 初始化
+    geometry_msgs::PoseStamped pick_pose;
+    pick_pose.header.frame_id = "map";
+    pick_pose.pose.orientation.x = 0;
+    pick_pose.pose.orientation.y = 0;
+    pick_pose.pose.orientation.z = 0;
+    pick_pose.pose.orientation.w = 1;
+
+    double ball_x, ball_y;
+    double track_center_x, track_center_y;
+    double rel_cam_x, rel_cam_y;
+    double cam_loc_rate;
+    double aim_high;
+    double tolerace_pix;
+    double step_size = 0.1; // 每次降落的步长
+
+    // 超时设置
+    double timeout_duration = 10.0; // 等待超时
+    double last_seen_time = ros::Time::now().toSec();
+
+    // 抓取主循环
+    while (ros::ok())
+    {
+        ROS_INFO("PICK LOOP pose");
+        // 如果目标没有被检测到，进入等待状态
+        if (current_camtrack.ball_num == 0)
+        {
+            double current_time = ros::Time::now().toSec();
+            // 如果超时，则跳出循环
+            if (current_time - last_seen_time > timeout_duration)
+            {
+                ROS_WARN("Target lost for too long, exiting pick loop...");
+                break;
+            }
+            // 如果目标丢失，更新最后一次看到目标的时间
+            last_seen_time = current_time;
+            ROS_INFO("Waiting for target...");
+            ros::spinOnce();
+            rate_.sleep();
+            continue;
+        }
+        else
+        {
+            // 目标重新检测到，重置等待计时器
+            last_seen_time = ros::Time::now().toSec();
+        }
+
+        // 获取像素坐标
+        ball_x = current_camtrack.ball_x;
+        ball_y = current_camtrack.ball_y;
+
+        // 计算相对坐标，减去图像中心
+        rel_cam_x = ball_x - track_center_x;
+        rel_cam_y = ball_y - track_center_y;
+
+        // 转化为实际坐标
+        rel_cam_x = rel_cam_x * cam_loc_rate;
+        rel_cam_y = rel_cam_y * cam_loc_rate;
+
+        // 计算当前高度，逐步下降
+        double current_height = current_pose.pose.position.z;
+        double target_height = current_height - step_size; // 目标高度逐步降低
+
+        // 如果高度已经降到目标高度以下，就将高度设置为目标高度
+        if (target_height < aim_high)
+        {
+            target_height = aim_high;
+        }
+
+        // 如果目标在容忍范围内，则进行抓取
+        if (rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix * tolerace_pix)
+        {
+            // 当前飞行路径调整到目标位置
+            pick_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
+            pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
+            pick_pose.pose.position.z = target_height; // 高度逐步调整
+
+            // 发送飞行指令
+            setpoint_pub_.publish(pick_pose);
+
+            // 检查是否到达目标位置并准备抓取
+            if (current_pose.pose.position.z <= aim_high && rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix)
+            {
+                if (gripPick()) // 调用抓取函数
+                {
+                    ROS_INFO("PICK LOOP out");
+                    break; // 跳出抓取循环
+                }
+            }
+        }
+        else
+        {
+            // 如果目标物体不在容忍范围内，继续调整位置
+            pick_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
+            pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
+            pick_pose.pose.position.z = target_height; // 高度保持逐步下降
+
+            // 发送调整后的飞行指令
+            setpoint_pub_.publish(pick_pose);
         }
 
         ros::spinOnce();

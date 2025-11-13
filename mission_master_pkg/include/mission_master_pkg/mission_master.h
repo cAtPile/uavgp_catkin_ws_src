@@ -38,7 +38,8 @@
 #include <Eigen/Dense>
 #include <actionlib/client/simple_action_client.h>
 #include "mavros_msgs/SetMode.h"
-// #include 避障/爪子/视觉相关 预留
+#include <actionlib/client/simple_action_client.h>
+#include "mission_master_pkg/GripperAction.h"
 
 // 任务状态枚举
 enum mission_state
@@ -83,7 +84,7 @@ private:
     //---------订阅者---------------
     ros::Subscriber state_sub_;     // 无人机状态订阅者（/mavros/state）
     ros::Subscriber local_pos_sub_; // 局部位置订阅者（/mavros/local_position/pose）
-    ros::Subscriber camtrack_sub_; //视觉订阅
+    ros::Subscriber camtrack_sub_;  // 视觉订阅
     // ros::Subscriber 视觉，爪子 预留
 
     //---------发布者----------------
@@ -96,12 +97,13 @@ private:
 
     //------------action------------
     // actionlib::SimpleActionClient 避障预留
+    actionlib::SimpleActionClient<mission_master_pkg::GripperAction> gripper_ac_; // 爪子Action客户端
 
     //=========飞行参数============
     double TOLERANCE_WAYPOINT; // 位置容忍值（到达判定阈值）
 
     //=========航点参数============
-    geometry_msgs::PoseStamped home_pose;           // 起飞降落点（home位置）
+    geometry_msgs::PoseStamped home_pose; // 起飞降落点（home位置）
 
     Eigen::Vector3d TAKEOFF_WAYPOINT;
     Eigen::Vector3d PICKUP_START_WAYPOINT;
@@ -135,16 +137,17 @@ private:
     double TRACE_END_POSE_Z;
 
     //=========数据缓存============
-    mavros_msgs::State current_state;        // 当前无人机状态
-    geometry_msgs::PoseStamped current_pose; // 当前位置姿态
-    geometry_msgs::PoseStamped temp_pose;    // 临时位置姿态
-    mission_state current_mission_state;     // 当前任务状态
-    mission_master_pkg::CamTrack current_camtrack;//当前视觉
+    mavros_msgs::State current_state;              // 当前无人机状态
+    geometry_msgs::PoseStamped current_pose;       // 当前位置姿态
+    geometry_msgs::PoseStamped temp_pose;          // 临时位置姿态
+    mission_state current_mission_state;           // 当前任务状态
+    mission_master_pkg::CamTrack current_camtrack; // 当前视觉
 
     //=========回调函数============
-    void state_cb(const mavros_msgs::State::ConstPtr &msg) { current_state = *msg; }            // 无人机状态回调
-    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg) { current_pose = *msg; } // 本地位置回调
-    void camtrack_cb(const mission_master_pkg::CamTrack::ConstPtr &msg){ current_camtrack = *msg;}//视觉回调
+    void state_cb(const mavros_msgs::State::ConstPtr &msg) { current_state = *msg; }                 // 无人机状态回调
+    void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg) { current_pose = *msg; }      // 本地位置回调
+    void camtrack_cb(const mission_master_pkg::CamTrack::ConstPtr &msg) { current_camtrack = *msg; } // 视觉回调
+    void gripperFeedbackCb(const mission_master_pkg::GripperFeedback::ConstPtr &feedback) {}
 
     //=========私有函数============
     void loadParams();                            // 参数导入
@@ -159,7 +162,8 @@ private:
     void pickupStart();   // 开始拾取
     void pickupExecute(); // 抓取执行
     void pickupCheck();   // 拾取成功检查
-    void pickLoop();
+    void pickLoop();      // 抓循环
+    bool gripPick();      // 爪子抓
 
     void avoidStart();   // 避障开始
     void avoidExecute(); // 避障执行
@@ -178,7 +182,7 @@ private:
 public:
     MissionMaster();  // 构造函数
     ~MissionMaster(); // 析构函数
-    void run();//主任务
+    void run();       // 主任务
 };
 
 #endif // MISSION_MASTER_H
