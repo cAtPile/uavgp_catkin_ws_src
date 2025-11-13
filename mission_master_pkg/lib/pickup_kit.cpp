@@ -191,7 +191,7 @@ void MissionMaster::pickLoop()
 bool MissionMaster::gripPick()
 {
     // 创建抓取的 Action 客户端
-    actionlib::SimpleActionClient<your_package::GripperAction> ac("gripper_action", true);
+    actionlib::SimpleActionClient<mission_master_pkg::GripAction> ac("gripper_action", true);
 
     // 等待 Action 服务器启动
     if (!ac.waitForServer(ros::Duration(5.0)))  // 等待最多 5 秒
@@ -201,8 +201,8 @@ bool MissionMaster::gripPick()
     }
 
     // 创建目标消息并设置命令为抓取
-    your_package::GripperGoal goal;
-    goal.command = your_package::GripperGoal::GRIP;  // 命令为抓取
+    mission_master_pkg::GripGoal goal;
+    goal.command = mission_master_pkg::GripGoal::GRIP;  // 命令为抓取
 
     // 发送目标
     ac.sendGoal(goal);
@@ -214,7 +214,7 @@ bool MissionMaster::gripPick()
     if (finished_before_timeout)
     {
         // 获取结果
-        const your_package::GripperResult::ConstPtr& result = ac.getResult();
+        const mission_master_pkg::GripResult::ConstPtr& result = ac.getResult();
 
         // 根据 cmd_success 判断抓取是否成功
         if (result->cmd_success)
