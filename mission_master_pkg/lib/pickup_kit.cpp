@@ -32,10 +32,10 @@ void MissionMaster::pickupExecute()
 {
     ROS_INFO("EXE PICKUP");
 
-    pickloop();
+    pickLoop();
 
-    temp_pose.pose.position.x = currernt_pose.pose.position.x;
-    temp_pose.pose.position.y = currernt_pose.pose.position.y;
+    temp_pose.pose.position.x = current_pose.pose.position.x;
+    temp_pose.pose.position.y = current_pose.pose.position.y;
     temp_pose.pose.position.z = 5.0 + home_pose.pose.position.z;
 
     while (ros::ok())

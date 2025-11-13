@@ -147,7 +147,7 @@ private:
     void state_cb(const mavros_msgs::State::ConstPtr &msg) { current_state = *msg; }                 // 无人机状态回调
     void local_pos_cb(const geometry_msgs::PoseStamped::ConstPtr &msg) { current_pose = *msg; }      // 本地位置回调
     void camtrack_cb(const mission_master_pkg::CamTrack::ConstPtr &msg) { current_camtrack = *msg; } // 视觉回调
-    void gripperFeedbackCb(const mission_master_pkg::GripperFeedback::ConstPtr &feedback) {}
+    void gripperFeedbackCb(const mission_master_pkg::GripFeedback::ConstPtr &feedback) {}
 
     //=========私有函数============
     void loadParams();                            // 参数导入
