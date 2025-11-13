@@ -173,6 +173,8 @@ private:
     void traceStart();   // 跟踪开始
     void traceExecute(); // 追踪执行
     void traceCheck();   // 跟踪检查
+    void traceLoop();    //
+    void gripRelease();  //
 
     void landStart();   // 降落开始
     void landExecute(); // 降落执行
