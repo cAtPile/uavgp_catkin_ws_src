@@ -51,7 +51,6 @@ void MissionMaster::pickupExecute()
         rate_.sleep();
     }
 
-    // 预留
 }
 
 /**

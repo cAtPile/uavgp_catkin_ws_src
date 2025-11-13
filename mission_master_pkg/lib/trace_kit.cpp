@@ -34,8 +34,24 @@ void MissionMaster::traceStart()
 void MissionMaster::traceExecute()
 {
     ROS_INFO("T exe");
+    traceLoop();
 
-    current_mission_state = SUCCEED_TRACE_STATE;
+    temp_pose.pose.position.x = currernt_pose.pose.position.x;
+    temp_pose.pose.position.y = currernt_pose.pose.position.y;
+    temp_pose.pose.position.z = 5.0 + home_pose.pose.position.z;
+
+    while (ros::ok())
+    {
+
+        setpoint_pub_.publish(temp_pose);
+        if (reachCheck(Eigen::Vector3d(temp_pose.pose.position.x, temp_pose.pose.position.y, temp_pose.pose.position.z)))
+        {
+            current_mission_state = SUCCEED_TRACE_STATE;
+            break;
+        }
+        ros::spinOnce();
+        rate_.sleep();
+    }
 }
 
 /**
@@ -62,23 +78,23 @@ void MissionMaster::traceCheck()
         rate_.sleep();
     }
 }
-void MissionMaster::pickLoop()
+void MissionMaster::traceLoop()
 {
-    ROS_INFO("PICK LOOP IN");
+    ROS_INFO("TR LOOP IN");
 
     // pick_pose 初始化
-    geometry_msgs::PoseStamped pick_pose;
-    pick_pose.header.frame_id = "map";
-    pick_pose.pose.orientation.x = 0;
-    pick_pose.pose.orientation.y = 0;
-    pick_pose.pose.orientation.z = 0;
-    pick_pose.pose.orientation.w = 1;
+    geometry_msgs::PoseStamped trace_pose;
+    trace_pose.header.frame_id = "map";
+    trace_pose.pose.orientation.x = 0;
+    trace_pose.pose.orientation.y = 0;
+    trace_pose.pose.orientation.z = 0;
+    trace_pose.pose.orientation.w = 1;
 
-    double ball_x, ball_y;
-    double track_center_x, track_center_y;
+    double car_x, car_y;
+    double trace_center_x, trace_center_y;
     double rel_cam_x, rel_cam_y;
     double cam_loc_rate;
-    double aim_high;
+    double aim_high_trace;
     double tolerace_pix;
     double step_size = 0.1; // 每次降落的步长
 
@@ -89,20 +105,20 @@ void MissionMaster::pickLoop()
     // 抓取主循环
     while (ros::ok())
     {
-        ROS_INFO("PICK LOOP pose");
+        ROS_INFO("TR LOOP pose");
         // 如果目标没有被检测到，进入等待状态
-        if (current_camtrack.ball_num == 0)
+        if (current_camtrack.car_num == 0)
         {
             double current_time = ros::Time::now().toSec();
             // 如果超时，则跳出循环
             if (current_time - last_seen_time > timeout_duration)
             {
-                ROS_WARN("Target lost for too long, exiting pick loop...");
+                ROS_WARN("Target lost for too long, exiting TR loop...");
                 break;
             }
             // 如果目标丢失，更新最后一次看到目标的时间
             last_seen_time = current_time;
-            ROS_INFO("Waiting for target...");
+            ROS_INFO("Waiting for target...TR");
             ros::spinOnce();
             rate_.sleep();
             continue;
@@ -114,12 +130,12 @@ void MissionMaster::pickLoop()
         }
 
         // 获取像素坐标
-        ball_x = current_camtrack.ball_x;
-        ball_y = current_camtrack.ball_y;
+        car_x = current_camtrack.car_x[0];
+        car_y = current_camtrack.car_y[0];
 
         // 计算相对坐标，减去图像中心
-        rel_cam_x = ball_x - track_center_x;
-        rel_cam_y = ball_y - track_center_y;
+        rel_cam_x = car_x - trace_center_x;
+        rel_cam_y = car_y - trace_center_y;
 
         // 转化为实际坐标
         rel_cam_x = rel_cam_x * cam_loc_rate;
@@ -130,44 +146,105 @@ void MissionMaster::pickLoop()
         double target_height = current_height - step_size; // 目标高度逐步降低
 
         // 如果高度已经降到目标高度以下，就将高度设置为目标高度
-        if (target_height < aim_high)
+        if (target_height < aim_high_trace)
         {
-            target_height = aim_high;
+            target_height = aim_high_trace;
         }
 
         // 如果目标在容忍范围内，则进行抓取
         if (rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix * tolerace_pix)
         {
             // 当前飞行路径调整到目标位置
-            pick_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
-            pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
-            pick_pose.pose.position.z = target_height; // 高度逐步调整
+            trace_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
+            trace_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
+            trace_pose.pose.position.z = target_height; // 高度逐步调整
 
             // 发送飞行指令
-            setpoint_pub_.publish(pick_pose);
+            setpoint_pub_.publish(trace_pose);
 
             // 检查是否到达目标位置并准备抓取
-            if (current_pose.pose.position.z <= aim_high && rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix)
+            if (current_pose.pose.position.z <= aim_high_trace && rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix)
             {
-                if (gripPick()) // 调用抓取函数
+                if (gripRelease()) // 调用释放函数
                 {
-                    ROS_INFO("PICK LOOP out");
-                    break; // 跳出抓取循环
+                    ROS_INFO("TR LOOP out");
+                    break; // 跳出跟踪循环
                 }
             }
         }
         else
         {
             // 如果目标物体不在容忍范围内，继续调整位置
-            pick_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
-            pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
-            pick_pose.pose.position.z = target_height; // 高度保持逐步下降
+            trace_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
+            trace_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
+            trace_pose.pose.position.z = target_height; // 高度保持逐步下降
 
             // 发送调整后的飞行指令
-            setpoint_pub_.publish(pick_pose);
+            setpoint_pub_.publish(trace_pose);
         }
 
         ros::spinOnce();
         rate_.sleep();
     }
+}
+
+bool MissionMaster::gripRelease()
+{
+
+    // 等待 Action 服务器启动
+    if (!ac.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
+    {
+        ROS_ERROR("Unable to connect to gripper action server!");
+        return false; // 连接不到服务器，返回失败
+    }
+
+    // 创建目标消息并设置命令为释放
+    your_package::GripperGoal goal;
+    goal.command = your_package::GripperGoal::RELEASE; // 命令为释放
+
+    // 发送目标
+    ac.sendGoal(goal);
+
+    // 设置超时时间
+    ros::Time start_time = ros::Time::now();
+    double timeout_duration = 10.0; // 等待超时时间，单位：秒
+
+    // 等待释放完成的过程中，允许处理回调函数
+    while (ros::ok())
+    {
+        // 检查是否超时
+        if ((ros::Time::now() - start_time).toSec() > timeout_duration)
+        {
+            ROS_ERROR("Gripper release action did not finish before the timeout.");
+            ac.cancelGoal(); // 超时取消目标
+            return false;    // 超时未完成释放，返回失败
+        }
+
+        // 检查是否完成释放任务
+        if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        {
+            // 获取结果
+            const your_package::GripperResult::ConstPtr &result = ac.getResult();
+
+            // 根据 cmd_success 判断释放是否成功
+            if (result->cmd_success)
+            {
+                ROS_INFO("Gripper successfully released the object!");
+                return true; // 释放成功，返回 true
+            }
+            else
+            {
+                ROS_WARN("Gripper failed to release the object!");
+                return false; // 释放失败，返回 false
+            }
+        }
+
+        // 处理回调函数（在等待过程中继续处理ROS消息）
+        ros::spinOnce(); // 调用一次回调函数
+
+        // 控制循环的频率（如果有必要）
+        ros::Rate(10).sleep(); // 例如设置频率为 10Hz，控制循环速度
+    }
+
+    return false; // 如果退出了循环，表示某种错误发生
 }
