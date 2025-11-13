@@ -62,3 +62,25 @@ void MissionMaster::avoidCheck()
         rate_.sleep();
     }
 }
+
+void avoidLoop(double avoid_goal_x,double avoid_goal_y,double avoid_goal_z){
+    //以geometry_msgs/PoseStamped的形式发送到/mission_avoid/goal
+    geometry_msgs::PoseStamped::avoid_goal;
+    avoid_goal.header.stamp=ros::Time::now();
+    avoid_goal.header.frame_id="map";
+    avoid_gaol.pose.position.x=avoid_goal_x;
+    avoid_gaol.pose.position.y=avoid_goal_y;
+    avoid_gaol.pose.position.z=avoid_goal_z;
+    avoid_gaol.pose.orientation.x=0;
+    avoid_gaol.pose.orientation.y=0;
+    avoid_gaol.pose.orientation.z=0;
+    avoid_gaol.pose.orientation.2=1;
+    
+
+
+
+
+
+
+    //
+}
