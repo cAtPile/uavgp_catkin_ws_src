@@ -224,7 +224,7 @@ bool MissionMaster::gripRelease()
         if (gripper_ac_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
         {
             // 获取结果
-            const mission_master_pkg::GripResult::ConstPtr &result = ac.getResult();
+            const mission_master_pkg::GripResult::ConstPtr &result = gripper_ac_.getResult();
 
             // 根据 cmd_success 判断释放是否成功
             if (result->cmd_success)
