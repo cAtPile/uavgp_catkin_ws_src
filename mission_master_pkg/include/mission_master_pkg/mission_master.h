@@ -97,7 +97,7 @@ private:
 
     //------------action------------
     // actionlib::SimpleActionClient 避障预留
-    actionlib::SimpleActionClient<mission_master_pkg::GripperAction> gripper_ac_; // 爪子Action客户端
+    actionlib::SimpleActionClient<mission_master_pkg::GripAction> gripper_ac_; // 爪子Action客户端
 
     //=========飞行参数============
     double TOLERANCE_WAYPOINT; // 位置容忍值（到达判定阈值）
