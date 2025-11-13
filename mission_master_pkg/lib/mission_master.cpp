@@ -3,12 +3,13 @@
 /**
  * @brief 构造函数
  */
-MissionMaster::MissionMaster() : nh_(""), rate_(20.0)  // 初始化节点句柄和20Hz循环频率
+MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
+                                 gripper_ac_("gripper_action", true);
 {
     //================初始化订阅者=======================
-    state_sub_ = nh_.subscribe<mavros_msgs::State>("/mavros/state", 10, &MissionMaster::state_cb, this);//状态
-    local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, &MissionMaster::local_pos_cb, this);//位置
-    camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack> ("/cam_tracker/info", 10,&MissionMaster::camtrack_cb,this );//视觉
+    state_sub_ = nh_.subscribe<mavros_msgs::State>("/mavros/state", 10, &MissionMaster::state_cb, this);                               // 状态
+    local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, &MissionMaster::local_pos_cb, this); // 位置
+    camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack>("/cam_tracker/info", 10, &MissionMaster::camtrack_cb, this);           // 视觉
 
     //================初始化发布者======================
     setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>(
@@ -18,23 +19,21 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0)  // 初始化节点句柄�
     arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
-    //===============初始化action客户端=====================
-     gripper_ac_("gripper_action", true);
-
     // 初始化任务状态为等待起飞
     current_mission_state = WAITING_TAKEOFF_STATE;
 
     // 等待无人机连接
-    while (nh_.ok() && !current_state.connected) {
+    while (nh_.ok() && !current_state.connected)
+    {
         ros::spinOnce();
         rate_.sleep();
     }
-    
-    //加载参数
+
+    // 加载参数
     loadParams();
 
     ROS_INFO("MissionMaster initialized. Drone connected.");
-}  
+}
 
 /**
  * @brief 析构函数
@@ -47,14 +46,15 @@ MissionMaster::~MissionMaster()
 /**
  * @brief 参数加载
  */
-void MissionMaster::loadParams(){
+void MissionMaster::loadParams()
+{
 
     home_pose = current_pose;
 
-    //飞行参数
+    // 飞行参数
     nh_.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
 
-    //航点参数
+    // 航点参数
     nh_.param("takeoff_pose_x", TAKEOFF_POSE_X, 0.0);
     nh_.param("takeoff_pose_y", TAKEOFF_POSE_Y, 0.0);
     nh_.param("takeoff_pose_z", TAKEOFF_POSE_Z, 1.0);
@@ -76,5 +76,4 @@ void MissionMaster::loadParams(){
     nh_.param("trace_end_pose_x", TRACE_END_POSE_X, 0.0);
     nh_.param("trace_end_pose_y", TRACE_END_POSE_Y, 0.0);
     nh_.param("trace_end_pose_z", TRACE_END_POSE_Z, 1.0);
-
 }
