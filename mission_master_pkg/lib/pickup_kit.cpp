@@ -74,7 +74,7 @@ void MissionMaster::pickupCheck()
     }
 }
 
-pickLoop()
+void MissionMaster::pickLoop()
 {
     ROS_INFO("PICK LOOP IN")
 
@@ -95,8 +95,8 @@ pickLoop()
     double aim_high;
     double pick_time;
     double pick_land_vel;
+    double tolerace_pix;
 
-    ros::time loop_start_time = ros::Time::now();
     // 抓取主循环
     while (ros::ok())
     {
@@ -115,12 +115,19 @@ pickLoop()
         rel_cam_y = rel_cam_y * cam_loc_rate;
 
         // 计算目标点
-        via_x = current_pose.pose.position.x - rel_cam_x;
-        via_y = current_pose.pose.position.y - rel_cam_y;
 
-        // 计算高度via_z
-        pick_time = (ros::Time::now() - loop_start_time).toSec();
-        via_z = pick_land_vel * pick_time;
+        if (rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix * tolerace_pix)
+        {
+            via_x = current_pose.pose.position.x;
+            via_y = current_pose.pose.position.y;
+            via_z = home_pose.pose.position.x + aim_high;
+        }
+        else
+        {
+            via_x = current_pose.pose.position.x - rel_cam_x;
+            via_y = current_pose.pose.position.y - rel_cam_y;
+            via_z = current_pose.pose.position.z;
+        }
 
         // 构造点
         pick_pose.pose.position.x = via_x;
@@ -131,7 +138,7 @@ pickLoop()
         setpoint_pub_.publish(pick_pose);
 
         // 到达目标高度
-        if (current_pose.pose.position.z <= aim_high)
+        if (current_pose.pose.position.z <= aim_high && rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix)
         {
             gripPick();
         }

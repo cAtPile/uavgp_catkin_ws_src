@@ -159,6 +159,7 @@ private:
     void pickupStart();   // 开始拾取
     void pickupExecute(); // 抓取执行
     void pickupCheck();   // 拾取成功检查
+    void pickLoop();
 
     void avoidStart();   // 避障开始
     void avoidExecute(); // 避障执行
