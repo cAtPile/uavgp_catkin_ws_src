@@ -99,8 +99,8 @@ void MissionMaster::avoidLoop(double avoid_goal_x,double avoid_goal_y,double avo
     
     
     //接受ego消息
-    /**
-     * #PositionCommand.msg
+
+     #PositionCommand.msg
 
 Header header
 geometry_msgs/Point position
@@ -123,12 +123,12 @@ uint8 TRAJECTORY_STATUS_IMPOSSIBLE = 7
 
 # Its ID number will start from 1, allowing you comparing it with 0.
 uint8 trajectory_flag
-     */
+
 
     //ego消息转换
     
     //发布到mav
 
     //到达退出
-}
+//}
 */
