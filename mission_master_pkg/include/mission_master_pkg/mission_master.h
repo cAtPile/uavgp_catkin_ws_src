@@ -101,15 +101,15 @@ private:
     actionlib::SimpleActionClient<mission_master_pkg::GripAction> gripper_ac_; // 爪子Action客户端
 
     //=========飞行参数============
-    double TOLERANCE_WAYPOINT;               // 位置容忍值（到达判定阈值）
-    double trace_center_x, trace_center_y;   // 跟踪相机中央
-    double cam_loc_rate;                     // 相机世界转换率
-    double aim_high_trace;                   // 跟踪目标高度
-    double tolerace_pix;                     // 容忍误差
-    double step_size_trace;                  // 跟踪降落步长
-    double pickup_center_x, pickup_center_y; // 抓取相机中央
-    double pickup_aim_high;                  // 抓取目标高度
-    double pickup_step_size = 0.1;           // 每次降落的步长
+    double TOLERANCE_WAYPOINT;                           // 位置容忍值（到达判定阈值）
+    double trace_center_x = 320, trace_center_y = 320;   // 跟踪相机中央
+    double cam_loc_rate = 0.001;                         // 相机世界转换率
+    double aim_high_trace = 0.1;                         // 跟踪目标高度
+    double tolerace_pix = 10;                            // 容忍误差
+    double step_size_trace = 0.1;                        // 跟踪降落步长
+    double pickup_center_x = 320, pickup_center_y = 320; // 抓取相机中央
+    double pickup_aim_high = 0.1;                        // 抓取目标高度
+    double pickup_step_size = 0.1;                       // 每次降落的步长
 
     //=========航点参数============
     geometry_msgs::PoseStamped home_pose; // 起飞降落点（home位置）
@@ -174,9 +174,10 @@ private:
     void pickLoop();      // 抓循环
     bool gripPick();      // 爪子抓
 
-    void avoidStart();   // 避障开始
-    void avoidExecute(); // 避障执行
-    void avoidCheck();   // 避障检查
+    void avoidStart();                                                             // 避障开始
+    void avoidExecute();                                                           // 避障执行
+    void avoidCheck();                                                             // 避障检查
+    void avoidLoop(double avoid_goal_x, double avoid_goal_y, double avoid_goal_z); // 避障循环
 
     void traceStart();   // 跟踪开始
     void traceExecute(); // 追踪执行

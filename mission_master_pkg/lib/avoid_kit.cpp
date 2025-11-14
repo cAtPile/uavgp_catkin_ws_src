@@ -63,7 +63,7 @@ void MissionMaster::avoidCheck()
     }
 }
 
-void avoidLoop(double avoid_goal_x,double avoid_goal_y,double avoid_goal_z){
+void MissionMaster::avoidLoop(double avoid_goal_x,double avoid_goal_y,double avoid_goal_z){
 
     //以geometry_msgs/PoseStamped的形式发送到/mission_avoid/goal
     geometry_msgs::PoseStamped::avoid_goal;
@@ -91,9 +91,9 @@ void avoidLoop(double avoid_goal_x,double avoid_goal_y,double avoid_goal_z){
 
     while (ros::ok())
     {
-        temp_pose.pose.position.x=//
-        temp_pose.pose.position.x=//
-        temp_pose.pose.position.x=//
+        temp_pose.pose.position.x=0;//
+        temp_pose.pose.position.x=0;//
+        temp_pose.pose.position.x=0;//
 
     }
     
