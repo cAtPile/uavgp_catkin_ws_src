@@ -50,7 +50,6 @@ void MissionMaster::pickupExecute()
         ros::spinOnce();
         rate_.sleep();
     }
-
 }
 
 /**
@@ -91,12 +90,7 @@ void MissionMaster::pickLoop()
     pick_pose.pose.orientation.w = 1;
 
     double ball_x, ball_y;
-    double track_center_x, track_center_y;
     double rel_cam_x, rel_cam_y;
-    double cam_loc_rate;
-    double aim_high;
-    double tolerace_pix;
-    double step_size = 0.1; // 每次降落的步长
 
     // 超时设置
     double timeout_duration = 10.0; // 等待超时
@@ -134,8 +128,8 @@ void MissionMaster::pickLoop()
         ball_y = current_camtrack.ball_y;
 
         // 计算相对坐标，减去图像中心
-        rel_cam_x = ball_x - track_center_x;
-        rel_cam_y = ball_y - track_center_y;
+        rel_cam_x = ball_x - pickup_center_x;
+        rel_cam_y = ball_y - pickup_center_y;
 
         // 转化为实际坐标
         rel_cam_x = rel_cam_x * cam_loc_rate;
@@ -143,12 +137,12 @@ void MissionMaster::pickLoop()
 
         // 计算当前高度，逐步下降
         double current_height = current_pose.pose.position.z;
-        double target_height = current_height - step_size; // 目标高度逐步降低
+        double target_height = current_height - pickup_step_size; // 目标高度逐步降低
 
         // 如果高度已经降到目标高度以下，就将高度设置为目标高度
-        if (target_height < aim_high)
+        if (target_height < pickup_aim_high)
         {
-            target_height = aim_high;
+            target_height = pickup_aim_high;
         }
 
         // 如果目标在容忍范围内，则进行抓取
@@ -163,7 +157,7 @@ void MissionMaster::pickLoop()
             setpoint_pub_.publish(pick_pose);
 
             // 检查是否到达目标位置并准备抓取
-            if (current_pose.pose.position.z <= aim_high && rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix)
+            if (current_pose.pose.position.z <= pickup_aim_high && rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix)
             {
                 if (gripPick()) // 调用抓取函数
                 {
@@ -194,15 +188,15 @@ bool MissionMaster::gripPick()
     actionlib::SimpleActionClient<mission_master_pkg::GripAction> ac("gripper_action", true);
 
     // 等待 Action 服务器启动
-    if (!ac.waitForServer(ros::Duration(5.0)))  // 等待最多 5 秒
+    if (!ac.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
     {
         ROS_ERROR("Unable to connect to gripper action server!");
-        return false;  // 连接不到服务器，返回失败
+        return false; // 连接不到服务器，返回失败
     }
 
     // 创建目标消息并设置命令为抓取
     mission_master_pkg::GripGoal goal;
-    goal.command = mission_master_pkg::GripGoal::GRIP;  // 命令为抓取
+    goal.command = mission_master_pkg::GripGoal::GRIP; // 命令为抓取
 
     // 发送目标
     ac.sendGoal(goal);
@@ -214,23 +208,23 @@ bool MissionMaster::gripPick()
     if (finished_before_timeout)
     {
         // 获取结果
-        const mission_master_pkg::GripResult::ConstPtr& result = ac.getResult();
+        const mission_master_pkg::GripResult::ConstPtr &result = ac.getResult();
 
         // 根据 cmd_success 判断抓取是否成功
         if (result->cmd_success)
         {
             ROS_INFO("Gripper successfully picked up the object!");
-            return true;  // 抓取成功，返回 true
+            return true; // 抓取成功，返回 true
         }
         else
         {
             ROS_WARN("Gripper failed to pick up the object!");
-            return false;  // 抓取失败，返回 false
+            return false; // 抓取失败，返回 false
         }
     }
     else
     {
         ROS_ERROR("Gripper action did not finish before the timeout.");
-        return false;  // 超时未完成抓取，返回失败
+        return false; // 超时未完成抓取，返回失败
     }
 }

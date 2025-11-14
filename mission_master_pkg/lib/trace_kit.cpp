@@ -91,12 +91,7 @@ void MissionMaster::traceLoop()
     trace_pose.pose.orientation.w = 1;
 
     double car_x, car_y;
-    double trace_center_x, trace_center_y;
     double rel_cam_x, rel_cam_y;
-    double cam_loc_rate;
-    double aim_high_trace;
-    double tolerace_pix;
-    double step_size = 0.1; // 每次降落的步长
 
     // 超时设置
     double timeout_duration = 10.0; // 等待超时
@@ -143,7 +138,7 @@ void MissionMaster::traceLoop()
 
         // 计算当前高度，逐步下降
         double current_height = current_pose.pose.position.z;
-        double target_height = current_height - step_size; // 目标高度逐步降低
+        double target_height = current_height - step_size_trace; // 目标高度逐步降低
 
         // 如果高度已经降到目标高度以下，就将高度设置为目标高度
         if (target_height < aim_high_trace)
@@ -182,7 +177,7 @@ void MissionMaster::traceLoop()
             // 发送调整后的飞行指令
             setpoint_pub_.publish(trace_pose);
         }
- 
+
         ros::spinOnce();
         rate_.sleep();
     }
@@ -217,7 +212,7 @@ bool MissionMaster::gripRelease()
         {
             ROS_ERROR("Gripper release action did not finish before the timeout.");
             gripper_ac_.cancelGoal(); // 超时取消目标
-            return false;     // 超时未完成释放，返回失败
+            return false;             // 超时未完成释放，返回失败
         }
 
         // 检查是否完成释放任务
