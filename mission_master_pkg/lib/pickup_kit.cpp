@@ -4,13 +4,13 @@
  */
 void MissionMaster::pickupStart()
 {
-    ROS_INFO("P start");
+    ROS_DUBUG("P start");
 
     setPoint(PICKUP_START_WAYPOINT);
 
     while (ros::ok())
     {
-        ROS_INFO("P loop");
+        ROS_DEBUG("P loop");
 
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(PICKUP_START_WAYPOINT))
@@ -30,7 +30,7 @@ void MissionMaster::pickupStart()
  */
 void MissionMaster::pickupExecute()
 {
-    ROS_INFO("EXE PICKUP");
+    ROS_DEBUG("EXE PICKUP");
 
     pickLoop();
 
@@ -62,7 +62,7 @@ void MissionMaster::pickupCheck()
     setPoint(PICKUP_END_WAYPOINT);
     while (ros::ok())
     {
-        ROS_INFO("EXE PICKUP END LOOP ");
+        ROS_DUBUG("EXE PICKUP END LOOP ");
 
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(PICKUP_END_WAYPOINT))
@@ -93,13 +93,13 @@ void MissionMaster::pickLoop()
     double rel_cam_x, rel_cam_y;
 
     // 超时设置
-    double timeout_duration = 10.0; // 等待超时
+    double timeout_duration = 1.0; // 等待超时
     double last_seen_time = ros::Time::now().toSec();
 
     // 抓取主循环
     while (ros::ok())
     {
-        ROS_INFO("PICK LOOP pose");
+        ROS_DUBUG("PICK LOOP pose");
         // 如果目标没有被检测到，进入等待状态
         if (current_camtrack.ball_num == 0)
         {

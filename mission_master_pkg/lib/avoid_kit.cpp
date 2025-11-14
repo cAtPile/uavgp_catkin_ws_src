@@ -8,13 +8,13 @@
  */
 void MissionMaster::avoidStart()
 {
-    ROS_INFO("A start");
+    ROS_DEBUG("A start");
 
     setPoint(AVOID_START_WAYPOINT);
 
     while (ros::ok())
     {
-        ROS_INFO("A Loop");
+        ROS_DEBUG("A Loop");
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(AVOID_START_WAYPOINT))
         {
@@ -34,6 +34,7 @@ void MissionMaster::avoidStart()
 void MissionMaster::avoidExecute()
 {
     ROS_INFO("A exe");
+    setpoint_pub_.publish(current_pose);
 
     // 预留
     current_mission_state = SUCCEED_AVOID_STATE;
@@ -44,17 +45,19 @@ void MissionMaster::avoidExecute()
  */
 void MissionMaster::avoidCheck()
 {
-    ROS_INFO("A check");
+    ROS_DEBUG("A check");
 
     setPoint(AVOID_END_WAYPOINT);
     while (ros::ok())
     {
-        ROS_INFO("Ac Loop");
+        ROS_DEBUG("Ac Loop");
 
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(AVOID_END_WAYPOINT))
         {
             current_mission_state = START_TRACE_STATE;
+            setpoint_pub_.publish(current_pose);
+
             break;
         }
 
@@ -96,8 +99,8 @@ void MissionMaster::avoidLoop(double avoid_goal_x,double avoid_goal_y,double avo
         temp_pose.pose.position.x=0;//
 
     }
-    
-    
+
+
     //接受ego消息
 
      #PositionCommand.msg
@@ -109,7 +112,7 @@ geometry_msgs/Vector3 acceleration
 float64 yaw
 float64 yaw_dot
 float64[3] kx
-float64[3] kv 
+float64[3] kv
 
 uint32 trajectory_id
 
@@ -126,7 +129,7 @@ uint8 trajectory_flag
 
 
     //ego消息转换
-    
+
     //发布到mav
 
     //到达退出

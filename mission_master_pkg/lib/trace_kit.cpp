@@ -94,7 +94,7 @@ void MissionMaster::traceLoop()
     double rel_cam_x, rel_cam_y;
 
     // 超时设置
-    double timeout_duration = 10.0; // 等待超时
+    double timeout_duration = 1.0; // 等待超时
     double last_seen_time = ros::Time::now().toSec();
 
     // 抓取主循环
