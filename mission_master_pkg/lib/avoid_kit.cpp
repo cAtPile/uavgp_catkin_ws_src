@@ -62,7 +62,7 @@ void MissionMaster::avoidCheck()
         rate_.sleep();
     }
 }
-
+/*
 void MissionMaster::avoidLoop(double avoid_goal_x,double avoid_goal_y,double avoid_goal_z){
 
     //以geometry_msgs/PoseStamped的形式发送到/mission_avoid/goal
@@ -131,3 +131,4 @@ uint8 trajectory_flag
 
     //到达退出
 }
+*/
