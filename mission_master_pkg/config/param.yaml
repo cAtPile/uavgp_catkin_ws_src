@@ -29,3 +29,11 @@ trace_start_pose_z: 1.0
 trace_end_pose_x: 0.0
 trace_end_pose_y: 1.0
 trace_end_pose_z: 1.0
+
+# 话题参数
+MAV_state:"/mavros/state"
+MAV_localPositionPose", MAV_LOCAL_POSITION_POSE, "/mavros/local_position/pose"
+MAV_cmdArming", MAV_CMD_ARMING, "/mavros/cmd/arming"
+MAV_setMode", MAV_SET_MODE, "/mavros/set_mode"
+MAV_setpointPositionLocal", MAV_SETPOINT_POSITION_LOCAL, "/mavros/setpoint_position/local"
+CAM_info", CAM_INFO, "/cam_tracker/info"
