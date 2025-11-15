@@ -100,6 +100,15 @@ private:
     // actionlib::SimpleActionClient 避障预留
     actionlib::SimpleActionClient<mission_master_pkg::GripAction> gripper_ac_; // 爪子Action客户端
 
+    //=========话题参数============
+    std::string MAV_STATE;
+    std::string MAV_LOCAL_POSITION_POSE;
+    std::string MAV_CMD_ARMING;
+    std::string MAV_SET_MODE;
+    std::string MAV_SETPOINT_POSITION_LOCAL;
+
+    std::string CAM_INFO;
+
     //=========飞行参数============
     double TOLERANCE_WAYPOINT;                           // 位置容忍值（到达判定阈值）
     double trace_center_x = 320, trace_center_y = 320;   // 跟踪相机中央
