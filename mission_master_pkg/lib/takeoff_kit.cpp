@@ -119,25 +119,39 @@ bool MissionMaster::armSet()
 void MissionMaster::loadWaypoints()
 {
 
-    TAKEOFF_WAYPOINT = Eigen::Vector3d(TAKEOFF_POSE_X + home_pose.pose.position.x,
-                                       TAKEOFF_POSE_Y + home_pose.pose.position.y,
-                                       TAKEOFF_POSE_Z + home_pose.pose.position.z);
-    PICKUP_START_WAYPOINT = Eigen::Vector3d(PICKUP_START_POSE_X + home_pose.pose.position.x,
-                                            PICKUP_START_POSE_Y + home_pose.pose.position.y,
-                                            PICKUP_START_POSE_Z + home_pose.pose.position.z);
-    PICKUP_END_WAYPOINT = Eigen::Vector3d(PICKUP_END_POSE_X + home_pose.pose.position.x,
-                                          PICKUP_END_POSE_Y + home_pose.pose.position.y,
-                                          PICKUP_END_POSE_Z + home_pose.pose.position.z);
-    AVOID_START_WAYPOINT = Eigen::Vector3d(AVOID_START_POSE_X + home_pose.pose.position.x,
-                                           AVOID_START_POSE_Y + home_pose.pose.position.y,
-                                           AVOID_START_POSE_Z + home_pose.pose.position.z);
-    AVOID_END_WAYPOINT = Eigen::Vector3d(AVOID_END_POSE_X + home_pose.pose.position.x,
-                                         AVOID_END_POSE_Y + home_pose.pose.position.y,
-                                         AVOID_END_POSE_Z + home_pose.pose.position.z);
-    TRACE_START_WAYPOINT = Eigen::Vector3d(TRACE_START_POSE_X + home_pose.pose.position.x,
-                                           TRACE_START_POSE_Y + home_pose.pose.position.y,
-                                           TRACE_START_POSE_Z + home_pose.pose.position.z);
-    TRACE_END_WAYPOINT = Eigen::Vector3d(TRACE_END_POSE_X + home_pose.pose.position.x,
-                                         TRACE_END_POSE_Y + home_pose.pose.position.y,
-                                         TRACE_END_POSE_Z + home_pose.pose.position.z);
+    takeoff_waypoint_re = {
+        takeoff_waypoint_v[0] + home_pose.pose.position.x,
+        takeoff_waypoint_v[1] + home_pose.pose.position.y,
+        takeoff_waypoint_v[2] + home_pose.pose.position.z};
+
+    pickup_start_waypoint_re = {
+        pickup_start_waypoint_v[0] + home_pose.pose.position.x,
+        pickup_start_waypoint_v[1] + home_pose.pose.position.y,
+        pickup_start_waypoint_v[2] + home_pose.pose.position.z};
+
+    pickup_end_waypoint_re = {
+        pickup_end_waypoint_v[0] + home_pose.pose.position.x,
+        pickup_end_waypoint_v[1] + home_pose.pose.position.y,
+        pickup_end_waypoint_v[2] + home_pose.pose.position.z};
+
+    avoid_start_waypoint_re = {
+        avoid_start_waypoint_v[0] + home_pose.pose.position.x,
+        avoid_start_waypoint_v[1] + home_pose.pose.position.y,
+        avoid_start_waypoint_v[2] + home_pose.pose.position.z};
+
+    avoid_end_waypoint_re = {
+        avoid_end_waypoint_v[0] + home_pose.pose.position.x,
+        avoid_end_waypoint_v[1] + home_pose.pose.position.y,
+        avoid_end_waypoint_v[2] + home_pose.pose.position.z};
+
+    trace_start_waypoint_re = {
+        trace_start_waypoint_v[0] + home_pose.pose.position.x,
+        trace_start_waypoint_v[1] + home_pose.pose.position.y,
+        trace_start_waypoint_v[2] + home_pose.pose.position.z};
+
+    trace_end_waypoint_re = {
+        trace_end_waypoint_v[0] + home_pose.pose.position.x,
+        trace_end_waypoint_v[0] + home_pose.pose.position.y,
+        trace_end_waypoint_v[0] + home_pose.pose.position.z};
+        
 }
