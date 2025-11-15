@@ -112,8 +112,9 @@ void MissionMaster::traceLoop()
                 break;
             }
             // 如果目标丢失，更新最后一次看到目标的时间
-            last_seen_time = current_time;
+            //last_seen_time = current_time;
             ROS_INFO("Waiting for target...TR");
+            setpoint_pub_.publish(current_pose);
             ros::spinOnce();
             rate_.sleep();
             continue;
