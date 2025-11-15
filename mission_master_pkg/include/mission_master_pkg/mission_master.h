@@ -131,7 +131,6 @@ private:
     std::vector<double> trace_start_waypoint_v;
     std::vector<double> trace_end_waypoint_v;
 
-
     Eigen::Vector3d takeoff_waypoint_re;
     Eigen::Vector3d pickup_start_waypoint_re;
     Eigen::Vector3d pickup_end_waypoint_re;
