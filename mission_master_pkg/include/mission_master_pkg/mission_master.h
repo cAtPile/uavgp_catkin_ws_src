@@ -152,6 +152,9 @@ private:
     void camtrack_cb(const mission_master_pkg::CamTrack::ConstPtr &msg) { current_camtrack = *msg; } // 视觉回调
     void gripperFeedbackCb(const mission_master_pkg::GripFeedback::ConstPtr &feedback) {}
 
+    //=========任务队列============
+    std::vector<mission_state> mission_queue;
+
     //=========私有函数============
     void loadParams();                            // 参数导入
     void loadWaypoints();                         // 航点导入
@@ -162,7 +165,6 @@ private:
 
     void setPoint(const Eigen::Vector3d& set_point);     // 航点飞行
     bool reachCheck(const Eigen::Vector3d& check_point); // 到达检查
-
 
     void pickupStart();   // 开始拾取
     void pickupExecute(); // 抓取执行
