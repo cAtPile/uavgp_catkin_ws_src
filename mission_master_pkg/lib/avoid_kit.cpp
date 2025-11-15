@@ -10,13 +10,13 @@ void MissionMaster::avoidStart()
 {
     ROS_DEBUG("A start");
 
-    setPoint(AVOID_START_WAYPOINT);
+    setPoint(avoid_start_waypoint_re);
 
     while (ros::ok())
     {
         ROS_DEBUG("A Loop");
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(AVOID_START_WAYPOINT))
+        if (reachCheck(avoid_start_waypoint_re))
         {
             ROS_INFO("Arrived at avoid Start Point");
             current_mission_state = EXECUTE_AVOID_STATE;
@@ -47,13 +47,13 @@ void MissionMaster::avoidCheck()
 {
     ROS_DEBUG("A check");
 
-    setPoint(AVOID_END_WAYPOINT);
+    setPoint(avoid_end_waypoint_re);
     while (ros::ok())
     {
         ROS_DEBUG("Ac Loop");
 
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(AVOID_END_WAYPOINT))
+        if (reachCheck(avoid_end_waypoint_re))
         {
             current_mission_state = START_TRACE_STATE;
             setpoint_pub_.publish(current_pose);
