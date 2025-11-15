@@ -52,13 +52,13 @@ void MissionMaster::loadParams()
     home_pose = current_pose;
 
     // 话题参数
-    nh_.param("MAV_state", MAV_STATE, "/mavros/state");
-    nh_.param("MAV_localPositionPose", MAV_LOCAL_POSITION_POSE, "/mavros/local_position/pose");
-    nh_.param("MAV_cmdArming", MAV_CMD_ARMING, "/mavros/cmd/arming");
-    nh_.param("MAV_setMode", MAV_SET_MODE, "/mavros/set_mode");
-    nh_.param("MAV_setpointPositionLocal", MAV_SETPOINT_POSITION_LOCAL, "/mavros/setpoint_position/local");
+    nh_.param<std:vector>("MAV_state", MAV_STATE, "/mavros/state");
+    nh_.param<std:vector>("MAV_localPositionPose", MAV_LOCAL_POSITION_POSE, "/mavros/local_position/pose");
+    nh_.param<std:vector>("MAV_cmdArming", MAV_CMD_ARMING, "/mavros/cmd/arming");
+    nh_.param<std:vector>("MAV_setMode", MAV_SET_MODE, "/mavros/set_mode");
+    nh_.param<std:vector>("MAV_setpointPositionLocal", MAV_SETPOINT_POSITION_LOCAL, "/mavros/setpoint_position/local");
 
-    nh_.param("CAM_info", CAM_INFO, "/cam_tracker/info");
+    nh_.param<std:vector>("CAM_info", CAM_INFO, "/cam_tracker/info");
 
     // 飞行参数
     nh_.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
