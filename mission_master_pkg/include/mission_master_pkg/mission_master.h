@@ -131,13 +131,14 @@ private:
     std::vector<double> trace_start_waypoint_v;
     std::vector<double> trace_end_waypoint_v;
 
-    std::vector<double> takeoff_waypoint_re;
-    std::vector<double> pickup_start_waypoint_re;
-    std::vector<double> pickup_end_waypoint_re;
-    std::vector<double> avoid_start_waypoint_re;
-    std::vector<double> avoid_end_waypoint_re;
-    std::vector<double> trace_start_waypoint_re;
-    std::vector<double> trace_end_waypoint_re;
+
+    Eigen::Vector3d takeoff_waypoint_re;
+    Eigen::Vector3d pickup_start_waypoint_re;
+    Eigen::Vector3d pickup_end_waypoint_re;
+    Eigen::Vector3d avoid_start_waypoint_re;
+    Eigen::Vector3d avoid_end_waypoint_re;
+    Eigen::Vector3d trace_start_waypoint_re;
+    Eigen::Vector3d trace_end_waypoint_re;
 
     //=========数据缓存============
     mavros_msgs::State current_state;              // 当前无人机状态
@@ -159,8 +160,10 @@ private:
     bool armSet();                                // 解锁
     void takeoffExecute();                        // 执行起飞
     void takeoffCheck();                          // 起飞成功检查
-    void setPoint(std::vector<double> set_point);     // 航点飞行
-    bool reachCheck(std::vector<double> check_point); // 到达检查
+
+    void setPoint(const Eigen::Vector3d& set_point);     // 航点飞行
+    bool reachCheck(const Eigen::Vector3d& check_point); // 到达检查
+
 
     void pickupStart();   // 开始拾取
     void pickupExecute(); // 抓取执行
