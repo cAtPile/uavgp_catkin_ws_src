@@ -10,13 +10,13 @@
 void MissionMaster::traceStart()
 {
     ROS_INFO("T Start");
-    setPoint(TRACE_START_WAYPOINT);
+    setPoint(trace_start_waypoint_re);
 
     while (ros::ok())
     {
         ROS_INFO("T Loop");
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(TRACE_START_WAYPOINT))
+        if (reachCheck(trace_start_waypoint_re))
         {
             ROS_INFO("Arrived at trace Start Point");
             current_mission_state = EXECUTE_TRACE_STATE;
@@ -61,12 +61,12 @@ void MissionMaster::traceCheck()
 {
     ROS_INFO("T c");
 
-    setPoint(TRACE_END_WAYPOINT);
+    setPoint(trace_end_waypoint_re);
     while (ros::ok())
     {
         ROS_INFO("TC L");
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(TRACE_END_WAYPOINT))
+        if (reachCheck(trace_end_waypoint_re))
         {
 
             ROS_INFO("Arrived at trace End Point");

@@ -4,16 +4,16 @@
  */
 void MissionMaster::pickupStart()
 {
-    ROS_DUBUG("P start");
+    ROS_DEBUG("P start");
 
-    setPoint(PICKUP_START_WAYPOINT);
+    setPoint(pickup_start_waypoint_re);
 
     while (ros::ok())
     {
         ROS_DEBUG("P loop");
 
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(PICKUP_START_WAYPOINT))
+        if (reachCheck(pickup_start_waypoint_re))
         {
             ROS_INFO("Arrived at Pickup Start Point");
             current_mission_state = EXECUTE_PICKUP_STATE;
@@ -59,13 +59,13 @@ void MissionMaster::pickupCheck()
 {
     ROS_INFO("EXE PICK END");
 
-    setPoint(PICKUP_END_WAYPOINT);
+    setPoint(pickup_end_waypoint_re);
     while (ros::ok())
     {
         ROS_DUBUG("EXE PICKUP END LOOP ");
 
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(PICKUP_END_WAYPOINT))
+        if (reachCheck(pickup_end_waypoint_re))
         {
             ROS_INFO("EXE PICKUP END CHECK ");
 

@@ -50,12 +50,12 @@ void MissionMaster::takeoffExecute()
     home_pose = current_pose;
     loadWaypoints();
 
-    setPoint(TAKEOFF_WAYPOINT);
+    setPoint(takeoff_waypoint_re);
 
     while (ros::ok())
     {
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(TAKEOFF_WAYPOINT))
+        if (reachCheck(takeoff_waypoint_re))
         {
             ROS_INFO("Takeoff set Success!");
             current_mission_state = SUCCEED_TAKEOFF_STATE;
@@ -80,7 +80,7 @@ void MissionMaster::takeoffCheck()
         // 保持起飞定点
         setpoint_pub_.publish(temp_pose);
 
-        if (reachCheck(TAKEOFF_WAYPOINT))
+        if (reachCheck(takeoff_waypoint_re))
         {
             current_mission_state = START_PICKUP_STATE;
             ROS_INFO("Takeoff Success!");
