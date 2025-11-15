@@ -32,8 +32,6 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
         rate_.sleep();
     }
 
-
-
     ROS_INFO("MissionMaster initialized. Drone connected.");
 }
 
@@ -87,10 +85,10 @@ void MissionMaster::loadParams()
 
 
     // -------------------------- 打印所有参数（参数展示） --------------------------
-    ROS_INFO("\n===== 加载的参数如下 =====");
+    ROS_INFO("\n===== params list =====");
 
     // 1. 话题参数（字符串类型）
-    ROS_INFO("话题参数:");
+    ROS_INFO("topic list:");
     ROS_INFO("  MAV_state: %s", MAV_STATE.c_str());
     ROS_INFO("  MAV_localPositionPose: %s", MAV_LOCAL_POSITION_POSE.c_str());
     ROS_INFO("  MAV_cmdArming: %s", MAV_CMD_ARMING.c_str());
@@ -99,24 +97,24 @@ void MissionMaster::loadParams()
     ROS_INFO("  CAM_info: %s", CAM_INFO.c_str());
 
     // 2. 飞行参数（double类型）
-    ROS_INFO("\n飞行参数:");
-    ROS_INFO("  tolerance_waypoint: %.2f (米)", TOLERANCE_WAYPOINT);  // 保留2位小数，加单位更清晰
+    ROS_INFO("\n fly param:");
+    ROS_INFO("  tolerance_waypoint: %.2f (m)", TOLERANCE_WAYPOINT);  // 保留2位小数，加单位更清晰
 
     // 3. 追踪参数（double类型）
-    ROS_INFO("\n追踪参数:");
-    ROS_INFO("  trace_center_x: %.1f (像素)", trace_center_x);
-    ROS_INFO("  trace_center_y: %.1f (像素)", trace_center_y);
+    ROS_INFO("\n tracker param:");
+    ROS_INFO("  trace_center_x: %.1f (pix)", trace_center_x);
+    ROS_INFO("  trace_center_y: %.1f (pix)", trace_center_y);
     ROS_INFO("  cam_loc_rate: %.3f", cam_loc_rate);
-    ROS_INFO("  aim_high_trace: %.2f (米)", aim_high_trace);
-    ROS_INFO("  tolerace_pix: %.1f (像素)", tolerace_pix);
-    ROS_INFO("  step_size_trace: %.2f (米/步)", step_size_trace);
-    ROS_INFO("  pickup_center_x: %.1f (像素)", pickup_center_x);
-    ROS_INFO("  pickup_center_y: %.1f (像素)", pickup_center_y);
-    ROS_INFO("  pickup_aim_high: %.2f (米)", pickup_aim_high);
-    ROS_INFO("  pickup_step_size: %.2f (米/步)", pickup_step_size);
+    ROS_INFO("  aim_high_trace: %.2f (m)", aim_high_trace);
+    ROS_INFO("  tolerace_pix: %.1f (pix)", tolerace_pix);
+    ROS_INFO("  step_size_trace: %.2f (m/step)", step_size_trace);
+    ROS_INFO("  pickup_center_x: %.1f (pix)", pickup_center_x);
+    ROS_INFO("  pickup_center_y: %.1f (pix)", pickup_center_y);
+    ROS_INFO("  pickup_aim_high: %.2f (m)", pickup_aim_high);
+    ROS_INFO("  pickup_step_size: %.2f (m/step)", pickup_step_size);
 
     // 4. 航点参数（vector<double>类型，假设为三维坐标 x,y,z）
-    ROS_INFO("\n航点参数 (x, y, z 单位: 米):");
+    ROS_INFO("\n waypoint (x, y, z  (m)):");
     ROS_INFO("  takeoff_waypoint_v: [%.2f, %.2f, %.2f]", 
              takeoff_waypoint_v[0], takeoff_waypoint_v[1], takeoff_waypoint_v[2]);
     ROS_INFO("  pickup_start_waypoint_v: [%.2f, %.2f, %.2f]", 
