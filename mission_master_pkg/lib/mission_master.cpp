@@ -10,38 +10,36 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
     // 加载参数
     loadParams();
     //================初始化订阅者=======================
-    //state_sub_ = nh_.subscribe<mavros_msgs::State>("MAV_STATE", 10, &MissionMaster::state_cb, this);                               // 状态
-    state_sub_ = nh_.subscribe<mavros_msgs::State>("/mavros/state", 10, &MissionMaster::state_cb, this);                               // 状态
+    state_sub_ = nh_.subscribe<mavros_msgs::State>(MAV_STATE, 10, &MissionMaster::state_cb, this); // 状态
+    // state_sub_ = nh_.subscribe<mavros_msgs::State>("/mavros/state", 10, &MissionMaster::state_cb, this);                               // 状态
 
-    //local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("MAV_LOCAL_POSITION_POSE", 10, &MissionMaster::local_pos_cb, this); // 位置
-    local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, &MissionMaster::local_pos_cb, this); // 位置
+    local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>(MAV_LOCAL_POSITION_POSE, 10, &MissionMaster::local_pos_cb, this); // 位置
+                                                                                                                                 // local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, &MissionMaster::local_pos_cb, this); // 位置
 
-   // camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack>("CAM_INFO", 10, &MissionMaster::camtrack_cb, this);                // 视觉
-    camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack>("/cam_tracker/info", 10, &MissionMaster::camtrack_cb, this);                // 视觉
-
+    camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack>(CAM_INFO, 10, &MissionMaster::camtrack_cb, this); // 视觉
+    // camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack>("/cam_tracker/info", 10, &MissionMaster::camtrack_cb, this);                // 视觉
 
     //================初始化发布者======================
-    //setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("MAV_SETPOINT_POSITION_LOCAL", 10);
-    setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 10);
-
+    setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>(MAV_SETPOINT_POSITION_LOCAL, 10);
+    // setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 10);
 
     //===============初始化服务客户端=====================
-    //arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("MAV_CMD_ARMING");
-    arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
+    arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>(MAV_CMD_ARMING);
+    // arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
 
-    //set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("MAV_SET_MODE");
-    set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
+    set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>(MAV_SET_MODE);
+    // set_mode_client_ = nh_.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
     // 初始化任务状态为等待起飞
     current_mission_state = WAITING_TAKEOFF_STATE;
-/*
-    // 等待无人机连接
-    while (nh_.ok() && !current_state.connected)
-    {
-        ros::spinOnce();
-        rate_.sleep();
-    }
-*/
+    /*
+        // 等待无人机连接
+        while (nh_.ok() && !current_state.connected)
+        {
+            ros::spinOnce();
+            rate_.sleep();
+        }
+    */
     ROS_INFO("MissionMaster initialized. Drone connected.");
 }
 
@@ -53,7 +51,6 @@ MissionMaster::~MissionMaster()
     ROS_INFO("MissionMaster terminated.");
 }
 
-
 /**
  * @brief 参数加载，并打印所有参数值
  */
@@ -62,12 +59,12 @@ void MissionMaster::loadParams()
     home_pose = current_pose;
 
     // 话题参数
-    //nh_.param<std::string>("MAV_state", MAV_STATE, "/mavros/state");
-   // nh_.param<std::string>("MAV_localPositionPose", MAV_LOCAL_POSITION_POSE, "/mavros/local_position/pose");
-   // nh_.param<std::string>("MAV_cmdArming", MAV_CMD_ARMING, "/mavros/cmd/arming");
-   // nh_.param<std::string>("MAV_setMode", MAV_SET_MODE, "/mavros/set_mode");
-  //  nh_.param<std::string>("MAV_setpointPositionLocal", MAV_SETPOINT_POSITION_LOCAL, "/mavros/setpoint_position/local");
-  //  nh_.param<std::string>("CAM_info", CAM_INFO, "/cam_tracker/info");
+    nh_.param<std::string>("MAV_state", MAV_STATE, "/mavros/state");
+    nh_.param<std::string>("MAV_localPositionPose", MAV_LOCAL_POSITION_POSE, "/mavros/local_position/pose");
+    nh_.param<std::string>("MAV_cmdArming", MAV_CMD_ARMING, "/mavros/cmd/arming");
+    nh_.param<std::string>("MAV_setMode", MAV_SET_MODE, "/mavros/set_mode");
+    nh_.param<std::string>("MAV_setpointPositionLocal", MAV_SETPOINT_POSITION_LOCAL, "/mavros/setpoint_position/local");
+    nh_.param<std::string>("CAM_info", CAM_INFO, "/cam_tracker/info");
 
     // 飞行参数
     nh_.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
@@ -85,30 +82,29 @@ void MissionMaster::loadParams()
     nh_.param("pickup_step_size", pickup_step_size, 0.1);
 
     // 航点参数（vector<double>类型）
-    nh_.param<std::vector<double>>("takeoff_waypoint_v", takeoff_waypoint_v, {0.0,0.0,1.0});
-    nh_.param<std::vector<double>>("pickup_start_waypoint_v", pickup_start_waypoint_v, {1.0,0.0,1.0});
-    nh_.param<std::vector<double>>("pickup_end_waypoint_v", pickup_end_waypoint_v, {1.0,1.0,1.0});
-    nh_.param<std::vector<double>>("avoid_start_waypoint_v", avoid_start_waypoint_v, {0.0,1.0,1.0});
-    nh_.param<std::vector<double>>("avoid_end_waypoint_v", avoid_end_waypoint_v, {1.0,1.0,1.0});
-    nh_.param<std::vector<double>>("trace_start_waypoint_v", trace_start_waypoint_v, {1.0,0.0,1.0});
-    nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0,1.0,1.0});
-
+    nh_.param<std::vector<double>>("takeoff_waypoint_v", takeoff_waypoint_v, {0.0, 0.0, 1.0});
+    nh_.param<std::vector<double>>("pickup_start_waypoint_v", pickup_start_waypoint_v, {1.0, 0.0, 1.0});
+    nh_.param<std::vector<double>>("pickup_end_waypoint_v", pickup_end_waypoint_v, {1.0, 1.0, 1.0});
+    nh_.param<std::vector<double>>("avoid_start_waypoint_v", avoid_start_waypoint_v, {0.0, 1.0, 1.0});
+    nh_.param<std::vector<double>>("avoid_end_waypoint_v", avoid_end_waypoint_v, {1.0, 1.0, 1.0});
+    nh_.param<std::vector<double>>("trace_start_waypoint_v", trace_start_waypoint_v, {1.0, 0.0, 1.0});
+    nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
     // -------------------------- 打印所有参数（参数展示） --------------------------
     ROS_INFO("\n===== params list =====");
 
     // 1. 话题参数（字符串类型）
     ROS_INFO("topic list:");
-  //  ROS_INFO("  MAV_state: %s", MAV_STATE.c_str());
-  //  ROS_INFO("  MAV_localPositionPose: %s", MAV_LOCAL_POSITION_POSE.c_str());
-  //  ROS_INFO("  MAV_cmdArming: %s", MAV_CMD_ARMING.c_str());
-  //  ROS_INFO("  MAV_setMode: %s", MAV_SET_MODE.c_str());
-  //  ROS_INFO("  MAV_setpointPositionLocal: %s", MAV_SETPOINT_POSITION_LOCAL.c_str());
-  //  ROS_INFO("  CAM_info: %s", CAM_INFO.c_str());
+    //  ROS_INFO("  MAV_state: %s", MAV_STATE.c_str());
+    //  ROS_INFO("  MAV_localPositionPose: %s", MAV_LOCAL_POSITION_POSE.c_str());
+    //  ROS_INFO("  MAV_cmdArming: %s", MAV_CMD_ARMING.c_str());
+    //  ROS_INFO("  MAV_setMode: %s", MAV_SET_MODE.c_str());
+    //  ROS_INFO("  MAV_setpointPositionLocal: %s", MAV_SETPOINT_POSITION_LOCAL.c_str());
+    //  ROS_INFO("  CAM_info: %s", CAM_INFO.c_str());
 
     // 2. 飞行参数（double类型）
     ROS_INFO("\n fly param:");
-    ROS_INFO("  tolerance_waypoint: %.2f (m)", TOLERANCE_WAYPOINT);  // 保留2位小数，加单位更清晰
+    ROS_INFO("  tolerance_waypoint: %.2f (m)", TOLERANCE_WAYPOINT); // 保留2位小数，加单位更清晰
 
     // 3. 追踪参数（double类型）
     ROS_INFO("\n tracker param:");
@@ -125,19 +121,19 @@ void MissionMaster::loadParams()
 
     // 4. 航点参数（vector<double>类型，假设为三维坐标 x,y,z）
     ROS_INFO("\n waypoint (x, y, z  (m)):");
-    ROS_INFO("  takeoff_waypoint_v: [%.2f, %.2f, %.2f]", 
+    ROS_INFO("  takeoff_waypoint_v: [%.2f, %.2f, %.2f]",
              takeoff_waypoint_v[0], takeoff_waypoint_v[1], takeoff_waypoint_v[2]);
-    ROS_INFO("  pickup_start_waypoint_v: [%.2f, %.2f, %.2f]", 
+    ROS_INFO("  pickup_start_waypoint_v: [%.2f, %.2f, %.2f]",
              pickup_start_waypoint_v[0], pickup_start_waypoint_v[1], pickup_start_waypoint_v[2]);
-    ROS_INFO("  pickup_end_waypoint_v: [%.2f, %.2f, %.2f]", 
+    ROS_INFO("  pickup_end_waypoint_v: [%.2f, %.2f, %.2f]",
              pickup_end_waypoint_v[0], pickup_end_waypoint_v[1], pickup_end_waypoint_v[2]);
-    ROS_INFO("  avoid_start_waypoint_v: [%.2f, %.2f, %.2f]", 
+    ROS_INFO("  avoid_start_waypoint_v: [%.2f, %.2f, %.2f]",
              avoid_start_waypoint_v[0], avoid_start_waypoint_v[1], avoid_start_waypoint_v[2]);
-    ROS_INFO("  avoid_end_waypoint_v: [%.2f, %.2f, %.2f]", 
+    ROS_INFO("  avoid_end_waypoint_v: [%.2f, %.2f, %.2f]",
              avoid_end_waypoint_v[0], avoid_end_waypoint_v[1], avoid_end_waypoint_v[2]);
-    ROS_INFO("  trace_start_waypoint_v: [%.2f, %.2f, %.2f]", 
+    ROS_INFO("  trace_start_waypoint_v: [%.2f, %.2f, %.2f]",
              trace_start_waypoint_v[0], trace_start_waypoint_v[1], trace_start_waypoint_v[2]);
-    ROS_INFO("  trace_end_waypoint_v: [%.2f, %.2f, %.2f]", 
+    ROS_INFO("  trace_end_waypoint_v: [%.2f, %.2f, %.2f]",
              trace_end_waypoint_v[0], trace_end_waypoint_v[1], trace_end_waypoint_v[2]);
 
     ROS_INFO("==========================\n");
