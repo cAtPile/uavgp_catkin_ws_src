@@ -14,7 +14,7 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
     // state_sub_ = nh_.subscribe<mavros_msgs::State>("/mavros/state", 10, &MissionMaster::state_cb, this);                               // 状态
 
     local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>(MAV_LOCAL_POSITION_POSE, 10, &MissionMaster::local_pos_cb, this); // 位置
-                                                                                                                                 // local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, &MissionMaster::local_pos_cb, this); // 位置
+    // local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("/mavros/local_position/pose", 10, &MissionMaster::local_pos_cb, this); // 位置
 
     camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack>(CAM_INFO, 10, &MissionMaster::camtrack_cb, this); // 视觉
     // camtrack_sub_ = nh_.subscribe<mission_master_pkg::CamTrack>("/cam_tracker/info", 10, &MissionMaster::camtrack_cb, this);                // 视觉
