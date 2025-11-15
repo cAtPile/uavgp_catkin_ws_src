@@ -42,7 +42,7 @@ void MissionMaster::pickupExecute()
     {
 
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(Eigen::Vector3d(temp_pose.pose.position.x, temp_pose.pose.position.y, temp_pose.pose.position.z)))
+        if (reachCheck([temp_pose.pose.position.x, temp_pose.pose.position.y, temp_pose.pose.position.z]))
         {
             current_mission_state = SUCCEED_PICKUP_STATE;
             break;
@@ -62,7 +62,7 @@ void MissionMaster::pickupCheck()
     setPoint(pickup_end_waypoint_re);
     while (ros::ok())
     {
-        ROS_DUBUG("EXE PICKUP END LOOP ");
+        ROS_DEBUG("EXE PICKUP END LOOP ");
 
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(pickup_end_waypoint_re))
@@ -99,7 +99,7 @@ void MissionMaster::pickLoop()
     // 抓取主循环
     while (ros::ok())
     {
-        ROS_DUBUG("PICK LOOP pose");
+        ROS_DEBUG("PICK LOOP pose");
         // 如果目标没有被检测到，进入等待状态
         if (current_camtrack.ball_num == 0)
         {

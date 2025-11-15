@@ -23,7 +23,7 @@ void MissionMaster::landStart()
     while (ros::ok())
     {
         setpoint_pub_.publish(land_pose);
-        if (reachCheck(Eigen::Vector3d(home_pose.pose.position.x, home_pose.pose.position.y, 3.0)))
+        if (reachCheck([home_pose.pose.position.x, home_pose.pose.position.y, 3.0]))
         {
             ROS_INFO("Arrived at Pickup Start Point");
             current_mission_state = EXECUTE_LAND_STATE;
