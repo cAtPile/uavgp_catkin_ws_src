@@ -24,14 +24,14 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
 
     // 初始化任务状态为等待起飞
     current_mission_state = WAITING_TAKEOFF_STATE;
-
+/*
     // 等待无人机连接
     while (nh_.ok() && !current_state.connected)
     {
         ros::spinOnce();
         rate_.sleep();
     }
-
+*/
     ROS_INFO("MissionMaster initialized. Drone connected.");
 }
 
