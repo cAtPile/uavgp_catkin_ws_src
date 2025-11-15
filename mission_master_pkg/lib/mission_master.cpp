@@ -95,12 +95,12 @@ void MissionMaster::loadParams()
 
     // 1. 话题参数（字符串类型）
     ROS_INFO("topic list:");
-    //  ROS_INFO("  MAV_state: %s", MAV_STATE.c_str());
-    //  ROS_INFO("  MAV_localPositionPose: %s", MAV_LOCAL_POSITION_POSE.c_str());
-    //  ROS_INFO("  MAV_cmdArming: %s", MAV_CMD_ARMING.c_str());
-    //  ROS_INFO("  MAV_setMode: %s", MAV_SET_MODE.c_str());
-    //  ROS_INFO("  MAV_setpointPositionLocal: %s", MAV_SETPOINT_POSITION_LOCAL.c_str());
-    //  ROS_INFO("  CAM_info: %s", CAM_INFO.c_str());
+    ROS_INFO("  MAV_state: %s", MAV_STATE.c_str());
+    ROS_INFO("  MAV_localPositionPose: %s", MAV_LOCAL_POSITION_POSE.c_str());
+    ROS_INFO("  MAV_cmdArming: %s", MAV_CMD_ARMING.c_str());
+    ROS_INFO("  MAV_setMode: %s", MAV_SET_MODE.c_str());
+    ROS_INFO("  MAV_setpointPositionLocal: %s", MAV_SETPOINT_POSITION_LOCAL.c_str());
+    ROS_INFO("  CAM_info: %s", CAM_INFO.c_str());
 
     // 2. 飞行参数（double类型）
     ROS_INFO("\n fly param:");
