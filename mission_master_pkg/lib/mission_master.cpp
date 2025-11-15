@@ -7,6 +7,8 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
                                  gripper_ac_("gripper_action", true)
 {
     ROS_INFO("MMC");
+    // 加载参数
+    loadParams();
     //================初始化订阅者=======================
     state_sub_ = nh_.subscribe<mavros_msgs::State>("MAV_STATE", 10, &MissionMaster::state_cb, this);                               // 状态
     local_pos_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("MAV_LOCAL_POSITION_POSE", 10, &MissionMaster::local_pos_cb, this); // 位置
@@ -30,8 +32,7 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
         rate_.sleep();
     }
 
-    // 加载参数
-    loadParams();
+
 
     ROS_INFO("MissionMaster initialized. Drone connected.");
 }
