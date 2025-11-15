@@ -64,14 +64,14 @@ void MissionMaster::loadParams()
     nh_.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
 
     //追踪参数
-    nh_.param("trace_center_x", trace_center_x, 320);
-    nh_.param("trace_center_y", trace_center_y, 320);
+    nh_.param("trace_center_x", trace_center_x, 320.0);
+    nh_.param("trace_center_y", trace_center_y, 320.0);
     nh_.param("cam_loc_rate", cam_loc_rate, 0.001);
     nh_.param("aim_high_trace", aim_high_trace, 0.1);
-    nh_.param("tolerace_pix", tolerace_pix, 10);
+    nh_.param("tolerace_pix", tolerace_pix, 10.0);
     nh_.param("step_size_trace", step_size_trace, 0.1);
-    nh_.param("pickup_center_x", pickup_center_x, 320);
-    nh_.param("pickup_center_y", pickup_center_y, 320);
+    nh_.param("pickup_center_x", pickup_center_x, 320.0);
+    nh_.param("pickup_center_y", pickup_center_y, 320.0);
     nh_.param("pickup_aim_high", pickup_aim_high, 0.1);
     nh_.param("pickup_step_size", pickup_step_size, 0.1);
 
