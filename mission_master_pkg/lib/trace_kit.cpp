@@ -44,7 +44,7 @@ void MissionMaster::traceExecute()
     {
 
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck([temp_pose.pose.position.x, temp_pose.pose.position.y, temp_pose.pose.position.z]))
+        if (reachCheck(Eigen::Vector3d(temp_pose.pose.position.x, temp_pose.pose.position.y, temp_pose.pose.position.z)))
         {
             current_mission_state = SUCCEED_TRACE_STATE;
             break;
