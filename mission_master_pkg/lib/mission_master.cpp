@@ -63,26 +63,26 @@ void MissionMaster::loadParams()
     // 飞行参数
     nh_.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
 
-    // 航点参数
-    nh_.param("takeoff_pose_x", TAKEOFF_POSE_X, 0.0);
-    nh_.param("takeoff_pose_y", TAKEOFF_POSE_Y, 0.0);
-    nh_.param("takeoff_pose_z", TAKEOFF_POSE_Z, 1.0);
-    nh_.param("pickup_start_pose_x", PICKUP_START_POSE_X, 1.0);
-    nh_.param("pickup_start_pose_y", PICKUP_START_POSE_Y, 0.0);
-    nh_.param("pickup_start_pose_z", PICKUP_START_POSE_Z, 1.0);
-    nh_.param("pickup_end_pose_x", PICKUP_END_POSE_X, 1.0);
-    nh_.param("pickup_end_pose_y", PICKUP_END_POSE_Y, 1.0);
-    nh_.param("pickup_end_pose_z", PICKUP_END_POSE_Z, 1.0);
-    nh_.param("avoid_start_pose_x", AVOID_START_POSE_X, 0.0);
-    nh_.param("avoid_start_pose_y", AVOID_START_POSE_Y, 1.0);
-    nh_.param("avoid_start_pose_z", AVOID_START_POSE_Z, 1.0);
-    nh_.param("avoid_end_pose_x", AVOID_END_POSE_X, 1.0);
-    nh_.param("avoid_end_pose_y", AVOID_END_POSE_Y, 0.0);
-    nh_.param("avoid_end_pose_z", AVOID_END_POSE_Z, 1.0);
-    nh_.param("trace_start_pose_x", TRACE_START_POSE_X, 1.0);
-    nh_.param("trace_start_pose_y", TRACE_START_POSE_Y, 1.0);
-    nh_.param("trace_start_pose_z", TRACE_START_POSE_Z, 1.0);
-    nh_.param("trace_end_pose_x", TRACE_END_POSE_X, 0.0);
-    nh_.param("trace_end_pose_y", TRACE_END_POSE_Y, 0.0);
-    nh_.param("trace_end_pose_z", TRACE_END_POSE_Z, 1.0);
+    //追踪参数
+    nh_.param("trace_center_x", trace_center_x, 320);
+    nh_.param("trace_center_y", trace_center_y, 320);
+    nh_.param("cam_loc_rate", cam_loc_rate, 0.001);
+    nh_.param("aim_high_trace", aim_high_trace, 0.1);
+    nh_.param("tolerace_pix", tolerace_pix, 10);
+    nh_.param("step_size_trace", step_size_trace, 0.1);
+    nh_.param("pickup_center_x", pickup_center_x, 320);
+    nh_.param("pickup_center_y", pickup_center_y, 320);
+    nh_.param("pickup_aim_high", pickup_aim_high, 0.1);
+    nh_.param("pickup_step_size", pickup_step_size, 0.1);
+
+    //航点参数
+    nh_.param<std::vector<double>>("takeoff_waypoint_v", takeoff_waypoint_v, {0.0,0.0,1.0});
+    nh_.param<std::vector<double>>("pickup_start_waypoint_v", pickup_start_waypoint_v, {1.0,0.0,1.0});
+    nh_.param<std::vector<double>>("pickup_end_waypoint_v", pickup_end_waypoint_v, {1.0,1.0,1.0});
+    nh_.param<std::vector<double>>("avoid_start_waypoint_v", avoid_start_waypoint_v, {0.0,1.0,1.0});
+    nh_.param<std::vector<double>>("avoid_end_waypoint_v", avoid_end_waypoint_v, {1.0,1.0,1.0});
+    nh_.param<std::vector<double>>("trace_start_waypoint_v", trace_start_waypoint_v, {1.0,0.0,1.0});
+    nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0,1.0,1.0});
+
 }
+ 

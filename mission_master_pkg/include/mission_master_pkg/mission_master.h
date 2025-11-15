@@ -110,49 +110,34 @@ private:
     std::string CAM_INFO;
 
     //=========飞行参数============
-    double TOLERANCE_WAYPOINT;                           // 位置容忍值（到达判定阈值）
-    double trace_center_x = 320, trace_center_y = 320;   // 跟踪相机中央
-    double cam_loc_rate = 0.001;                         // 相机世界转换率
-    double aim_high_trace = 0.1;                         // 跟踪目标高度
-    double tolerace_pix = 10;                            // 容忍误差
-    double step_size_trace = 0.1;                        // 跟踪降落步长
-    double pickup_center_x = 320, pickup_center_y = 320; // 抓取相机中央
-    double pickup_aim_high = 0.1;                        // 抓取目标高度
-    double pickup_step_size = 0.1;                       // 每次降落的步长
+    double TOLERANCE_WAYPOINT;               // 位置容忍值（到达判定阈值）
+    double trace_center_x, trace_center_y;   // 跟踪相机中央
+    double cam_loc_rate;                     // 相机世界转换率
+    double aim_high_trace;                   // 跟踪目标高度
+    double tolerace_pix;                     // 容忍误差
+    double step_size_trace;                  // 跟踪降落步长
+    double pickup_center_x, pickup_center_y; // 抓取相机中央
+    double pickup_aim_high;                  // 抓取目标高度
+    double pickup_step_size;                 // 每次降落的步长
 
     //=========航点参数============
     geometry_msgs::PoseStamped home_pose; // 起飞降落点（home位置）
 
-    Eigen::Vector3d TAKEOFF_WAYPOINT;
-    Eigen::Vector3d PICKUP_START_WAYPOINT;
-    Eigen::Vector3d PICKUP_END_WAYPOINT;
-    Eigen::Vector3d AVOID_START_WAYPOINT;
-    Eigen::Vector3d AVOID_END_WAYPOINT;
-    Eigen::Vector3d TRACE_START_WAYPOINT;
-    Eigen::Vector3d TRACE_END_WAYPOINT;
+    std::vector<double> takeoff_waypoint_v;
+    std::vector<double> pickup_start_waypoint_v;
+    std::vector<double> pickup_end_waypoint_v;
+    std::vector<double> avoid_start_waypoint_v;
+    std::vector<double> avoid_end_waypoint_v;
+    std::vector<double> trace_start_waypoint_v;
+    std::vector<double> trace_end_waypoint_v;
 
-    //--------航点缓存XYZ----------
-    double TAKEOFF_POSE_X;
-    double TAKEOFF_POSE_Y;
-    double TAKEOFF_POSE_Z;
-    double PICKUP_START_POSE_X;
-    double PICKUP_START_POSE_Y;
-    double PICKUP_START_POSE_Z;
-    double PICKUP_END_POSE_X;
-    double PICKUP_END_POSE_Y;
-    double PICKUP_END_POSE_Z;
-    double AVOID_START_POSE_X;
-    double AVOID_START_POSE_Y;
-    double AVOID_START_POSE_Z;
-    double AVOID_END_POSE_X;
-    double AVOID_END_POSE_Y;
-    double AVOID_END_POSE_Z;
-    double TRACE_START_POSE_X;
-    double TRACE_START_POSE_Y;
-    double TRACE_START_POSE_Z;
-    double TRACE_END_POSE_X;
-    double TRACE_END_POSE_Y;
-    double TRACE_END_POSE_Z;
+    std::vector<double> takeoff_waypoint_re;
+    std::vector<double> pickup_start_waypoint_re;
+    std::vector<double> pickup_end_waypoint_re;
+    std::vector<double> avoid_start_waypoint_re;
+    std::vector<double> avoid_end_waypoint_re;
+    std::vector<double> trace_start_waypoint_re;
+    std::vector<double> trace_end_waypoint_re;
 
     //=========数据缓存============
     mavros_msgs::State current_state;              // 当前无人机状态
@@ -174,8 +159,8 @@ private:
     bool armSet();                                // 解锁
     void takeoffExecute();                        // 执行起飞
     void takeoffCheck();                          // 起飞成功检查
-    void setPoint(Eigen::Vector3d set_point);     // 航点飞行
-    bool reachCheck(Eigen::Vector3d check_point); // 到达检查
+    void setPoint(std::vector<double> set_point);     // 航点飞行
+    bool reachCheck(std::vector<double> check_point); // 到达检查
 
     void pickupStart();   // 开始拾取
     void pickupExecute(); // 抓取执行
