@@ -31,4 +31,21 @@ trace_start_waypoint_v: [1.0, 1.0, 1.0]
 trace_end_waypoint_v: [0.0, 1.0, 1.0]
 
 #任务队列
-mission_queue: [0,1,2,12,13,15,14,16]
+mission_queue: [0, 1, 2, 12, 13, 15, 14, 16]
+#"WAITING_TAKEOFF_STATE", // 0
+#"EXECUTE_TAKEOFF_STATE", // 1
+#"SUCCEED_TAKEOFF_STATE", // 2
+#"START_PICKUP_STATE",    // 3
+#"EXECUTE_PICKUP_STATE",  // 4
+#"SUCCEED_PICKUP_STATE",  // 5
+#"START_AVOID_STATE",     // 6
+#"EXECUTE_AVOID_STATE",   // 7
+#"SUCCEED_AVOID_STATE",   // 8
+# "START_TRACE_STATE",     // 9
+# "EXECUTE_TRACE_STATE",   // 10
+#"SUCCEED_TRACE_STATE",   // 11
+#"START_LAND_STATE",      // 12
+#"EXECUTE_LAND_STATE",    // 13
+#"SUCCEED_LAND_STATE",    // 14
+#"ERROR_STATE",           // 15
+#"MISSION_SUCCEED_STATE"  // 16
