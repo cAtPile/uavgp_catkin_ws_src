@@ -64,7 +64,7 @@ void MissionMaster::pickupCheck()
     setPoint(pickup_end_waypoint_re);
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE("1.0, EXE PICKUP END LOOP ");
+        ROS_INFO_THROTTLE(1.0," EXE PICKUP END LOOP ");
 
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(pickup_end_waypoint_re))
