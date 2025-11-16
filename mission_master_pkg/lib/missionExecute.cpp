@@ -84,7 +84,8 @@ void MissionMaster::run()
 {
     while (ros::ok())
     {
-        if(current_mission_state==MISSION_SUCCEED_STATE){
+        if (current_mission_state == MISSION_SUCCEED_STATE)
+        {
             break;
         }
         missionExecute();
