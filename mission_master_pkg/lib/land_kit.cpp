@@ -14,7 +14,7 @@ void MissionMaster::landStart()
     land_pose.header.stamp = ros::Time::now();
     land_pose.pose.position.x = home_pose.pose.position.x;
     land_pose.pose.position.y = home_pose.pose.position.y;
-    land_pose.pose.position.z = 3.0; // 预留修改
+    land_pose.pose.position.z = trace_end_waypoint_v[2]; // 预留修改
     land_pose.pose.orientation.x = 0.0;
     land_pose.pose.orientation.y = 0.0;
     land_pose.pose.orientation.z = 0.0;
@@ -23,7 +23,7 @@ void MissionMaster::landStart()
     while (ros::ok())
     {
         setpoint_pub_.publish(land_pose);
-        if (reachCheck(Eigen::Vector3d(home_pose.pose.position.x, home_pose.pose.position.y, 3.0)))
+        if (reachCheck(Eigen::Vector3d(home_pose.pose.position.x, home_pose.pose.position.y, trace_end_waypoint_v[2])))
         {
             ROS_INFO("Arrived at Pickup Start Point");
             current_mission_state = mission_queue[mission_queue_index];

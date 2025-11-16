@@ -37,7 +37,7 @@ void MissionMaster::pickupExecute()
 
     temp_pose.pose.position.x = current_pose.pose.position.x;
     temp_pose.pose.position.y = current_pose.pose.position.y;
-    temp_pose.pose.position.z = 5.0 + home_pose.pose.position.z;
+    temp_pose.pose.position.z = pickup_end_waypoint_v[2] + home_pose.pose.position.z;
 
     while (ros::ok())
     {
@@ -64,7 +64,7 @@ void MissionMaster::pickupCheck()
     setPoint(pickup_end_waypoint_re);
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0," EXE PICKUP END LOOP ");
+        ROS_INFO_THROTTLE(1.0, " EXE PICKUP END LOOP ");
 
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(pickup_end_waypoint_re))
@@ -106,7 +106,7 @@ void MissionMaster::pickLoop()
     // 抓取主循环
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0,"PICK LOOP PULSE");
+        ROS_INFO_THROTTLE(1.0, "PICK LOOP PULSE");
         // 如果目标没有被检测到，进入等待状态
         if (current_camtrack.ball_num == 0)
         {
@@ -119,7 +119,7 @@ void MissionMaster::pickLoop()
             }
             // 如果目标丢失，更新最后一次看到目标的时间
             // last_seen_time = current_time;
-            ROS_INFO_THROTTLE(1.0,"Waiting for target...");
+            ROS_INFO_THROTTLE(1.0, "Waiting for target...");
             setpoint_pub_.publish(current_pose);
             ros::spinOnce();
             rate_.sleep();
@@ -161,15 +161,15 @@ void MissionMaster::pickLoop()
             pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
             pick_pose.pose.position.z = target_height; // 高度逐步调整
 
-            ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f",pick_pose.pose.position.x ,pick_pose.pose.position.y,pick_pose.pose.position.z);
+            ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", pick_pose.pose.position.x, pick_pose.pose.position.y, pick_pose.pose.position.z);
 
             // 发送飞行指令
             setpoint_pub_.publish(pick_pose);
 
             // 检查是否到达目标位置并准备抓取
-            if (current_pose.pose.position.z <= pickup_aim_high )
+            if (current_pose.pose.position.z <= pickup_aim_high)
             {
-                if (1/*gripPick()*/) // 调用抓取函数
+                if (1 /*gripPick()*/) // 调用抓取函数
                 {
                     ROS_INFO("PICK LOOP out");
                     break; // 跳出抓取循环
@@ -183,7 +183,7 @@ void MissionMaster::pickLoop()
             pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
             pick_pose.pose.position.z = target_height; // 高度保持逐步下降
 
-            ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f",pick_pose.pose.position.x ,pick_pose.pose.position.y,pick_pose.pose.position.z);
+            ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", pick_pose.pose.position.x, pick_pose.pose.position.y, pick_pose.pose.position.z);
 
             // 发送调整后的飞行指令
             setpoint_pub_.publish(pick_pose);
