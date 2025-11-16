@@ -85,6 +85,11 @@ void MissionMaster::traceLoop()
 {
     ROS_INFO("TR LOOP IN");
 
+    // 视觉使能（放）
+    std_msgs::UInt8 traceStart_camCmd_msg;
+    traceStart_camCmd_msg.data = 2;
+    cam_cmd_pub_.publish(traceStart_camCmd_msg);
+
     // pick_pose 初始化
     geometry_msgs::PoseStamped trace_pose;
     trace_pose.header.frame_id = "map";
@@ -185,6 +190,11 @@ void MissionMaster::traceLoop()
         ros::spinOnce();
         rate_.sleep();
     }
+
+    // 视觉休息
+    std_msgs::UInt8 traceEnd_camCmd_msg;
+    traceEnd_camCmd_msg.data = 0;
+    cam_cmd_pub_.publish(traceEnd_camCmd_msg);
 }
 
 bool MissionMaster::gripRelease()

@@ -90,6 +90,7 @@ private:
 
     //---------发布者----------------
     ros::Publisher setpoint_pub_; // 位置指令发布者（/mavros/setpoint_position/local）
+    ros::Publisher cam_cmd_pub_;  // 视觉控制发布
     // ros::Publisher 视觉，爪子 预留
 
     //----------客户端---------------
@@ -107,6 +108,7 @@ private:
     std::string MAV_SET_MODE;
     std::string MAV_SETPOINT_POSITION_LOCAL;
 
+    std::string CAM_CMD;
     std::string CAM_INFO;
 
     //=========飞行参数============

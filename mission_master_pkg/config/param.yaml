@@ -19,6 +19,8 @@ MAV_localPositionPose: "/mavros/local_position/pose"
 MAV_cmdArming: "/mavros/cmd/arming"
 MAV_setMode: "/mavros/set_mode"
 MAV_setpointPositionLocal: "/mavros/setpoint_position/local"
+
+CAM_cmd: "/cam_tracker/tracker_control"
 CAM_info: "/cam_tracker/info"
 
 #航点参数

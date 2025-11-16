@@ -22,6 +22,7 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
     //================初始化发布者======================
     setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>(MAV_SETPOINT_POSITION_LOCAL, 10);
     // setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 10);
+    cam_cmd_pub_ = nh_.advertise<std_msgs::UInt8>(CAM_CMD, 10);
 
     //===============初始化服务客户端=====================
     arming_client_ = nh_.serviceClient<mavros_msgs::CommandBool>(MAV_CMD_ARMING);
@@ -75,7 +76,9 @@ void MissionMaster::loadParams()
     nh_.param<std::string>("MAV_cmdArming", MAV_CMD_ARMING, "/mavros/cmd/arming");
     nh_.param<std::string>("MAV_setMode", MAV_SET_MODE, "/mavros/set_mode");
     nh_.param<std::string>("MAV_setpointPositionLocal", MAV_SETPOINT_POSITION_LOCAL, "/mavros/setpoint_position/local");
+    
     nh_.param<std::string>("CAM_info", CAM_INFO, "/cam_tracker/info");
+    nh_.param<std::string>("CAM_cmd", CAM_CMD, "/cam_tracker/tracker_control");
 
     // 飞行参数
     nh_.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
@@ -163,6 +166,7 @@ void MissionMaster::loadParams()
     ROS_INFO("  MAV_setMode: %s", MAV_SET_MODE.c_str());
     ROS_INFO("  MAV_setpointPositionLocal: %s", MAV_SETPOINT_POSITION_LOCAL.c_str());
     ROS_INFO("  CAM_info: %s", CAM_INFO.c_str());
+    ROS_INFO("  CAM_cmd: %s", CAM_CMD.c_str());
 
     // 2. 飞行参数（double类型）
     ROS_INFO("\n fly param:");

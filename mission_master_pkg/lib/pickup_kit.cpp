@@ -84,6 +84,11 @@ void MissionMaster::pickLoop()
 {
     ROS_INFO("PICK LOOP IN");
 
+    //视觉使能（抓）
+    std_msgs::UInt8 pickupStart_camCmd_msg;
+    pickupStart_camCmd_msg.data = 1;
+    cam_cmd_pub_.publish(pickupStart_camCmd_msg);
+
     // pick_pose 初始化
     geometry_msgs::PoseStamped pick_pose;
     pick_pose.header.frame_id = "map";
@@ -184,6 +189,12 @@ void MissionMaster::pickLoop()
         ros::spinOnce();
         rate_.sleep();
     }
+
+    //视觉休息
+    std_msgs::UInt8 pickupEnd_camCmd_msg;
+    pickupEnd_camCmd_msg.data = 0;
+    cam_cmd_pub_.publish(pickupEnd_camCmd_msg);
+
 }
 
 bool MissionMaster::gripPick()
