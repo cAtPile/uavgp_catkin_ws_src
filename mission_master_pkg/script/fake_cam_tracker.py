@@ -8,7 +8,7 @@ Fake Cam Tracker Node
 import rospy
 import random
 from std_msgs.msg import UInt8
-from mission_master.msg import CamTrack
+from mission_master_pkg.msg import CamTrack
 
 
 class FakeCamTracker:
