@@ -22,6 +22,7 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
     //================初始化发布者======================
     setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>(MAV_SETPOINT_POSITION_LOCAL, 10);
     // setpoint_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 10);
+    
     cam_cmd_pub_ = nh_.advertise<std_msgs::UInt8>(CAM_CMD, 10);
 
     //===============初始化服务客户端=====================
