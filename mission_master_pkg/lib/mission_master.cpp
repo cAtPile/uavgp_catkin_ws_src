@@ -100,7 +100,7 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
     // 任务队列导入
-    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14}; // 默认任务
+    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14,15,6,89}; // 默认任务
     nh_.param<std::vector<int>>("mission_queue", mission_queue_int, default_queue_int);
 
     mission_queue.clear();
