@@ -100,7 +100,7 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
     // 任务队列导入
-    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14,15,6,89}; // 默认任务
+    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14, 15}; // 默认任务
     nh_.param<std::vector<int>>("mission_queue", mission_queue_int, default_queue_int);
 
     mission_queue.clear();
@@ -122,7 +122,11 @@ void MissionMaster::loadParams()
     ROS_INFO("current mission %ld state :", mission_queue.size());
     for (size_t i = 0; i < mission_queue.size(); ++i)
     {
-        ROS_INFO("  state %d:%d", static_cast<int>(i), static_cast<int>(mission_queue[i]));
+        ROS_INFO("  state %d: %d (%s)",
+                 static_cast<int>(i),                                            // 状态索引（0、1、2...）
+                 static_cast<int>(mission_queue[i]),                             // 枚举对应的整数
+                 mission_state_names[static_cast<int>(mission_queue[i])].c_str() // 枚举名称
+        );
     }
 
     // -------------------------- 打印所有参数（参数展示） --------------------------
