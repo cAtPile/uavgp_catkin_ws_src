@@ -26,6 +26,7 @@
 #include <cmath>
 #include <std_msgs/Bool.h>
 #include <mutex>
+#include <std_msgs/UInt8.h> 
 
 /**
  * @class apoc
