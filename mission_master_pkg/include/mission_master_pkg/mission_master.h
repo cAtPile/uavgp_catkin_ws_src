@@ -41,6 +41,8 @@
 #include <actionlib/client/simple_action_client.h>
 #include "mission_master_pkg/GripAction.h"
 #include <mission_master_pkg/CamTrack.h>
+#include <std_msgs/Unit8.h>
+
 
 // 任务状态枚举
 enum mission_state
