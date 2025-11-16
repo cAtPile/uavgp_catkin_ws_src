@@ -14,7 +14,7 @@ aim_high_trace: 0.1
 tolerace_pix: 10
 step_size_trace: 0.1
 pickup_center_x: 320
-pickup_center_y: 320
+pickup_center_y: 240
 pickup_aim_high: 0.1
 pickup_step_size: 0.1
 
