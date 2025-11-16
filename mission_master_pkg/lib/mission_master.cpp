@@ -100,7 +100,7 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
     // 任务队列导入
-    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14, 15}; // 默认任务
+    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14, 16}; // 默认任务
     nh_.param<std::vector<int>>("mission_queue", mission_queue_int, default_queue_int);
 
     mission_queue.clear();
@@ -117,6 +117,27 @@ void MissionMaster::loadParams()
             ROS_ERROR("invalid mission_int: %d (0,16) skip ", val);
         }
     }
+
+    // 枚举名称映射表：索引 = 枚举值，元素 = 对应名称（必须与mission_state定义顺序一致）
+    const std::vector<std::string> mission_state_names = {
+        "WAITING_TAKEOFF_STATE", // 0
+        "EXECUTE_TAKEOFF_STATE", // 1
+        "SUCCEED_TAKEOFF_STATE", // 2
+        "START_PICKUP_STATE",    // 3
+        "EXECUTE_PICKUP_STATE",  // 4
+        "SUCCEED_PICKUP_STATE",  // 5
+        "START_AVOID_STATE",     // 6
+        "EXECUTE_AVOID_STATE",   // 7
+        "SUCCEED_AVOID_STATE",   // 8
+        "START_TRACE_STATE",     // 9
+        "EXECUTE_TRACE_STATE",   // 10
+        "SUCCEED_TRACE_STATE",   // 11
+        "START_LAND_STATE",      // 12
+        "EXECUTE_LAND_STATE",    // 13
+        "SUCCEED_LAND_STATE",    // 14
+        "ERROR_STATE",           // 15
+        "MISSION_SUCCEED_STATE"  // 16
+    };
 
     // 验证转换结果
     ROS_INFO("current mission %ld state :", mission_queue.size());
