@@ -43,7 +43,6 @@
 #include <mission_master_pkg/CamTrack.h>
 #include <std_msgs/UInt8.h>
 
-
 // 任务状态枚举
 enum mission_state
 {
@@ -114,7 +113,12 @@ private:
     std::string CAM_INFO;
 
     //=========飞行参数============
-    double TOLERANCE_WAYPOINT;               // 位置容忍值（到达判定阈值）
+    double TOLERANCE_WAYPOINT; // 位置容忍值（到达判定阈值）
+
+    double pickup_cam_timeout; // 抓取相机搜索超时
+    double trace_cam_timeout;  // 抓取相机搜索超时
+    double land_timeout;       // 降落超时
+
     double trace_center_x, trace_center_y;   // 跟踪相机中央
     double cam_loc_rate;                     // 相机世界转换率
     double aim_high_trace;                   // 跟踪目标高度

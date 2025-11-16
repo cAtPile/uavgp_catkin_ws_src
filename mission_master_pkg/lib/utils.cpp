@@ -15,7 +15,6 @@ void MissionMaster::setPoint(const Eigen::Vector3d& set_point){
     temp_pose.pose.orientation.z = 0.0;
     temp_pose.pose.orientation.w = 1.0;
 
-
 }
 
 /**

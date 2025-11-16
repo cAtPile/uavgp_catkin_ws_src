@@ -76,12 +76,17 @@ void MissionMaster::loadParams()
     nh_.param<std::string>("MAV_cmdArming", MAV_CMD_ARMING, "/mavros/cmd/arming");
     nh_.param<std::string>("MAV_setMode", MAV_SET_MODE, "/mavros/set_mode");
     nh_.param<std::string>("MAV_setpointPositionLocal", MAV_SETPOINT_POSITION_LOCAL, "/mavros/setpoint_position/local");
-    
+
     nh_.param<std::string>("CAM_info", CAM_INFO, "/cam_tracker/info");
     nh_.param<std::string>("CAM_cmd", CAM_CMD, "/cam_tracker/tracker_control");
 
     // 飞行参数
     nh_.param("tolerance_waypoint", TOLERANCE_WAYPOINT, 0.10);
+
+    // 超时参数
+    nh_.param("pickup_cam_timeout", pickup_cam_timeout, 1.0);
+    nh_.param("trace_cam_timeout", trace_cam_timeout, 1.0);
+    nh_.param("land_timeout", land_timeout, 1.0);
 
     // 追踪参数
     nh_.param("trace_center_x", trace_center_x, 320.0);
@@ -170,7 +175,13 @@ void MissionMaster::loadParams()
 
     // 2. 飞行参数（double类型）
     ROS_INFO("\n fly param:");
-    ROS_INFO("  tolerance_waypoint: %.2f (m)", TOLERANCE_WAYPOINT); // 保留2位小数，加单位更清晰
+    ROS_INFO("  tolerance_waypoint: %.2f (m)", TOLERANCE_WAYPOINT);
+
+    // 3.容忍值参数
+    ROS_INFO("\n tolerance param:");
+    ROS_INFO("pickup_cam_timeout: %.2f (s)", pickup_cam_timeout);
+    ROS_INFO("trace_cam_timeout: %.2f (s)", trace_cam_timeout);
+    ROS_INFO("land_timeout: %.2f (s)", land_timeout);
 
     // 3. 追踪参数（double类型）
     ROS_INFO("\n tracker param:");
