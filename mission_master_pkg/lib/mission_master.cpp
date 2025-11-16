@@ -104,7 +104,7 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<int>>("mission_queue", mission_queue_int, default_queue_int);
 
     mission_queue.clear();
-    for (int val : queue_int)
+    for (int val : mission_queue_int)
     {
         // 合法性检查：确保int值在枚举有效范围内（0~16）
         if (val >= WAITING_TAKEOFF_STATE && val <= MISSION_SUCCEED_STATE)
