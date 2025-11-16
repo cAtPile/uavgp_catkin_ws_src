@@ -72,9 +72,13 @@ void MissionMaster::landExecute()
  */
 void MissionMaster::landCheck()
 {
+
+    double land_start_time = ros::Time::now().toSec();
     // 着陆检查并上锁
     while (ros::ok())
     {
+        double current_time = ros::Time::now().toSec();
+
         // 检查当前高度是否低于航点容忍距离（判断是否已着陆）
         if (current_pose.pose.position.z <= TOLERANCE_WAYPOINT)
         {
@@ -93,6 +97,27 @@ void MissionMaster::landCheck()
             else
             {
                 ROS_ERROR("Failed to disarm vehicle");
+            }
+        }
+        else
+        {
+            if (land_start_time - current_time >= land_timeout)
+            {
+
+                // 上锁
+                mavros_msgs::CommandBool arm_cmd;
+                arm_cmd.request.value = false; // 设置为上锁
+                if (arming_client_.call(arm_cmd) && arm_cmd.response.success)
+                {
+                    ROS_INFO("Vehicle disarmed");
+                    current_mission_state = mission_queue[mission_queue_index];
+                    mission_queue_index++;
+                    break;
+                }
+                else
+                {
+                    ROS_ERROR("Failed to disarm vehicle");
+                }
             }
         }
 

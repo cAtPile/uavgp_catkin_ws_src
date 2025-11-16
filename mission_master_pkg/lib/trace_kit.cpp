@@ -102,7 +102,6 @@ void MissionMaster::traceLoop()
     double rel_cam_x, rel_cam_y;
 
     // 超时设置
-    double timeout_duration = 1.0; // 等待超时
     double last_seen_time = ros::Time::now().toSec();
 
     // 抓取主循环
@@ -114,7 +113,7 @@ void MissionMaster::traceLoop()
         {
             double current_time = ros::Time::now().toSec();
             // 如果超时，则跳出循环
-            if (current_time - last_seen_time > timeout_duration)
+            if (current_time - last_seen_time > trace_cam_timeout)
             {
                 ROS_WARN("Target lost for too long, exiting TR loop...");
                 break;
