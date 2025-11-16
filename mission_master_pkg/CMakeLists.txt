@@ -27,11 +27,11 @@ add_action_files(
   Grip.action
 )
 
-# 声明自定义消息文件（新增：添加CamTrack.msg）
+# 声明自定义消息文件
 add_message_files(
-  DIRECTORY msg  # 消息文件存放目录（需手动创建msg文件夹）
+  DIRECTORY msg  # 消息文件存放目录
   FILES
-  CamTrack.msg   # 你的自定义消息文件
+  CamTrack.msg  
 )
 
 # 生成消息（包含Action和自定义消息，依赖保持不变）
