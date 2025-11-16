@@ -19,7 +19,8 @@ void MissionMaster::traceStart()
         if (reachCheck(trace_start_waypoint_re))
         {
             ROS_INFO("Arrived at trace Start Point");
-            current_mission_state = EXECUTE_TRACE_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
 
@@ -46,7 +47,8 @@ void MissionMaster::traceExecute()
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(Eigen::Vector3d(temp_pose.pose.position.x, temp_pose.pose.position.y, temp_pose.pose.position.z)))
         {
-            current_mission_state = SUCCEED_TRACE_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
         ros::spinOnce();
@@ -70,7 +72,8 @@ void MissionMaster::traceCheck()
         {
 
             ROS_INFO("Arrived at trace End Point");
-            current_mission_state = START_LAND_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
 
@@ -112,7 +115,7 @@ void MissionMaster::traceLoop()
                 break;
             }
             // 如果目标丢失，更新最后一次看到目标的时间
-            //last_seen_time = current_time;
+            // last_seen_time = current_time;
             ROS_INFO("Waiting for target...TR");
             setpoint_pub_.publish(current_pose);
             ros::spinOnce();

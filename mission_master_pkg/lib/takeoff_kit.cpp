@@ -14,7 +14,8 @@ void MissionMaster::waitingTakeoff()
             if (armSet())
             {
                 ROS_INFO("Switched to OFFBOARD mode and armed successfully");
-                current_mission_state = EXECUTE_TAKEOFF_STATE;
+                current_mission_state = mission_queue[mission_queue_index];
+                mission_queue_index++;
                 break;
             }
             else
@@ -58,7 +59,8 @@ void MissionMaster::takeoffExecute()
         if (reachCheck(takeoff_waypoint_re))
         {
             ROS_INFO("Takeoff set Success!");
-            current_mission_state = SUCCEED_TAKEOFF_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
         ros::spinOnce();
@@ -82,7 +84,8 @@ void MissionMaster::takeoffCheck()
 
         if (reachCheck(takeoff_waypoint_re))
         {
-            current_mission_state = START_PICKUP_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             ROS_INFO("Takeoff Success!");
             break;
         }
@@ -153,6 +156,4 @@ void MissionMaster::loadWaypoints()
         trace_end_waypoint_v[0] + home_pose.pose.position.x,
         trace_end_waypoint_v[1] + home_pose.pose.position.y,
         trace_end_waypoint_v[2] + home_pose.pose.position.z);
-        
 }
-

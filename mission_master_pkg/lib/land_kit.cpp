@@ -26,7 +26,8 @@ void MissionMaster::landStart()
         if (reachCheck(Eigen::Vector3d(home_pose.pose.position.x, home_pose.pose.position.y, 3.0)))
         {
             ROS_INFO("Arrived at Pickup Start Point");
-            current_mission_state = EXECUTE_LAND_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
 
@@ -56,7 +57,8 @@ void MissionMaster::landExecute()
         else
         {
             ROS_INFO("Already in AUTO.LAND mode");
-            current_mission_state = SUCCEED_LAND_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
 
@@ -70,7 +72,7 @@ void MissionMaster::landExecute()
  */
 void MissionMaster::landCheck()
 {
-    //着陆检查并上锁
+    // 着陆检查并上锁
     while (ros::ok())
     {
         // 检查当前高度是否低于航点容忍距离（判断是否已着陆）
@@ -84,7 +86,8 @@ void MissionMaster::landCheck()
             if (arming_client_.call(arm_cmd) && arm_cmd.response.success)
             {
                 ROS_INFO("Vehicle disarmed");
-                current_mission_state = MISSION_SUCCEED_STATE;
+                current_mission_state = mission_queue[mission_queue_index];
+                mission_queue_index++;
                 break;
             }
             else
@@ -96,5 +99,4 @@ void MissionMaster::landCheck()
         ros::spinOnce();
         rate_.sleep();
     }
-
 }

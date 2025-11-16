@@ -16,7 +16,8 @@ void MissionMaster::pickupStart()
         if (reachCheck(pickup_start_waypoint_re))
         {
             ROS_INFO("Arrived at Pickup Start Point");
-            current_mission_state = EXECUTE_PICKUP_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
 
@@ -44,7 +45,8 @@ void MissionMaster::pickupExecute()
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(Eigen::Vector3d(temp_pose.pose.position.x, temp_pose.pose.position.y, temp_pose.pose.position.z)))
         {
-            current_mission_state = SUCCEED_PICKUP_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
         ros::spinOnce();
@@ -69,7 +71,8 @@ void MissionMaster::pickupCheck()
         {
             ROS_INFO("EXE PICKUP END CHECK ");
 
-            current_mission_state = START_AVOID_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
         ros::spinOnce();
@@ -111,7 +114,7 @@ void MissionMaster::pickLoop()
                 break;
             }
             // 如果目标丢失，更新最后一次看到目标的时间
-            //last_seen_time = current_time;
+            // last_seen_time = current_time;
             ROS_INFO("Waiting for target...");
             setpoint_pub_.publish(current_pose);
             ros::spinOnce();

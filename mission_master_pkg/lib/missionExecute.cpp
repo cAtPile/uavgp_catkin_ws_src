@@ -72,6 +72,7 @@ void MissionMaster::missionExecute()
         break;
 
     case MISSION_SUCCEED_STATE:
+        ROS_INFO("MISSION SUCCEED");
         break;
 
     default:
@@ -83,6 +84,9 @@ void MissionMaster::run()
 {
     while (ros::ok())
     {
+        if(current_mission_state==MISSION_SUCCEED_STATE){
+            break;
+        }
         missionExecute();
         ros::spinOnce();
         rate_.sleep();

@@ -19,7 +19,8 @@ void MissionMaster::avoidStart()
         if (reachCheck(avoid_start_waypoint_re))
         {
             ROS_INFO("Arrived at avoid Start Point");
-            current_mission_state = EXECUTE_AVOID_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             break;
         }
 
@@ -37,7 +38,8 @@ void MissionMaster::avoidExecute()
     setpoint_pub_.publish(current_pose);
 
     // 预留
-    current_mission_state = SUCCEED_AVOID_STATE;
+    current_mission_state = mission_queue[mission_queue_index];
+    mission_queue_index++;
 }
 
 /**
@@ -55,7 +57,8 @@ void MissionMaster::avoidCheck()
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(avoid_end_waypoint_re))
         {
-            current_mission_state = START_TRACE_STATE;
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
             setpoint_pub_.publish(current_pose);
 
             break;
