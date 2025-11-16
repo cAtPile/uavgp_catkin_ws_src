@@ -68,6 +68,7 @@ void MissionMaster::missionExecute()
         break;
 
     case ERROR_STATE:
+        ROS_ERROR("ERROR");
         break;
 
     case MISSION_SUCCEED_STATE:
