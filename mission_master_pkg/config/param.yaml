@@ -29,3 +29,12 @@ avoid_start_waypoint_v: [1.0, 1.0, 1.0]
 avoid_end_waypoint_v: [0.0, 1.0, 1.0]
 trace_start_waypoint_v: [1.0, 1.0, 1.0]
 trace_end_waypoint_v: [0.0, 1.0, 1.0]
+
+#任务队列
+mission_queue: [0,1,2,12,13,14,16]
+  - 0  # WAITING_TAKEOFF_STATE
+  - 1  # EXECUTE_TAKEOFF_STATE
+  - 2  # SUCCEED_TAKEOFF_STATE
+  - 12 # START_LAND_STATE
+  - 13 # EXECUTE_LAND_STATE
+  - 14 # SUCCEED_LAND_STATE

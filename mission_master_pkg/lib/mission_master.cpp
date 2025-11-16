@@ -99,6 +99,32 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<double>>("trace_start_waypoint_v", trace_start_waypoint_v, {1.0, 0.0, 1.0});
     nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
+    // 任务队列导入
+    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14}; // 默认任务
+    nh_.param<std::vector<int>>("mission_queue", mission_queue_int, default_queue_int);
+
+    mission_queue.clear();
+    for (int val : queue_int)
+    {
+        // 合法性检查：确保int值在枚举有效范围内（0~16）
+        if (val >= WAITING_TAKEOFF_STATE && val <= MISSION_SUCCEED_STATE)
+        {
+            // 强制类型转换：int → mission_state
+            mission_queue.push_back(static_cast<mission_state>(val));
+        }
+        else
+        {
+            ROS_ERROR("invalid mission_int: %d (0,16) skip ", val);
+        }
+    }
+
+    // 验证转换结果
+    ROS_INFO("current mission %d state :", mission_queue.size());
+    for (size_t i = 0; i < mission_queue.size(); ++i)
+    {
+        ROS_INFO("  state %d:%d", static_cast<int>(i), static_cast<int>(mission_queue[i]));
+    }
+
     // -------------------------- 打印所有参数（参数展示） --------------------------
     ROS_INFO("\n===== params list =====");
 

@@ -154,6 +154,7 @@ private:
 
     //=========任务队列============
     std::vector<mission_state> mission_queue;
+    std::vector<int> mission_queue_int;
 
     //=========私有函数============
     void loadParams();     // 参数导入
