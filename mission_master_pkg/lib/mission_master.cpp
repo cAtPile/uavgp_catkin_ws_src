@@ -119,7 +119,7 @@ void MissionMaster::loadParams()
     }
 
     // 验证转换结果
-    ROS_INFO("current mission %d state :", mission_queue.size());
+    ROS_INFO("current mission %ld state :", mission_queue.size());
     for (size_t i = 0; i < mission_queue.size(); ++i)
     {
         ROS_INFO("  state %d:%d", static_cast<int>(i), static_cast<int>(mission_queue[i]));
