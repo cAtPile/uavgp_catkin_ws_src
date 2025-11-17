@@ -35,7 +35,6 @@ void MissionMaster::avoidStart()
 void MissionMaster::avoidExecute()
 {
     ROS_INFO("A exe");
-    std::vector<Eigen::Vector3d> avoid_waypoints_v3d;
 
     avoidWaypointsLoad();
     avoidWaypointsLoop();

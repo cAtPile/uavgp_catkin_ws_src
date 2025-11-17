@@ -151,6 +151,7 @@ private:
     std::vector<double> waypoints_group_x;
     std::vector<double> waypoints_group_y;
     std::vector<double> waypoints_group_z;
+    std::vector<Eigen::Vector3d> avoid_waypoints_v3d;
 
     //=========数据缓存============
     mavros_msgs::State current_state;              // 当前无人机状态
@@ -171,7 +172,7 @@ private:
     int mission_queue_index;
 
     //=========私有函数============
-    void loadParams();     // 参数导入
+    void loadParams(); // 参数导入
     void showParams();
     void loadWaypoints();  // 航点导入
     void waitingTakeoff(); // 等待起飞
@@ -192,10 +193,8 @@ private:
     void avoidExecute();                                                           // 避障执行
     void avoidCheck();                                                             // 避障检查
     void avoidLoop(double avoid_goal_x, double avoid_goal_y, double avoid_goal_z); // 避障循环
-    void avoidWaypointsLoad();//避障点压入
-    void avoidWaypointsLoop();//避障点循环
-
-
+    void avoidWaypointsLoad();                                                     // 避障点压入
+    void avoidWaypointsLoop();                                                     // 避障点循环
 
     void traceStart();   // 跟踪开始
     void traceExecute(); // 追踪执行
