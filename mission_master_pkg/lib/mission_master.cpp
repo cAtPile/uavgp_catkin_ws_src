@@ -249,6 +249,7 @@ void MissionMaster::loadParams()
                  waypoint[1],
                  waypoint[2]);
     }
+    ROS_INFO("X=%.2f",avoid_waypoints[1][1])
 
     ROS_INFO("==========================\n");
 }
