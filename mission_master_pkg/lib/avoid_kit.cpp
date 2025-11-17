@@ -96,8 +96,9 @@ void MissionMaster::avoidWaypointsLoop()
         {
             setPoint(wap_av_v3d_temp);
             setpoint_pub_.publish(temp_pose);
-            if(reachCheck(wap_av_v3d_temp)){
-        ROS_INFO("NUM: %d :(%.2f, %.2f, %.2f)", i, wap_av_v3d_temp.x(), wap_av_v3d_temp.y(), wap_av_v3d_temp.z());
+            if (reachCheck(wap_av_v3d_temp))
+            {
+                ROS_INFO("NUM: %d :(%.2f, %.2f, %.2f)", i, wap_av_v3d_temp.x(), wap_av_v3d_temp.y(), wap_av_v3d_temp.z());
 
                 break;
             }
