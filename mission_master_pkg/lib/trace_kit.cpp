@@ -66,7 +66,7 @@ void MissionMaster::traceCheck()
     setPoint(trace_end_waypoint_re);
     while (ros::ok())
     {
-        ROS_INFO("TC L");
+        ROS_INFO_THROTTLE(1.0,"TC L");
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(trace_end_waypoint_re))
         {
@@ -107,7 +107,7 @@ void MissionMaster::traceLoop()
     // 抓取主循环
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0, "TR LOOP pose");
+        ROS_INFO_THROTTLE(1.0, "TR LOOP pluse");
         // 如果目标没有被检测到，进入等待状态
         if (current_camtrack.car_num == 0)
         {
@@ -252,7 +252,7 @@ bool MissionMaster::gripRelease()
             }
         }
 
-        // 处理回调函数（在等待过程中继续处理ROS消息）
+        // 处理回调函数
         ros::spinOnce(); // 调用一次回调函数
 
         // 控制循环的频率

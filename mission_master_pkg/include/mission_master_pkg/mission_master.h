@@ -172,6 +172,7 @@ private:
 
     //=========私有函数============
     void loadParams();     // 参数导入
+    void showParams();
     void loadWaypoints();  // 航点导入
     void waitingTakeoff(); // 等待起飞
     bool armSet();         // 解锁

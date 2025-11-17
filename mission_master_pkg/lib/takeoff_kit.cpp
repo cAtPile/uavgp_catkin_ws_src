@@ -35,7 +35,7 @@ void MissionMaster::waitingTakeoff()
 
             // 发送心跳信号
             setpoint_pub_.publish(current_pose);
-            ROS_INFO_THROTTLE(1.0, "Waiting for taking off...");
+            ROS_INFO_THROTTLE(2.0, "Waiting for taking off...");
         }
 
         ros::spinOnce();

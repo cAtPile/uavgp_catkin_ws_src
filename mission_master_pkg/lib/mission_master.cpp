@@ -111,11 +111,12 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
     // 避障航点
-    //nh_.param<std::vector<std::vector<double>>>("avoid_waypoints", avoid_waypoints, {});
+    nh_.param<std::vector<double>>("waypoints_group_x", waypoints_group_x, {0.0});
+    nh_.param<std::vector<double>>("waypoints_group_y", waypoints_group_y, {0.0});
+    nh_.param<std::vector<double>>("waypoints_group_z", waypoints_group_z, {0.0});
 
     // 任务队列导入
-    std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14, 16}; // 默认任务
-    nh_.param<std::vector<int>>("mission_queue", mission_queue_int, default_queue_int);
+    nh_.param<std::vector<int>>("mission_queue", mission_queue_int, {0, 1, 2, 12, 13, 14, 16});
 
     mission_queue.clear();
     for (int val : mission_queue_int)
@@ -164,6 +165,11 @@ void MissionMaster::loadParams()
         );
     }
 
+    showParams();
+}
+
+void MissionMaster::showParams()
+{
     // -------------------------- 打印所有参数（参数展示） --------------------------
     ROS_INFO("\n===== params list =====");
 
@@ -216,41 +222,8 @@ void MissionMaster::loadParams()
              trace_start_waypoint_v[0], trace_start_waypoint_v[1], trace_start_waypoint_v[2]);
     ROS_INFO("  trace_end_waypoint_v: [%.2f, %.2f, %.2f]",
              trace_end_waypoint_v[0], trace_end_waypoint_v[1], trace_end_waypoint_v[2]);
-/*
-    // 避障航点
-    ROS_INFO("\n avoid waypoint (x, y, z  (m)):");
 
-    // 检查航点列表是否为空
-    if (avoid_waypoints.empty())
-    {
-        ROS_INFO("avoid_waypoints empty");
-        return;
-    }
-
-    // 打印航点总数
-    ROS_INFO("num points:%zu ", avoid_waypoints.size());
-
-    // 双重循环遍历：外层遍历每个航点，内层遍历坐标
-    for (size_t i = 0; i < avoid_waypoints.size(); ++i)
-    {
-        const auto &waypoint = avoid_waypoints[i]; // 获取第i个航点
-
-        // 检查当前航点的坐标数量（是否为3个：x,y,z）
-        if (waypoint.size() != 3)
-        {
-            ROS_WARN("waypoint: %zu error:have %zu value(correct 3)", i, waypoint.size());
-            continue; // 跳过异常航点
-        }
-
-        // 打印当前航点的坐标（x: waypoint[0], y: waypoint[1], z: waypoint[2]）
-        ROS_INFO("waypoint: %zu: (x=%.2f, y=%.2f, z=%.2f)",
-                 i,
-                 waypoint[0],
-                 waypoint[1],
-                 waypoint[2]);
-    }
-    ROS_INFO("X=%.2f",avoid_waypoints[1][1]);
-    */
+    //
 
     ROS_INFO("\n ==========================");
 }
