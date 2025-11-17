@@ -148,7 +148,9 @@ private:
     Eigen::Vector3d trace_end_waypoint_re;
 
     // 面向结果的避障
-    std::vector<std::vector<double>> avoid_waypoints;
+    std::vector<double> waypoints_group_x;
+    std::vector<double> waypoints_group_y;
+    std::vector<double> waypoints_group_z;
 
     //=========数据缓存============
     mavros_msgs::State current_state;              // 当前无人机状态

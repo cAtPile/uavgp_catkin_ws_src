@@ -111,7 +111,7 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
     // 避障航点
-    nh_.param<std::vector<std::vector<double>>>("avoid_waypoints", avoid_waypoints, {});
+    //nh_.param<std::vector<std::vector<double>>>("avoid_waypoints", avoid_waypoints, {});
 
     // 任务队列导入
     std::vector<int> default_queue_int = {0, 1, 2, 12, 13, 14, 16}; // 默认任务
