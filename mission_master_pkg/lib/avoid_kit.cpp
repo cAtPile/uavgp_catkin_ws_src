@@ -35,6 +35,8 @@ void MissionMaster::avoidStart()
 void MissionMaster::avoidExecute()
 {
     ROS_INFO("A exe");
+    std::vector<Eigen::Vector3d> avoid_waypoints_v3d;
+
     avoidWaypointsLoad();
     avoidWaypointsLoop();
 
@@ -73,14 +75,13 @@ void MissionMaster::avoidCheck()
 // 避障点压入
 void MissionMaster::avoidWaypointsLoad()
 {
-    std::vector<Eigen::Vector3d> avoid_waypoints_v3d;
     int wap_av_size = waypoints_group_x.size();
     for (int i = 0; i < wap_av_size; i++)
     {
 
         double waypoint_x = waypoints_group_x[i];
         double waypoint_y = waypoints_group_y[i];
-        double waypoint_z = waypoints_group_[i];
+        double waypoint_z = waypoints_group_z[i];
         avoid_waypoints_v3d.emplace_back(waypoint_x, waypoint_y, waypoint_z);
     }
 }
