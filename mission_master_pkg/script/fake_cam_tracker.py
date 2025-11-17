@@ -2,7 +2,7 @@
 import rospy
 from mavros_msgs.msg import PoseStamped
 from std_msgs.msg import UInt8
-from cam_tracker.msg import CamTrack  # 需确保msg已正确编译
+from mission_master_pkg.msg import CamTrack  # 需确保msg已正确编译
 
 class FakeCamNode:
     def __init__(self):
@@ -20,7 +20,7 @@ class FakeCamNode:
         self.rate = rospy.Rate(10)  # 发布频率10Hz
         
         # 订阅者
-        rospy.Subscriber('mavros/local_position/pose', PoseStamped, self.pose_callback)
+        rospy.Subscriber('/mavros/local_position/pose', PoseStamped, self.pose_callback)
         rospy.Subscriber('/cam_tracker/tracker_control', UInt8, self.control_callback)
         
         # 发布者
