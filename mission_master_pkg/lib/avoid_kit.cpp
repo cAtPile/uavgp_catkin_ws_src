@@ -100,5 +100,6 @@ void MissionMaster::avoidWaypointsLoop()
             ros::spinOnce();
             rate_.sleep();
         }
+        ROS_INFO("(%.2f, %.2f, %.2f)", i, x, y, z)
     }
 }
