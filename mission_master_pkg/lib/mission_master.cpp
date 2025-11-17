@@ -223,7 +223,19 @@ void MissionMaster::showParams()
     ROS_INFO("  trace_end_waypoint_v: [%.2f, %.2f, %.2f]",
              trace_end_waypoint_v[0], trace_end_waypoint_v[1], trace_end_waypoint_v[2]);
 
-    //
+    // 5.多航点参数
+    for (size_t i = 0; i < waypoints_group_x.size(); ++i)
+    {
+        ROS_INFO_STREAM("x[" << i << "]: " << std::fixed << std::setprecision(2) << waypoints_group_x[i]);
+    }
+    for (size_t i = 0; i < waypoints_group_y.size(); ++i)
+    {
+        ROS_INFO_STREAM("y[" << i << "]: " << std::fixed << std::setprecision(2) << waypoints_group_y[i]);
+    }
+    for (size_t i = 0; i < waypoints_group_z.size(); ++i)
+    {
+        ROS_INFO_STREAM("z[" << i << "]: " << std::fixed << std::setprecision(2) << waypoints_group_z[i]);
+    }
 
     ROS_INFO("\n ==========================");
 }
