@@ -12,7 +12,8 @@ class FakeCamNode:
         # 配置固定球地图坐标（可通过参数服务器读取，方便修改）
         self.ball_map_x = rospy.get_param('~ball_map_x', 5.0)  # 球在地图中的固定X坐标
         self.ball_map_y = rospy.get_param('~ball_map_y', 3.0)  # 球在地图中的固定Y坐标
-        self.scale_ratio = rospy.get_param('~scale_ratio', 0.1)  # 相对位置缩放比例
+        self.scale_ratio_x = rospy.get_param('~scale_ratio_x', 100.0)  # X轴缩放比例（地图坐标到像素坐标）
+        self.scale_ratio_y = rospy.get_param('~scale_ratio_y', 100.0)  # Y轴缩放比例（地图坐标到像素坐标）
         
         # 状态变量
         self.current_pose = PoseStamped()  # 无人机当前位置
@@ -43,11 +44,19 @@ class FakeCamNode:
         drone_x = self.current_pose.pose.position.x
         drone_y = self.current_pose.pose.position.y
         
-        # 相对位置 = (球地图坐标 - 无人机坐标) * 缩放比例
-        ball_rel_x = (self.ball_map_x - drone_x) * self.scale_ratio
-        ball_rel_y = (self.ball_map_y - drone_y) * self.scale_ratio
+        # 相对位置 = (球地图坐标 - 无人机坐标)
+        ball_rel_x = self.ball_map_x - drone_x
+        ball_rel_y = self.ball_map_y - drone_y
         
-        return ball_rel_x, ball_rel_y
+        # 将地图坐标转换为虚拟像素坐标
+        ball_pixel_x = ball_rel_x * self.scale_ratio_x  # 将X坐标映射到像素
+        ball_pixel_y = ball_rel_y * self.scale_ratio_y  # 将Y坐标映射到像素
+        
+        # 限制像素坐标在图像范围内
+        ball_pixel_x = max(0, min(640, ball_pixel_x))
+        ball_pixel_y = max(0, min(320, ball_pixel_y))
+
+        return ball_pixel_x, ball_pixel_y
 
     def run(self):
         while not rospy.is_shutdown():
@@ -65,11 +74,11 @@ class FakeCamNode:
 
             if self.track_mode == 1:
                 # 抓取区模式：只填充ball信息，car信息设为默认
-                ball_x, ball_y = self.calculate_ball_relative_pos()
+                ball_pixel_x, ball_pixel_y = self.calculate_ball_relative_pos()
                 cam_msg.ball_num = 1  # 固定检测到1个球
                 cam_msg.ball_id = 1    # 球ID固定为1
-                cam_msg.ball_x = ball_x
-                cam_msg.ball_y = ball_y
+                cam_msg.ball_x = ball_pixel_x
+                cam_msg.ball_y = ball_pixel_y
                 cam_msg.ball_dis = 0.0  # 预留接口，输出0
                 
                 # car信息置空

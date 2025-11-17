@@ -246,7 +246,7 @@ bool in_gripper             # 夹爪是否抓取到球（当前输出False）
 1#开始持续检测与发布（在抓取区-只检测ball）
 0#停止发布
 ```
-设置ball的位置为 ball_map_x,ball_map_y
+设置ball的位置为固定的 ball_map_x,ball_map_y
 根据mavros的位置确定相对位置，乘一个比例发布到ball_x和ball_y（/cam_tracker/info）
 设置car1的运动为匀速直线运动(vt)
 car2为匀变速运动(at^2+vt)
