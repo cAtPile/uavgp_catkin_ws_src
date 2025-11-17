@@ -92,14 +92,18 @@ void MissionMaster::avoidWaypointsLoop()
     for (int i = 0; i < wap_av_v3d_size; i++)
     {
         Eigen::Vector3d wap_av_v3d_temp = avoid_waypoints_v3d[i];
-        while (reachCheck(wap_av_v3d_temp))
+        while (ros::ok())
         {
             setPoint(wap_av_v3d_temp);
             setpoint_pub_.publish(temp_pose);
+            if(reachCheck(wap_av_v3d_temp)){
+        ROS_INFO("NUM: %d :(%.2f, %.2f, %.2f)", i, wap_av_v3d_temp.x(), wap_av_v3d_temp.y(), wap_av_v3d_temp.z());
+
+                break;
+            }
 
             ros::spinOnce();
             rate_.sleep();
         }
-        ROS_INFO("NUM: %d :(%.2f, %.2f, %.2f)", i, wap_av_v3d_temp.x(), wap_av_v3d_temp.y(), wap_av_v3d_temp.z());
     }
 }
