@@ -39,7 +39,7 @@ void MissionMaster::traceExecute()
 
     temp_pose.pose.position.x = current_pose.pose.position.x;
     temp_pose.pose.position.y = current_pose.pose.position.y;
-    temp_pose.pose.position.z = 5.0 + home_pose.pose.position.z;
+    temp_pose.pose.position.z = trace_end_waypoint_v[2]+ home_pose.pose.position.z;
 
     while (ros::ok())
     {

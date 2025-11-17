@@ -38,7 +38,7 @@ trace_start_waypoint_v: [1.0, 1.0, 1.0]
 trace_end_waypoint_v: [0.0, 1.0, 1.0]
 
 #任务队列
-mission_queue: [0, 1, 2, 6,7,8, 12, 13, 14, 16]
+mission_queue: [0, 1, 2, 3,4,5, 12, 13, 14, 16]
 #"WAITING_TAKEOFF_STATE", // 0
 #"EXECUTE_TAKEOFF_STATE", // 1
 #"SUCCEED_TAKEOFF_STATE", // 2
