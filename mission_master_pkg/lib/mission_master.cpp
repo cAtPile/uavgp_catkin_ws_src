@@ -216,7 +216,7 @@ void MissionMaster::loadParams()
              trace_start_waypoint_v[0], trace_start_waypoint_v[1], trace_start_waypoint_v[2]);
     ROS_INFO("  trace_end_waypoint_v: [%.2f, %.2f, %.2f]",
              trace_end_waypoint_v[0], trace_end_waypoint_v[1], trace_end_waypoint_v[2]);
-
+/*
     // 避障航点
     ROS_INFO("\n avoid waypoint (x, y, z  (m)):");
 
@@ -250,6 +250,7 @@ void MissionMaster::loadParams()
                  waypoint[2]);
     }
     ROS_INFO("X=%.2f",avoid_waypoints[1][1]);
+    */
 
     ROS_INFO("\n ==========================");
 }
