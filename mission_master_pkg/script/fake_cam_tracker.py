@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-from mavros_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped  
 from std_msgs.msg import UInt8
 from mission_master_pkg.msg import CamTrack  # 需确保msg已正确编译
 
