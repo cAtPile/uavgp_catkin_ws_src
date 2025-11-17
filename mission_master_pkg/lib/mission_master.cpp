@@ -111,9 +111,9 @@ void MissionMaster::loadParams()
     nh_.param<std::vector<double>>("trace_end_waypoint_v", trace_end_waypoint_v, {0.0, 1.0, 1.0});
 
     // 避障航点
-    nh_.param<std::vector<double>>("waypoints_group_x", waypoints_group_x, {0.0,3});
-    nh_.param<std::vector<double>>("waypoints_group_y", waypoints_group_y, {0.0,2});
-    nh_.param<std::vector<double>>("waypoints_group_z", waypoints_group_z, {0.0,1});
+    nh_.param<std::vector<double>>("waypoints_group_x", waypoints_group_x, {0.0});
+    nh_.param<std::vector<double>>("waypoints_group_y", waypoints_group_y, {0.0});
+    nh_.param<std::vector<double>>("waypoints_group_z", waypoints_group_z, {0.0});
 
     // 任务队列导入
     nh_.param<std::vector<int>>("mission_queue", mission_queue_int, {0, 1, 2, 12, 13, 14, 16});

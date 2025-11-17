@@ -58,6 +58,6 @@ mission_queue: [0, 1, 2, 9, 10, 11, 12, 13, 14, 16]
 #"MISSION_SUCCEED_STATE"  // 16
 
 #避障航点
-#waypoints_group_x: []
-#waypoints_group_y: []
-#waypoints_group_z: []
+waypoints_group_x: [2.2,3.3,4.4]
+waypoints_group_y: [1.1,2.2,2.5]
+waypoints_group_z: [1.0,3.0,5.0]

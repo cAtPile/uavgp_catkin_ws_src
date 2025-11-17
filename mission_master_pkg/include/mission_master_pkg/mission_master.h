@@ -192,6 +192,10 @@ private:
     void avoidExecute();                                                           // 避障执行
     void avoidCheck();                                                             // 避障检查
     void avoidLoop(double avoid_goal_x, double avoid_goal_y, double avoid_goal_z); // 避障循环
+    void avoidWaypointsLoad();//避障点压入
+    void avoidWaypointsLoop();//避障点循环
+
+
 
     void traceStart();   // 跟踪开始
     void traceExecute(); // 追踪执行

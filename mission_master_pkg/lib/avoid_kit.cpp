@@ -35,7 +35,8 @@ void MissionMaster::avoidStart()
 void MissionMaster::avoidExecute()
 {
     ROS_INFO("A exe");
-    setpoint_pub_.publish(current_pose);
+    avoidWaypointsLoad();
+    avoidWaypointsLoop();
 
     // 预留
     current_mission_state = mission_queue[mission_queue_index];
@@ -68,73 +69,36 @@ void MissionMaster::avoidCheck()
         rate_.sleep();
     }
 }
-/*
-void MissionMaster::avoidLoop(double avoid_goal_x,double avoid_goal_y,double avoid_goal_z){
 
-    //以geometry_msgs/PoseStamped的形式发送到/mission_avoid/goal
-    geometry_msgs::PoseStamped::avoid_goal;
-    avoid_goal.header.stamp=ros::Time::now();
-    avoid_goal.header.frame_id="map";
-    avoid_gaol.pose.position.x=avoid_goal_x;
-    avoid_gaol.pose.position.y=avoid_goal_y;
-    avoid_gaol.pose.position.z=avoid_goal_z;
-    avoid_gaol.pose.orientation.x=0;
-    avoid_gaol.pose.orientation.y=0;
-    avoid_gaol.pose.orientation.z=0;
-    avoid_gaol.pose.orientation.w=1;
-
-    geometry_msgs::PoseStamped::avoid_cmd;
-    avoid_cmd.header.stamp=ros::Time::now();
-    avoid_cmd.header.frame_id="map";
-    avoid_gaol.pose.position.x=avoid_goal_x;
-    avoid_gaol.pose.position.y=avoid_goal_y;
-    avoid_gaol.pose.position.z=avoid_goal_z;
-    avoid_gaol.pose.orientation.x=0;
-    avoid_gaol.pose.orientation.y=0;
-    avoid_gaol.pose.orientation.z=0;
-    avoid_gaol.pose.orientation.w=1;
-
-
-    while (ros::ok())
+// 避障点压入
+void MissionMaster::avoidWaypointsLoad()
+{
+    std::vector<Eigen::Vector3d> avoid_waypoints_v3d;
+    int wap_av_size = waypoints_group_x.size();
+    for (int i = 0; i < wap_av_size; i++)
     {
-        temp_pose.pose.position.x=0;//
-        temp_pose.pose.position.x=0;//
-        temp_pose.pose.position.x=0;//
 
+        double waypoint_x = waypoints_group_x[i];
+        double waypoint_y = waypoints_group_y[i];
+        double waypoint_z = waypoints_group_[i];
+        avoid_waypoints_v3d.emplace_back(waypoint_x, waypoint_y, waypoint_z);
     }
+}
 
+// 航点避障循环
+void MissionMaster::avoidWaypointsLoop()
+{
+    int wap_av_v3d_size = avoid_waypoints_v3d.size();
+    for (int i = 0; i < wap_av_v3d_size; i++)
+    {
+        Eigen::Vector3d wap_av_v3d_temp = avoid_waypoints_v3d[i];
+        while (reachCheck(wap_av_v3d_temp))
+        {
+            setPoint(wap_av_v3d_temp);
+            setpoint_pub_.publish(temp_pose);
 
-    //接受ego消息
-
-     #PositionCommand.msg
-
-Header header
-geometry_msgs/Point position
-geometry_msgs/Vector3 velocity
-geometry_msgs/Vector3 acceleration
-float64 yaw
-float64 yaw_dot
-float64[3] kx
-float64[3] kv
-
-uint32 trajectory_id
-
-uint8 TRAJECTORY_STATUS_EMPTY = 0
-uint8 TRAJECTORY_STATUS_READY = 1
-uint8 TRAJECTORY_STATUS_COMPLETED = 3
-uint8 TRAJECTROY_STATUS_ABORT = 4
-uint8 TRAJECTORY_STATUS_ILLEGAL_START = 5
-uint8 TRAJECTORY_STATUS_ILLEGAL_FINAL = 6
-uint8 TRAJECTORY_STATUS_IMPOSSIBLE = 7
-
-# Its ID number will start from 1, allowing you comparing it with 0.
-uint8 trajectory_flag
-
-
-    //ego消息转换
-
-    //发布到mav
-
-    //到达退出
-//}
-*/
+            ros::spinOnce();
+            rate_.sleep();
+        }
+    }
+}

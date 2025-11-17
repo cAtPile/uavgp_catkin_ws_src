@@ -205,3 +205,48 @@ enum mission_state
     - 略
 
 ## 全局参数列表
+
+
+
+# fake 系列
+1. fake_cam
+参考msg：
+```
+# CamTrack.msg（/cam_tracker/info）
+# Cam Tracker Detection Message
+# 用于发布ball和car的检测结果
+
+std_msgs/Header header      # 时间戳、坐标系等信息
+
+bool system_ok              # 系统健康状态（True=正常运行，False=检测异常）
+
+# Ball检测信息（抓取区使用）
+int32 ball_num              # 检测到的ball数量
+int32 ball_id
+float32 ball_x              # 最适合抓取的ball的x坐标
+float32 ball_y              # 最适合抓取的ball的y坐标
+float32 ball_dis            # 到ball的距离（预留接口，当前输出0）
+
+# Car检测信息（释放区使用）
+int32 car_num               # 检测到的car数量
+int32[] car_ids
+float32[] car_x             # 所有car的x坐标数组
+float32[] car_y             # 所有car的y坐标数组
+float32[] car_dis           # 到car的距离数组（预留接口，当前输出0）
+
+
+# 夹爪状态（预留接口）
+bool in_gripper             # 夹爪是否抓取到球（当前输出False）
+```
+建立一个python代码
+订阅mavros/local_position/pose和/cam_tracker/tracker_control
+/cam_tracker/tracker_control是uint8
+```
+2#开始持续检测与发布(在释放区-只检测car)
+1#开始持续检测与发布（在抓取区-只检测ball）
+0#停止发布
+```
+设置ball的位置为 ball_map_x,ball_map_y
+根据mavros的位置确定相对位置，乘一个比例发布到ball_x和ball_y（/cam_tracker/info）
+设置car1的运动为匀速直线运动(vt)
+car2为匀变速运动(at^2+vt)
