@@ -80,7 +80,7 @@ void MissionMaster::pickupCheck()
     }
 }
 
-/**
+/** 
  * @brief 抓取循环
  */
 void MissionMaster::pickLoop()
@@ -120,8 +120,6 @@ void MissionMaster::pickLoop()
                 ROS_WARN("Target lost for too long, exiting pick loop...");
                 break;
             }
-            // 如果目标丢失，更新最后一次看到目标的时间
-            // last_seen_time = current_time;
             ROS_INFO_THROTTLE(1.0, "Waiting for target...");
             setpoint_pub_.publish(current_pose);
             ros::spinOnce();
@@ -144,11 +142,15 @@ void MissionMaster::pickLoop()
         rel_cam_x = ball_x - pickup_center_x;
         rel_cam_y = ball_y - pickup_center_y;
 
-        double cam_loc_rate_h = current_height *cam_loc_rate;
+        double cam_loc_rate_h = current_height * cam_loc_rate;
 
         // 转化为实际坐标
         double delta_x = rel_cam_x * cam_loc_rate_h;
         double delta_y = rel_cam_y * cam_loc_rate_h;
+
+        // 限制delta_x和delta_y的最大值为1
+        delta_x = std::min(1.0, std::max(-1.0, delta_x));
+        delta_y = std::min(1.0, std::max(-1.0, delta_y));
 
         // 计算当前高度，逐步下降
         double target_height = current_height - pickup_step_size; // 目标高度逐步降低
@@ -204,6 +206,7 @@ void MissionMaster::pickLoop()
     pickupEnd_camCmd_msg.data = 0;
     cam_cmd_pub_.publish(pickupEnd_camCmd_msg);
 }
+
 
 bool MissionMaster::gripPick()
 {
