@@ -82,7 +82,7 @@ void MissionMaster::landCheck()
         // 检查当前高度是否低于航点容忍距离（判断是否已着陆）
         if (current_pose.pose.position.z <= TOLERANCE_WAYPOINT)
         {
-            ROS_INFO("Landed successfully");
+             ROS_INFO_THROTTLE(2.0,"Landed successfully");
 
             // 上锁
             mavros_msgs::CommandBool arm_cmd;
@@ -96,7 +96,7 @@ void MissionMaster::landCheck()
             }
             else
             {
-                ROS_ERROR("Failed to disarm vehicle");
+                ROS_ERROR_THROTTLE(2.0,"Failed to disarm vehicle");
             }
         }
         else
