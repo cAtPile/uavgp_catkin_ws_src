@@ -9,7 +9,7 @@ land_timeout: 1.0
 #追踪参数
 trace_center_x: 320
 trace_center_y: 320
-cam_loc_rate: 0.0003125
+cam_loc_rate: 0.003125
 aim_high_trace: 0.1
 tolerace_pix: 10
 step_size_trace: 0.1
