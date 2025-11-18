@@ -140,12 +140,15 @@ void MissionMaster::traceLoop()
         rel_cam_x = car_x - trace_center_x;
         rel_cam_y = car_y - trace_center_y;
 
+                double current_height = current_pose.pose.position.z;
+
+        double cam_loc_rate_h= cam_loc_rate*current_height;
+
         // 转化为实际坐标
-        rel_cam_x = rel_cam_x * cam_loc_rate;
+        rel_cam_x = rel_cam_x * cam_loc_rate_h;
         rel_cam_y = rel_cam_y * cam_loc_rate;
 
         // 计算当前高度，逐步下降
-        double current_height = current_pose.pose.position.z;
         double target_height = current_height - step_size_trace; // 目标高度逐步降低
 
         // 如果高度已经降到目标高度以下，就将高度设置为目标高度
