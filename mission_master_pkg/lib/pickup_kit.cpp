@@ -82,8 +82,8 @@ void MissionMaster::pickupCheck()
 
 void MissionMaster::pickLoop()
 {
-    PIDController pid_x(1.5, 0.01, 0.3,-320,320,-320,320);  // 对应 x 方向的 PID 参数
-PIDController pid_y(1.5, 0.01, 0.3,-320,320,-320,320);  // 对应 y 方向的 PID 参数
+    PIDController pid_x(1.1, 0.1, 0.3,-320,320,-320,320);  // 对应 x 方向的 PID 参数
+PIDController pid_y(1.1, 0.1, 0.3,-320,320,-320,320);  // 对应 y 方向的 PID 参数
     ROS_INFO("PICK LOOP IN");
 
     // 视觉使能（抓）
