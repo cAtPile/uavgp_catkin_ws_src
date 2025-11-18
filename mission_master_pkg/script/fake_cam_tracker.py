@@ -2,7 +2,7 @@
 import rospy
 from geometry_msgs.msg import PoseStamped
 # 导入自定义消息类型（替换为实际包名）
-from your_package.msg import CamTrack
+from mission_master_pkg.msg import CamTrack
 
 
 # 固定物体在map坐标系中的位置（请修改为实际坐标）
