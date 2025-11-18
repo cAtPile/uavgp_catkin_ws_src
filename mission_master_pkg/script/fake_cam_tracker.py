@@ -1,115 +1,34 @@
 #!/usr/bin/env python3
 import rospy
-from geometry_msgs.msg import PoseStamped  
-from std_msgs.msg import UInt8
-from mission_master_pkg.msg import CamTrack  # 需确保msg已正确编译
+from geometry_msgs.msg import PoseStamped
 
-class FakeCamNode:
-    def __init__(self):
-        # 初始化ROS节点
-        rospy.init_node('fake_cam_node', anonymous=True)
+def pose_callback(msg):
+    """回调函数：接收并打印local_position/pose消息"""
+    # 使用ROS日志系统打印消息（会同时输出到控制台和ROS日志文件）
+    rospy.loginfo("收到本地位置信息:")
+    rospy.loginfo(f"时间戳: {msg.header.stamp}")
+    rospy.loginfo(f"坐标系: {msg.header.frame_id}")
+    rospy.loginfo(f"位置(x,y,z): ({msg.pose.position.x:.4f}, {msg.pose.position.y:.4f}, {msg.pose.position.z:.4f})")
+    rospy.loginfo(f"姿态(x,y,z,w): ({msg.pose.orientation.x:.4f}, {msg.pose.orientation.y:.4f}, "
+                  f"{msg.pose.orientation.z:.4f}, {msg.pose.orientation.w:.4f})")
+    rospy.loginfo("----------------------------------------")
+
+def main():
+    # 初始化节点，节点名为"local_position_listener"（可自定义）
+    rospy.init_node('local_position_listener', anonymous=True)
+    
+    try:
+        # 订阅/mavros/local_position/pose话题，消息类型为PoseStamped，指定回调函数
+        rospy.Subscriber('/mavros/local_position/pose', PoseStamped, pose_callback)
         
-        # 配置固定球地图坐标（可通过参数服务器读取，方便修改）
-        self.ball_map_x = rospy.get_param('~ball_map_x', 5.0)  # 球在地图中的固定X坐标
-        self.ball_map_y = rospy.get_param('~ball_map_y', 3.0)  # 球在地图中的固定Y坐标
-        self.scale_ratio_x = rospy.get_param('~scale_ratio_x', 100.0)  # X轴缩放比例（地图坐标到像素坐标）
-        self.scale_ratio_y = rospy.get_param('~scale_ratio_y', 100.0)  # Y轴缩放比例（地图坐标到像素坐标）
+        # 保持节点运行，等待回调
+        rospy.loginfo("开始监听/mavros/local_position/pose话题...")
+        rospy.spin()
         
-        # 状态变量
-        self.current_pose = PoseStamped()  # 无人机当前位置
-        self.track_mode = 0  # 0:停止 1:抓取区(检测ball) 2:释放区(检测car)
-        self.rate = rospy.Rate(10)  # 发布频率10Hz
-        
-        # 订阅者
-        rospy.Subscriber('/mavros/local_position/pose', PoseStamped, self.pose_callback)
-        rospy.Subscriber('/cam_tracker/tracker_control', UInt8, self.control_callback)
-        
-        # 发布者
-        self.cam_info_pub = rospy.Publisher('/cam_tracker/info', CamTrack, queue_size=10)
-        
-        rospy.loginfo("Fake Cam Node 已启动")
-
-    def pose_callback(self, msg):
-        # 更新无人机当前位置
-        self.current_pose = msg
-
-    def control_callback(self, msg):
-        # 更新跟踪模式
-        self.track_mode = msg.data
-        mode_desc = {0: "停止发布", 1: "抓取区（检测ball）", 2: "释放区（检测car）"}
-        rospy.loginfo(f"切换跟踪模式: {mode_desc.get(self.track_mode, '未知模式')}")
-
-    def calculate_ball_relative_pos(self):
-        # 计算球相对于无人机的位置，并应用缩放比例
-        drone_x = self.current_pose.pose.position.x
-        drone_y = self.current_pose.pose.position.y
-        
-        # 相对位置 = (球地图坐标 - 无人机坐标)
-        ball_rel_x = self.ball_map_x - drone_x
-        ball_rel_y = self.ball_map_y - drone_y
-        
-        # 将地图坐标转换为虚拟像素坐标
-        ball_pixel_x = ball_rel_x * self.scale_ratio_x  # 将X坐标映射到像素
-        ball_pixel_y = ball_rel_y * self.scale_ratio_y  # 将Y坐标映射到像素
-        
-        # 限制像素坐标在图像范围内
-        ball_pixel_x = max(0, min(640, ball_pixel_x))
-        ball_pixel_y = max(0, min(320, ball_pixel_y))
-
-        return ball_pixel_x, ball_pixel_y
-
-    def run(self):
-        while not rospy.is_shutdown():
-            if self.track_mode == 0:
-                # 停止发布，直接休眠
-                self.rate.sleep()
-                continue
-            
-            # 初始化CamTrack消息
-            cam_msg = CamTrack()
-            cam_msg.header.stamp = rospy.Time.now()
-            cam_msg.header.frame_id = "base_link"  # 坐标系设为无人机基坐标系
-            cam_msg.system_ok = True  # 系统正常运行
-            cam_msg.in_gripper = False  # 夹爪未抓取（预留接口）
-
-            if self.track_mode == 1:
-                # 抓取区模式：只填充ball信息，car信息设为默认
-                ball_pixel_x, ball_pixel_y = self.calculate_ball_relative_pos()
-                cam_msg.ball_num = 1  # 固定检测到1个球
-                cam_msg.ball_id = 1    # 球ID固定为1
-                cam_msg.ball_x = ball_pixel_x
-                cam_msg.ball_y = ball_pixel_y
-                cam_msg.ball_dis = 0.0  # 预留接口，输出0
-                
-                # car信息置空
-                cam_msg.car_num = 0
-                cam_msg.car_ids = []
-                cam_msg.car_x = []
-                cam_msg.car_y = []
-                cam_msg.car_dis = []
-
-            elif self.track_mode == 2:
-                # 释放区模式：只填充car信息，ball信息设为默认
-                cam_msg.car_num = 1  # 固定检测到1个车（可根据需求修改）
-                cam_msg.car_ids = [1]  # 车ID列表
-                cam_msg.car_x = [0.5]  # 车的X坐标（示例值，可自定义）
-                cam_msg.car_y = [0.3]  # 车的Y坐标（示例值，可自定义）
-                cam_msg.car_dis = [0.0]  # 预留接口，输出0
-                
-                # ball信息置空
-                cam_msg.ball_num = 0
-                cam_msg.ball_id = 0
-                cam_msg.ball_x = 0.0
-                cam_msg.ball_y = 0.0
-                cam_msg.ball_dis = 0.0
-
-            # 发布消息
-            self.cam_info_pub.publish(cam_msg)
-            self.rate.sleep()
+    except rospy.ROSInterruptException:
+        rospy.logwarn("节点被中断")
+    except Exception as e:
+        rospy.logerr(f"发生错误: {str(e)}")
 
 if __name__ == '__main__':
-    try:
-        node = FakeCamNode()
-        node.run()
-    except rospy.ROSInterruptException:
-        rospy.loginfo("Fake Cam Node 正常退出")
+    main()
