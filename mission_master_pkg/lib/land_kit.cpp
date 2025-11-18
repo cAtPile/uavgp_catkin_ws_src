@@ -51,7 +51,7 @@ void MissionMaster::landExecute()
             land_setmode.request.custom_mode = "AUTO.LAND";
             if (set_mode_client_.call(land_setmode) && land_setmode.response.mode_sent)
             {
-                ROS_INFO("AUTO.LAND enabled");
+                ROS_INFO_THROTTLE(2.0,"AUTO.LAND enabled");
             }
         }
         else

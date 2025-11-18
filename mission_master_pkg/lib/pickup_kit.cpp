@@ -80,6 +80,9 @@ void MissionMaster::pickupCheck()
     }
 }
 
+/**
+ * @brief 抓取循环
+ */
 void MissionMaster::pickLoop()
 {
     ROS_INFO("PICK LOOP IN");
@@ -134,17 +137,20 @@ void MissionMaster::pickLoop()
         // 获取像素坐标
         ball_x = current_camtrack.ball_x;
         ball_y = current_camtrack.ball_y;
+        
+        double current_height = current_pose.pose.position.z;
 
         // 计算相对坐标，减去图像中心
         rel_cam_x = ball_x - pickup_center_x;
         rel_cam_y = ball_y - pickup_center_y;
 
+        double cam_loc_rate_h = current_height *cam_loc_rate;
+
         // 转化为实际坐标
-        rel_cam_x = rel_cam_x * cam_loc_rate;
-        rel_cam_y = rel_cam_y * cam_loc_rate;
+        double delta_x = rel_cam_x * cam_loc_rate_h;
+        double delta_y = rel_cam_y * cam_loc_rate_h;
 
         // 计算当前高度，逐步下降
-        double current_height = current_pose.pose.position.z;
         double target_height = current_height - pickup_step_size; // 目标高度逐步降低
 
         // 如果高度已经降到目标高度以下，就将高度设置为目标高度
@@ -157,8 +163,8 @@ void MissionMaster::pickLoop()
         if (rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix * tolerace_pix)
         {
             // 当前飞行路径调整到目标位置
-            pick_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
-            pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
+            pick_pose.pose.position.x = current_pose.pose.position.x - delta_x;
+            pick_pose.pose.position.y = current_pose.pose.position.y - delta_y;
             pick_pose.pose.position.z = target_height; // 高度逐步调整
 
             ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", pick_pose.pose.position.x, pick_pose.pose.position.y, pick_pose.pose.position.z);
@@ -179,9 +185,9 @@ void MissionMaster::pickLoop()
         else
         {
             // 如果目标物体不在容忍范围内，继续调整位置
-            pick_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
-            pick_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
-            pick_pose.pose.position.z = target_height; // 高度保持逐步下降
+            pick_pose.pose.position.x = current_pose.pose.position.x - delta_x;
+            pick_pose.pose.position.y = current_pose.pose.position.y - delta_y;
+            pick_pose.pose.position.z = current_pose.pose.position.z; // 高度保持逐步下降
 
             ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", pick_pose.pose.position.x, pick_pose.pose.position.y, pick_pose.pose.position.z);
 

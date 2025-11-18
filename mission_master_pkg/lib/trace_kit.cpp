@@ -39,7 +39,7 @@ void MissionMaster::traceExecute()
 
     temp_pose.pose.position.x = current_pose.pose.position.x;
     temp_pose.pose.position.y = current_pose.pose.position.y;
-    temp_pose.pose.position.z = trace_end_waypoint_v[2]+ home_pose.pose.position.z;
+    temp_pose.pose.position.z = trace_end_waypoint_v[2] + home_pose.pose.position.z;
 
     while (ros::ok())
     {
@@ -66,7 +66,7 @@ void MissionMaster::traceCheck()
     setPoint(trace_end_waypoint_re);
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0,"TC L");
+        ROS_INFO_THROTTLE(1.0, "TC L");
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(trace_end_waypoint_re))
         {
@@ -140,13 +140,13 @@ void MissionMaster::traceLoop()
         rel_cam_x = car_x - trace_center_x;
         rel_cam_y = car_y - trace_center_y;
 
-                double current_height = current_pose.pose.position.z;
+        double current_height = current_pose.pose.position.z;
 
-        double cam_loc_rate_h= cam_loc_rate*current_height;
+        double cam_loc_rate_h = cam_loc_rate * current_height;
 
         // 转化为实际坐标
-        rel_cam_x = rel_cam_x * cam_loc_rate_h;
-        rel_cam_y = rel_cam_y * cam_loc_rate;
+        double real_cam_x = rel_cam_x * cam_loc_rate_h;
+        double real_cam_y = rel_cam_y * cam_loc_rate_h;
 
         // 计算当前高度，逐步下降
         double target_height = current_height - step_size_trace; // 目标高度逐步降低
@@ -158,14 +158,14 @@ void MissionMaster::traceLoop()
         }
 
         // 如果目标在容忍范围内，则进行抓取
-        if (rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y <= tolerace_pix * tolerace_pix)
+        if (real_cam_x * real_cam_x + real_cam_y * real_cam_y <= tolerace_pix * tolerace_pix)
         {
             // 当前飞行路径调整到目标位置
-            trace_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
-            trace_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
+            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x;
+            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y;
             trace_pose.pose.position.z = target_height; // 高度逐步调整
 
-            //日志
+            // 日志
             ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", trace_pose.pose.position.x, trace_pose.pose.position.y, trace_pose.pose.position.z);
 
             // 发送飞行指令
@@ -184,10 +184,10 @@ void MissionMaster::traceLoop()
         else
         {
             // 如果目标物体不在容忍范围内，继续调整位置
-            trace_pose.pose.position.x = current_pose.pose.position.x - rel_cam_x;
-            trace_pose.pose.position.y = current_pose.pose.position.y - rel_cam_y;
+            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x;
+            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y;
             trace_pose.pose.position.z = target_height; // 高度保持逐步下降
-            
+
             ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", trace_pose.pose.position.x, trace_pose.pose.position.y, trace_pose.pose.position.z);
 
             // 发送调整后的飞行指令
