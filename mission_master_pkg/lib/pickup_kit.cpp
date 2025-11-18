@@ -148,9 +148,15 @@ void MissionMaster::pickLoop()
         double delta_x = rel_cam_x * cam_loc_rate_h;
         double delta_y = rel_cam_y * cam_loc_rate_h;
 
-        // 限制delta_x和delta_y的最大值为1
-        delta_x = std::min(1.0, std::max(-1.0, delta_x));
-        delta_y = std::min(1.0, std::max(-1.0, delta_y));
+        // 计算当前目标与机器人之间的距离（用于调节移动步长）
+        double distance_to_target = std::sqrt(rel_cam_x * rel_cam_x + rel_cam_y * rel_cam_y);
+        
+        // 动态调整最大步长，使得离目标越远，调整步长越大
+        double max_delta = std::min(1.0, distance_to_target * max_delta_factor);  // max_delta_factor 是一个系数（如0.5），可以调节
+
+        // 限制delta_x和delta_y的最大值为动态计算的max_delta
+        delta_x = std::min(max_delta, std::max(-max_delta, delta_x));
+        delta_y = std::min(max_delta, std::max(-max_delta, delta_y));
 
         // 计算当前高度，逐步下降
         double target_height = current_height - pickup_step_size; // 目标高度逐步降低
@@ -206,6 +212,7 @@ void MissionMaster::pickLoop()
     pickupEnd_camCmd_msg.data = 0;
     cam_cmd_pub_.publish(pickupEnd_camCmd_msg);
 }
+
 
 
 bool MissionMaster::gripPick()
