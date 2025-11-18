@@ -80,11 +80,10 @@ void MissionMaster::pickupCheck()
     }
 }
 
-/** 
- * @brief 抓取循环
- */
 void MissionMaster::pickLoop()
 {
+    PIDController pid_x(0.1, 0.01, 0.1);  // 对应 x 方向的 PID 参数
+PIDController pid_y(0.1, 0.01, 0.1);  // 对应 y 方向的 PID 参数
     ROS_INFO("PICK LOOP IN");
 
     // 视觉使能（抓）
@@ -110,6 +109,7 @@ void MissionMaster::pickLoop()
     while (ros::ok())
     {
         ROS_INFO_THROTTLE(1.0, "PICK LOOP PULSE");
+        
         // 如果目标没有被检测到，进入等待状态
         if (current_camtrack.ball_num == 0)
         {
@@ -135,7 +135,7 @@ void MissionMaster::pickLoop()
         // 获取像素坐标
         ball_x = current_camtrack.ball_x;
         ball_y = current_camtrack.ball_y;
-        
+
         double current_height = current_pose.pose.position.z;
 
         // 计算相对坐标，减去图像中心
@@ -144,13 +144,13 @@ void MissionMaster::pickLoop()
 
         double cam_loc_rate_h = current_height * cam_loc_rate;
 
-        // 转化为实际坐标
-        double delta_x = rel_cam_x * cam_loc_rate_h;
-        double delta_y = rel_cam_y * cam_loc_rate_h;
+        // 使用 PID 控制器来计算 delta_x 和 delta_y
+        double pid_output_x = pid_x.compute(rel_cam_x, 0.1);  // 使用 PID 控制器调整 x 方向
+        double pid_output_y = pid_y.compute(rel_cam_y, 0.1);  // 使用 PID 控制器调整 y 方向
 
-        // 限制delta_x和delta_y的最大值为1
-        delta_x = std::min(1.0, std::max(-1.0, delta_x));
-        delta_y = std::min(1.0, std::max(-1.0, delta_y));
+        // 转化为实际坐标
+        double delta_x = pid_output_x * cam_loc_rate_h;
+        double delta_y = pid_output_y * cam_loc_rate_h;
 
         // 计算当前高度，逐步下降
         double target_height = current_height - pickup_step_size; // 目标高度逐步降低
@@ -206,6 +206,7 @@ void MissionMaster::pickLoop()
     pickupEnd_camCmd_msg.data = 0;
     cam_cmd_pub_.publish(pickupEnd_camCmd_msg);
 }
+
 
 
 bool MissionMaster::gripPick()

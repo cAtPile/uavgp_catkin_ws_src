@@ -75,6 +75,7 @@ add_library(mission_master_lib
   lib/trace_kit.cpp
   lib/land_kit.cpp
   lib/utils.cpp
+  lib/pidctrl.cpp
 )
 
 # 库依赖（自动依赖生成的消息目标）

@@ -42,6 +42,8 @@
 #include "mission_master_pkg/GripAction.h"
 #include <mission_master_pkg/CamTrack.h>
 #include <std_msgs/UInt8.h>
+#include "mission_master_pkg/pidctrl.h"
+
 
 // 任务状态枚举
 enum mission_state
