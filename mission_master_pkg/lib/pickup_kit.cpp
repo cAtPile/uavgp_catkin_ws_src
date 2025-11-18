@@ -85,8 +85,8 @@ void MissionMaster::pickLoop()
     //PIDController pid_x(xkp, xki, xkd,xomn,xoma,ximn,xima);  // 对应 x 方向的 PID 参数
     //PIDController pid_y(ykp, yki, ykd,yomn,yoma,yimn,yima);  // 对应 x 方向的 PID 参数
 
-    PIDController pid_x(0.9, 0.1, 0.5,-320,320,-320,320);  // 对应 x 方向的 PID 参数
-PIDController pid_y(0.9, 0.1, 0.5,-320,320,-320,320);  // 对应 y 方向的 PID 参数
+    PIDController pid_x(0.9, 0.1, 0.8,-320,320,-320,320);  // 对应 x 方向的 PID 参数
+PIDController pid_y(0.9, 0.1, 0.8,-320,320,-320,320);  // 对应 y 方向的 PID 参数
     ROS_INFO("PICK LOOP IN");
 
     // 视觉使能（抓）
