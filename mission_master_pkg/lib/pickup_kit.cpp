@@ -82,8 +82,8 @@ void MissionMaster::pickupCheck()
 
 void MissionMaster::pickLoop()
 {
-    PIDController pid_x(0.1, 0.01, 0.1);  // 对应 x 方向的 PID 参数
-PIDController pid_y(0.1, 0.01, 0.1);  // 对应 y 方向的 PID 参数
+    PIDController pid_x(1.5, 0.01, 0.3);  // 对应 x 方向的 PID 参数
+PIDController pid_y(1.5, 0.01, 0.3);  // 对应 y 方向的 PID 参数
     ROS_INFO("PICK LOOP IN");
 
     // 视觉使能（抓）
@@ -137,12 +137,11 @@ PIDController pid_y(0.1, 0.01, 0.1);  // 对应 y 方向的 PID 参数
         ball_y = current_camtrack.ball_y;
 
         double current_height = current_pose.pose.position.z;
+        double cam_loc_rate_h = current_height * cam_loc_rate;
 
         // 计算相对坐标，减去图像中心
         rel_cam_x = ball_x - pickup_center_x;
         rel_cam_y = ball_y - pickup_center_y;
-
-        double cam_loc_rate_h = current_height * cam_loc_rate;
 
         // 使用 PID 控制器来计算 delta_x 和 delta_y
         double pid_output_x = pid_x.compute(rel_cam_x, 0.1);  // 使用 PID 控制器调整 x 方向
