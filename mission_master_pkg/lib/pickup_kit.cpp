@@ -90,7 +90,7 @@ void MissionMaster::pickLoop()
     cam_cmd_pub_.publish(pickupStart_camCmd_msg);
 
     // 降落到检测高度
-    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, track_high));
+    //setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, track_high));
     while (ros::ok())
     {
         ROS_INFO_THROTTLE(1.0, " EXE PICKUP END LOOP ");
