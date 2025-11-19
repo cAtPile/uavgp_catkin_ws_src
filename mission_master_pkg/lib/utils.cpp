@@ -49,8 +49,8 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
     vision_pose.pose.orientation.w = 1;
 
     // 临时参数
-    double field_view_x = 640; // 视场
-    double field_view_y = 480; //
+    double field_view_x = 720; // 视场
+    double field_view_y = 1280; //
     double drone_cam_rate = 1; // 控制量
     double cam_timeout = 5.0;  // 例子超时值，单位：秒
 

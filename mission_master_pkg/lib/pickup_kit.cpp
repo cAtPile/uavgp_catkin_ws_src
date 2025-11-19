@@ -89,7 +89,29 @@ void MissionMaster::pickLoop()
     pickupStart_camCmd_msg.data = 1;
     cam_cmd_pub_.publish(pickupStart_camCmd_msg);
 
-    visionLoop( pickup_center_x,  pickup_center_y);
+    // 降落到检测高度
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, track_high));
+    while (ros::ok())
+    {
+        ROS_INFO_THROTTLE(1.0, " EXE PICKUP END LOOP ");
+
+        setpoint_pub_.publish(temp_pose);
+        if (reachCheck(pickup_end_waypoint_re))
+        {
+            ROS_INFO("EXE PICKUP END CHECK ");
+
+            current_mission_state = mission_queue[mission_queue_index];
+            mission_queue_index++;
+            break;
+        }
+        ros::spinOnce();
+        rate_.sleep();
+    }
+
+    visionLoop(pickup_center_x, pickup_center_y);
+
+    // 降落到抓取高度
+    // 抓取
 
     // 视觉休息
     std_msgs::UInt8 pickupEnd_camCmd_msg;
