@@ -78,9 +78,9 @@ void MissionMaster::avoidWaypointsLoad()
     for (int i = 0; i < wap_av_size; i++)
     {
 
-        double waypoint_x = waypoints_group_x[i];
-        double waypoint_y = waypoints_group_y[i];
-        double waypoint_z = waypoints_group_z[i];
+        double waypoint_x = waypoints_group_x[i]+home_pose.pose.position.x;
+        double waypoint_y = waypoints_group_y[i]+home_pose.pose.position.y;
+        double waypoint_z = waypoints_group_z[i]+home_pose.pose.position.z;
         avoid_waypoints_v3d.emplace_back(waypoint_x, waypoint_y, waypoint_z);
     }
 }

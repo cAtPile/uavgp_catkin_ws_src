@@ -89,19 +89,16 @@ void MissionMaster::pickLoop()
     pickupStart_camCmd_msg.data = 1;
     cam_cmd_pub_.publish(pickupStart_camCmd_msg);
 
-    // 降落到检测高度
-    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 1+home_pose.pose.position.z));
+    // 降落到检测高度(待修改)
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 1 + home_pose.pose.position.z));
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0, " EXE PICKUP END LOOP ");
+        ROS_INFO_THROTTLE(1.0, " Rasing Detecting Height ");
 
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(pickup_end_waypoint_re))
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 1 + home_pose.pose.position.z)))
         {
-            ROS_INFO("EXE PICKUP END CHECK ");
-
-            current_mission_state = mission_queue[mission_queue_index];
-            mission_queue_index++;
+            ROS_INFO(" Reach Detecting Height ");
             break;
         }
         ros::spinOnce();
@@ -110,8 +107,40 @@ void MissionMaster::pickLoop()
 
     visionLoop(pickup_center_x, pickup_center_y);
 
-    // 降落到抓取高度
+    // 降落到抓取高度(需要修改)
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 0.1 + home_pose.pose.position.z));
+    while (ros::ok())
+    {
+        ROS_INFO_THROTTLE(1.0, " Rasing Detecting Height ");
+
+        setpoint_pub_.publish(temp_pose);
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 0.1 + home_pose.pose.position.z)))
+        {
+            ROS_INFO(" Reach Detecting Height ");
+            break;
+        }
+        ros::spinOnce();
+        rate_.sleep();
+    }
+
     // 抓取
+    gripPick();
+
+    //飞回巡航(修改)
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 5 + home_pose.pose.position.z));
+    while (ros::ok())
+    {
+        ROS_INFO_THROTTLE(1.0, " Rasing Detecting Height ");
+
+        setpoint_pub_.publish(temp_pose);
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 5 + home_pose.pose.position.z)))
+        {
+            ROS_INFO(" Reach Detecting Height ");
+            break;
+        }
+        ros::spinOnce();
+        rate_.sleep();
+    }
 
     // 视觉休息
     std_msgs::UInt8 pickupEnd_camCmd_msg;
