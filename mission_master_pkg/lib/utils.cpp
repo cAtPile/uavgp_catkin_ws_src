@@ -79,6 +79,7 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
                 break;
             }
             ROS_INFO_THROTTLE(1.0, "Waiting for target...");
+            double start_cam_time = ros::Time::now().toSec();
             setpoint_pub_.publish(current_pose);
             ros::spinOnce();
             rate_.sleep();
@@ -91,7 +92,7 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
         }
 
         //超时等待
-        if(ros::Time::now().toSec()-last_seen_time>10){
+        if(ros::Time::now().toSec()-start_cam_time>10){
             ROS_INFO("TIMEOUT");
             break;
         }
