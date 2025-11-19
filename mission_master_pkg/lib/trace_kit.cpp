@@ -158,7 +158,7 @@ void MissionMaster::traceLoop()
         }
 
         // 如果目标在容忍范围内，则进行抓取
-        if (real_cam_x * real_cam_x + real_cam_y * real_cam_y <= tolerace_pix * tolerace_pix)
+        if (real_cam_x * real_cam_x + real_cam_y * real_cam_y <= tolerance_pix * tolerance_pix)
         {
             // 当前飞行路径调整到目标位置
             trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x;
