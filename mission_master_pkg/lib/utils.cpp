@@ -1,4 +1,48 @@
 #include "mission_master_pkg/mission_master.h"
+#include <cmath>
+
+/**
+ * @brief 机体坐标系转世界坐标系
+ * @param point_body 机体坐标系下的点 (x_body, y_body, z_body)
+ * @return 世界坐标系下的点 (x_world, y_world, z_world)
+ * @details 将相对于无人机机体的坐标转换为世界坐标系（ENU）
+ *          机体坐标系：x前 y左 z上
+ *          世界坐标系：x东 y北 z上
+ */
+Eigen::Vector3d MissionMaster::bodyFrameToWorld(const Eigen::Vector3d &point_body)
+{
+    // 从home_orientation提取yaw角
+    double siny_cosp = 2.0 * (home_orientation.w * home_orientation.z + home_orientation.x * home_orientation.y);
+    double cosy_cosp = 1.0 - 2.0 * (home_orientation.y * home_orientation.y + home_orientation.z * home_orientation.z);
+    double yaw = std::atan2(siny_cosp, cosy_cosp);
+    
+    // 2D旋转矩阵（绕z轴旋转yaw角）
+    // x_world = cos(yaw) * x_body - sin(yaw) * y_body
+    // y_world = sin(yaw) * x_body + cos(yaw) * y_body
+    // z_world = z_body
+    
+    Eigen::Vector3d point_world;
+    point_world(0) = std::cos(yaw) * point_body(0) - std::sin(yaw) * point_body(1) + current_pose.pose.position.x;
+    point_world(1) = std::sin(yaw) * point_body(0) + std::cos(yaw) * point_body(1) + current_pose.pose.position.y;
+    point_world(2) = point_body(2) + current_pose.pose.position.z;
+    
+    return point_world;
+}
+
+/**
+ * @brief 定点飞行（机体坐标系）
+ * @param set_point_body 相对于机体坐标系的目标点
+ * @details 将机体坐标系的目标点转换为世界坐标系后发送
+ */
+void MissionMaster::setPointBodyFrame(const Eigen::Vector3d &set_point_body)
+{
+    // 转换到世界坐标系
+    Eigen::Vector3d set_point_world = bodyFrameToWorld(set_point_body);
+    
+    // 使用世界坐标系的setPoint函数
+    setPoint(set_point_world);
+}
+
 /**
  * @brief 定点（使用home位置的偏航角）
  */

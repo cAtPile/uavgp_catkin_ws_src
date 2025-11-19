@@ -183,7 +183,9 @@ private:
     void takeoffExecute(); // 执行起飞
     void takeoffCheck();   // 起飞成功检查
 
-    void setPoint(const Eigen::Vector3d &set_point);     // 航点飞行
+    void setPoint(const Eigen::Vector3d &set_point);     // 航点飞行（世界坐标系）
+    void setPointBodyFrame(const Eigen::Vector3d &set_point_body); // 航点飞行（机体坐标系）
+    Eigen::Vector3d bodyFrameToWorld(const Eigen::Vector3d &point_body); // 机体坐标系转世界坐标系
     bool reachCheck(const Eigen::Vector3d &check_point); // 到达检查
     void visionLoop(double aim_x, double aim_y);//视觉伺服
 
