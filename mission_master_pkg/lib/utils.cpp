@@ -49,10 +49,10 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
     vision_pose.pose.orientation.w = 1;
 
     // 临时参数
-    double field_view_x = 640;   // 视场
-    double field_view_y = 480;   //
-    double drone_cam_rate = 1; //控制量
-    double cam_timeout = 5.0;    // 例子超时值，单位：秒
+    double field_view_x = 640; // 视场
+    double field_view_y = 480; //
+    double drone_cam_rate = 1; // 控制量
+    double cam_timeout = 5.0;  // 例子超时值，单位：秒
 
     // 局部参数
     double delta_ball_x_pix, delta_ball_y_pix;
@@ -96,31 +96,36 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
             ROS_INFO("Vision in tolerance");
             break;
         }
+        ROS_INFO("camx = %.2f ;  camy = %.2f ", current_camtrack.ball_x, current_camtrack.ball_y);
 
         // 相对化
         delta_ball_x_pix = current_camtrack.ball_x - aim_x;
         delta_ball_y_pix = current_camtrack.ball_y - aim_y;
+        ROS_INFO("dx = %.2f ;  dy = %.2f ", delta_ball_x_pix, delta_ball_y_pix);
 
         // 修正
         delta_ball_x_pix_correct = cam_loc_rate * current_pose.pose.position.z * delta_ball_x_pix;
         delta_ball_y_pix_correct = cam_loc_rate * current_pose.pose.position.z * delta_ball_y_pix;
+        ROS_INFO("cx = %.2f ;  cy = %.2f ", delta_ball_x_pix_correct, delta_ball_y_pix_correct);
 
         // 比例化
         ball_x_rate = delta_ball_x_pix_correct / field_view_x;
         ball_y_rate = delta_ball_y_pix_correct / field_view_y;
 
+        ROS_INFO("rx = %.2f ;  ry = %.2f ", ball_x_rate, ball_y_rate);
+
         // 计算控制量
         drone_step_x = drone_cam_rate * ball_x_rate;
         drone_step_y = drone_cam_rate * ball_y_rate;
 
-        ROS_INFO("vx = %.2f ;  vy = %.2f ",drone_step_x,drone_step_y);
+        ROS_INFO("vx = %.2f ;  vy = %.2f ", drone_step_x, drone_step_y);
 
         // 定点量设置
         vision_pose.pose.position.x = current_pose.pose.position.x - drone_step_x;
         vision_pose.pose.position.y = current_pose.pose.position.y - drone_step_y;
         vision_pose.pose.position.z = current_pose.pose.position.z; // 临时
 
-        ROS_INFO("x = %.2f ;  y = %.2f ; z = %.2f ",vision_pose.pose.position.x,vision_pose.pose.position.y,vision_pose.pose.position.z);
+        ROS_INFO("x = %.2f ;  y = %.2f ; z = %.2f ", vision_pose.pose.position.x, vision_pose.pose.position.y, vision_pose.pose.position.z);
 
         // 发布定点
         setpoint_pub_.publish(vision_pose);
