@@ -114,11 +114,11 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
         drone_step_y = drone_cam_rate * ball_y_rate;
 
         // 定点量设置
-        vision_pose.pose.position.x = current_x - drone_step_x;
-        vision_pose.pose.position.y = current_y - drone_step_y;
-        vision_pose.pose.position.z = current_pose.position.z; // 临时
+        vision_pose.pose.position.x = current_pose.pose.position.x - drone_step_x;
+        vision_pose.pose.position.y = current_pose.pose.position.y - drone_step_y;
+        vision_pose.pose.position.z = current_pose.pose.position.z; // 临时
 
-        ROS_INFO("x = vision_pose.pose.position.x ;  y = vision_pose.pose.position.y ; z = vision_pose.pose.position.z ")
+        ROS_INFO("x = vision_pose.pose.position.x ;  y = vision_pose.pose.position.y ; z = vision_pose.pose.position.z ");
 
         // 发布定点
         setpoint_pub_.publish(vision_pose);

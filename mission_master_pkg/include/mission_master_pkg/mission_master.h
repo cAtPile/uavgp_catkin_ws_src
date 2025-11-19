@@ -124,7 +124,7 @@ private:
     double trace_center_x, trace_center_y;   // 跟踪相机中央
     double cam_loc_rate;                     // 相机世界转换率
     double aim_high_trace;                   // 跟踪目标高度
-    double tolerace_pix;                     // 容忍误差
+    double tolerance_pix;                     // 容忍误差
     double step_size_trace;                  // 跟踪降落步长
     double pickup_center_x, pickup_center_y; // 抓取相机中央
     double pickup_aim_high;                  // 抓取目标高度
