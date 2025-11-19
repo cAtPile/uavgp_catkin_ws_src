@@ -35,7 +35,7 @@ bool MissionMaster::reachCheck(const Eigen::Vector3d &check_point)
  * @param aim_x 目标x
  * @param aim_y 目标y
  */
-void MissionMaster::visionLoop(double aim_x, double aim_y, int mode)
+void MissionMaster::visionLoop(double aim_x, double aim_y)
 {
     // 日志
     ROS_INFO("Vision Loop Enter");
