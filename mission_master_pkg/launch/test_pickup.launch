@@ -4,4 +4,4 @@
     <!-- 加载参数配置文件到全局命名空间 -->
     <rosparam file="$(find mission_master_pkg)/config/param_pick.yaml" command="load" ns="/"/>
   </node>
-</launch>s
+</launch>
