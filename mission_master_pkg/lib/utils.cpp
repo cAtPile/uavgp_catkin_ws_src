@@ -104,8 +104,8 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
         ROS_INFO("dx = %.2f ;  dy = %.2f ", delta_ball_x_pix, delta_ball_y_pix);
 
         // 修正
-        delta_ball_x_pix_correct = cam_loc_rate * current_pose.pose.position.z * delta_ball_x_pix;
-        delta_ball_y_pix_correct = cam_loc_rate * current_pose.pose.position.z * delta_ball_y_pix;
+        delta_ball_x_pix_correct =  current_pose.pose.position.z * delta_ball_x_pix;
+        delta_ball_y_pix_correct =  current_pose.pose.position.z * delta_ball_y_pix;
         ROS_INFO("cx = %.2f ;  cy = %.2f ", delta_ball_x_pix_correct, delta_ball_y_pix_correct);
 
         // 比例化
