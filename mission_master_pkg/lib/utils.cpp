@@ -51,7 +51,7 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
     // 临时参数
     double field_view_x = 640;   // 视场
     double field_view_y = 480;   //
-    double drone_cam_rate = 0.1; //控制量
+    double drone_cam_rate = 1; //控制量
     double cam_timeout = 5.0;    // 例子超时值，单位：秒
 
     // 局部参数
@@ -118,7 +118,7 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
         vision_pose.pose.position.y = current_pose.pose.position.y - drone_step_y;
         vision_pose.pose.position.z = current_pose.pose.position.z; // 临时
 
-        ROS_INFO("x = vision_pose.pose.position.x ;  y = vision_pose.pose.position.y ; z = vision_pose.pose.position.z ");
+        ROS_INFO("x = %.2f ;  y = %.2f ; z = %.2f ",vision_pose.pose.position.x,vision_pose.pose.position.y,vision_pose.pose.position.z);
 
         // 发布定点
         setpoint_pub_.publish(vision_pose);
