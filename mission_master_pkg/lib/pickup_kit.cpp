@@ -89,7 +89,7 @@ void MissionMaster::pickLoop()
     pickupStart_camCmd_msg.data = 1;
     cam_cmd_pub_.publish(pickupStart_camCmd_msg);
 
-    visionLoop(double pickup_center_x, double pickup_center_y);
+    visionLoop( pickup_center_x,  pickup_center_y);
 
     // 视觉休息
     std_msgs::UInt8 pickupEnd_camCmd_msg;
