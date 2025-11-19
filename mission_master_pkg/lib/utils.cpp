@@ -113,6 +113,8 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
         drone_step_x = drone_cam_rate * ball_x_rate;
         drone_step_y = drone_cam_rate * ball_y_rate;
 
+        ROS_INFO("vx = %.2f ;  vy = %.2f ",drone_step_x,drone_step_y);
+
         // 定点量设置
         vision_pose.pose.position.x = current_pose.pose.position.x - drone_step_x;
         vision_pose.pose.position.y = current_pose.pose.position.y - drone_step_y;
