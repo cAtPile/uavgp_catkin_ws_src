@@ -94,7 +94,7 @@ void MissionMaster::loadParams()
     nh_.param("trace_center_y", trace_center_y, 320.0);
     nh_.param("cam_loc_rate", cam_loc_rate, 0.001);
     nh_.param("aim_high_trace", aim_high_trace, 0.1);
-    nh_.param("tolerace_pix", tolerace_pix, 10.0);
+    nh_.param("tolerance_pix", tolerance_pix, 10.0);
     nh_.param("step_size_trace", step_size_trace, 0.1);
     nh_.param("pickup_center_x", pickup_center_x, 320.0);
     nh_.param("pickup_center_y", pickup_center_y, 320.0);
@@ -199,7 +199,7 @@ void MissionMaster::showParams()
     ROS_INFO("  trace_center_y: %.1f (pix)", trace_center_y);
     ROS_INFO("  cam_loc_rate: %.3f", cam_loc_rate);
     ROS_INFO("  aim_high_trace: %.2f (m)", aim_high_trace);
-    ROS_INFO("  tolerace_pix: %.1f (pix)", tolerace_pix);
+    ROS_INFO("  tolerance_pix: %.1f (pix)", tolerance_pix);
     ROS_INFO("  step_size_trace: %.2f (m/step)", step_size_trace);
     ROS_INFO("  pickup_center_x: %.1f (pix)", pickup_center_x);
     ROS_INFO("  pickup_center_y: %.1f (pix)", pickup_center_y);
