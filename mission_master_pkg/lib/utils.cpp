@@ -90,6 +90,12 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
             last_seen_time = ros::Time::now().toSec();
         }
 
+        //超时等待
+        if(ros::Time::now().toSec()-last_seen_time>10){
+            ROS_INFO("TIMEOUT");
+            break;
+        }
+
         // 退出条件
         if (current_camtrack.ball_x * current_camtrack.ball_x + current_camtrack.ball_y * current_camtrack.ball_y <= tolerance_pix * tolerance_pix)
         {
