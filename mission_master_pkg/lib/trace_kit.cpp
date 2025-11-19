@@ -93,10 +93,8 @@ void MissionMaster::traceLoop()
     // pick_pose 初始化
     geometry_msgs::PoseStamped trace_pose;
     trace_pose.header.frame_id = "map";
-    //trace_pose.pose.orientation.x = 0;
-    //trace_pose.pose.orientation.y = 0;
-    //trace_pose.pose.orientation.z = 0;
-    //trace_pose.pose.orientation.w = 1;
+    // 使用home位置的偏航角（四元数形式）
+    trace_pose.pose.orientation = home_orientation;
 
     double car_x, car_y;
     double rel_cam_x, rel_cam_y;

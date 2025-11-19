@@ -132,6 +132,7 @@ private:
 
     //=========航点参数============
     geometry_msgs::PoseStamped home_pose; // 起飞降落点（home位置）
+    geometry_msgs::Quaternion home_orientation; // home位置的偏航角（四元数形式，用于所有定点飞行）
 
     std::vector<double> takeoff_waypoint_v;
     std::vector<double> pickup_start_waypoint_v;

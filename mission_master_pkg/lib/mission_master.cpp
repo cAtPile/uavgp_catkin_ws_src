@@ -7,6 +7,11 @@ MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
                                  gripper_ac_("gripper_action", true)
 {
     ROS_INFO("MMC");
+    // 初始化home_orientation为单位四元数
+    home_orientation.x = 0.0;
+    home_orientation.y = 0.0;
+    home_orientation.z = 0.0;
+    home_orientation.w = 1.0;
     // 加载参数
     loadParams();
     //================初始化订阅者=======================

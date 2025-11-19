@@ -15,10 +15,8 @@ void MissionMaster::landStart()
     land_pose.pose.position.x = home_pose.pose.position.x;
     land_pose.pose.position.y = home_pose.pose.position.y;
     land_pose.pose.position.z = trace_end_waypoint_v[2]; // 预留修改
-    //land_pose.pose.orientation.x = 0.0;
-    //land_pose.pose.orientation.y = 0.0;
-    //land_pose.pose.orientation.z = 0.0;
-    //land_pose.pose.orientation.w = 1.0;
+    // 使用home位置的偏航角（四元数形式）
+    land_pose.pose.orientation = home_orientation;
 
     while (ros::ok())
     {

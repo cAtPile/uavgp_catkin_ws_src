@@ -1,20 +1,17 @@
 #include "mission_master_pkg/mission_master.h"
 /**
- * @brief 定点
+ * @brief 定点（使用home位置的偏航角）
  */
 
 void MissionMaster::setPoint(const Eigen::Vector3d &set_point)
 {
-
     temp_pose.header.frame_id = "map";
     temp_pose.header.stamp = ros::Time::now();
     temp_pose.pose.position.x = set_point(0);
     temp_pose.pose.position.y = set_point(1);
     temp_pose.pose.position.z = set_point(2);
-    //temp_pose.pose.orientation.x = 0.0;
-    //temp_pose.pose.orientation.y = 0.0;
-    //temp_pose.pose.orientation.z = 0.0;
-    //temp_pose.pose.orientation.w = 1.0;
+    // 使用home位置的偏航角（四元数形式）
+    temp_pose.pose.orientation = home_orientation;
 }
 
 /**
@@ -43,10 +40,8 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
     // pick_pose 初始化
     geometry_msgs::PoseStamped vision_pose;
     vision_pose.header.frame_id = "map";
-    //vision_pose.pose.orientation.x = 0;
-    //vision_pose.pose.orientation.y = 0;
-    //vision_pose.pose.orientation.z = 0;
-    //vision_pose.pose.orientation.w = 1;
+    // 使用home位置的偏航角（四元数形式）
+    vision_pose.pose.orientation = home_orientation;
 
     // 临时参数
     double field_view_x = 720; // 视场

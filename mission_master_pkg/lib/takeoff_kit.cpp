@@ -49,6 +49,11 @@ void MissionMaster::waitingTakeoff()
 void MissionMaster::takeoffExecute()
 {
     home_pose = current_pose;
+    // 记录home位置的偏航角（四元数形式）
+    home_orientation = home_pose.pose.orientation;
+    ROS_INFO("Home orientation recorded: x=%.4f, y=%.4f, z=%.4f, w=%.4f", 
+             home_orientation.x, home_orientation.y, home_orientation.z, home_orientation.w);
+    
     loadWaypoints();
 
     setPoint(takeoff_waypoint_re);
