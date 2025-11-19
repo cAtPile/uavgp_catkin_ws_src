@@ -184,6 +184,7 @@ private:
 
     void setPoint(const Eigen::Vector3d &set_point);     // 航点飞行
     bool reachCheck(const Eigen::Vector3d &check_point); // 到达检查
+    void visionLoop(double aim_x, double aim_y);//视觉伺服
 
     void pickupStart();   // 开始拾取
     void pickupExecute(); // 抓取执行
