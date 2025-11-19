@@ -15,17 +15,17 @@ void MissionMaster::landStart()
     land_pose.pose.position.x = home_pose.pose.position.x;
     land_pose.pose.position.y = home_pose.pose.position.y;
     land_pose.pose.position.z = trace_end_waypoint_v[2]; // 预留修改
-    land_pose.pose.orientation.x = 0.0;
-    land_pose.pose.orientation.y = 0.0;
-    land_pose.pose.orientation.z = 0.0;
-    land_pose.pose.orientation.w = 1.0;
+    //land_pose.pose.orientation.x = 0.0;
+    //land_pose.pose.orientation.y = 0.0;
+    //land_pose.pose.orientation.z = 0.0;
+    //land_pose.pose.orientation.w = 1.0;
 
     while (ros::ok())
     {
         setpoint_pub_.publish(land_pose);
         if (reachCheck(Eigen::Vector3d(home_pose.pose.position.x, home_pose.pose.position.y, trace_end_waypoint_v[2])))
         {
-            ROS_INFO("Arrived at Pickup Start Point");
+            ROS_INFO("Arrived at Land Start Point");
             current_mission_state = mission_queue[mission_queue_index];
             mission_queue_index++;
             break;

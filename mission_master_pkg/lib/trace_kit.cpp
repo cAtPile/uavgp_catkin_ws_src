@@ -93,10 +93,10 @@ void MissionMaster::traceLoop()
     // pick_pose 初始化
     geometry_msgs::PoseStamped trace_pose;
     trace_pose.header.frame_id = "map";
-    trace_pose.pose.orientation.x = 0;
-    trace_pose.pose.orientation.y = 0;
-    trace_pose.pose.orientation.z = 0;
-    trace_pose.pose.orientation.w = 1;
+    //trace_pose.pose.orientation.x = 0;
+    //trace_pose.pose.orientation.y = 0;
+    //trace_pose.pose.orientation.z = 0;
+    //trace_pose.pose.orientation.w = 1;
 
     double car_x, car_y;
     double rel_cam_x, rel_cam_y;

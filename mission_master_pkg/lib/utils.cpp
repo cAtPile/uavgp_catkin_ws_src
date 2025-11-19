@@ -11,10 +11,10 @@ void MissionMaster::setPoint(const Eigen::Vector3d &set_point)
     temp_pose.pose.position.x = set_point(0);
     temp_pose.pose.position.y = set_point(1);
     temp_pose.pose.position.z = set_point(2);
-    temp_pose.pose.orientation.x = 0.0;
-    temp_pose.pose.orientation.y = 0.0;
-    temp_pose.pose.orientation.z = 0.0;
-    temp_pose.pose.orientation.w = 1.0;
+    //temp_pose.pose.orientation.x = 0.0;
+    //temp_pose.pose.orientation.y = 0.0;
+    //temp_pose.pose.orientation.z = 0.0;
+    //temp_pose.pose.orientation.w = 1.0;
 }
 
 /**
@@ -43,10 +43,10 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
     // pick_pose 初始化
     geometry_msgs::PoseStamped vision_pose;
     vision_pose.header.frame_id = "map";
-    vision_pose.pose.orientation.x = 0;
-    vision_pose.pose.orientation.y = 0;
-    vision_pose.pose.orientation.z = 0;
-    vision_pose.pose.orientation.w = 1;
+    //vision_pose.pose.orientation.x = 0;
+    //vision_pose.pose.orientation.y = 0;
+    //vision_pose.pose.orientation.z = 0;
+    //vision_pose.pose.orientation.w = 1;
 
     // 临时参数
     double field_view_x = 720; // 视场
