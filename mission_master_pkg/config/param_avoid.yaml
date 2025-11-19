@@ -1,0 +1,63 @@
+# 航点到达容忍距离(m)
+tolerance_waypoint: 0.1
+
+#时间容忍值
+pickup_cam_timeout: 1.0
+trace_cam_timeout: 1.0
+land_timeout: 1.0
+
+#追踪参数
+trace_center_x: 320
+trace_center_y: 320
+cam_loc_rate: 0.003125
+aim_high_trace: 0.1
+tolerace_pix: 10
+step_size_trace: 0.1
+pickup_center_x: 320
+pickup_center_y: 160
+pickup_aim_high: 0.1
+pickup_step_size: 0.1
+
+# 话题参数
+MAV_state: "/mavros/state"
+MAV_localPositionPose: "/mavros/local_position/pose"
+MAV_cmdArming: "/mavros/cmd/arming"
+MAV_setMode: "/mavros/set_mode"
+MAV_setpointPositionLocal: "/mavros/setpoint_position/local"
+
+CAM_cmd: "/cam_tracker/tracker_control"
+CAM_info: "/cam_tracker/info"
+
+#航点参数
+takeoff_waypoint_v: [0.0, 0.0, 1.0]
+pickup_start_waypoint_v: [1.0, 0.0, 1.0]
+pickup_end_waypoint_v: [0.0, 1.0, 1.0]
+avoid_start_waypoint_v: [1.0, 0.0, 1.0]
+avoid_end_waypoint_v: [0.0, 1.0, 1.0]
+trace_start_waypoint_v: [1.0, 1.0, 1.0]
+trace_end_waypoint_v: [0.0, 1.0, 1.0]
+
+#任务队列
+mission_queue: [0, 1, 2, 6,7,8, 12, 13, 14, 16]
+#"WAITING_TAKEOFF_STATE", // 0
+#"EXECUTE_TAKEOFF_STATE", // 1
+#"SUCCEED_TAKEOFF_STATE", // 2
+#"START_PICKUP_STATE",    // 3
+#"EXECUTE_PICKUP_STATE",  // 4
+#"SUCCEED_PICKUP_STATE",  // 5
+#"START_AVOID_STATE",     // 6
+#"EXECUTE_AVOID_STATE",   // 7
+#"SUCCEED_AVOID_STATE",   // 8
+# "START_TRACE_STATE",     // 9
+# "EXECUTE_TRACE_STATE",   // 10
+#"SUCCEED_TRACE_STATE",   // 11
+#"START_LAND_STATE",      // 12
+#"EXECUTE_LAND_STATE",    // 13
+#"SUCCEED_LAND_STATE",    // 14
+#"ERROR_STATE",           // 15
+#"MISSION_SUCCEED_STATE"  // 16
+
+#避障航点
+waypoints_group_x: [2.0,2.0,0.0]
+waypoints_group_y: [0.0,2.0,2.0]
+waypoints_group_z: [1.0,1.0,1.0]

@@ -1,0 +1,7 @@
+<launch>
+  <!-- 节点名称 -->
+  <node name="mission_master_node" pkg="mission_master_pkg" type="uavgp25_mission_node" output="screen">
+    <!-- 加载参数配置文件到全局命名空间 -->
+    <rosparam file="$(find mission_master_pkg)/config/param_avoid.yaml" command="load" ns="/"/>
+  </node>
+</launch>
