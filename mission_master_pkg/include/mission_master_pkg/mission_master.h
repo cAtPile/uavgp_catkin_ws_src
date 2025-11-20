@@ -42,8 +42,6 @@
 #include "mission_master_pkg/GripAction.h"
 #include <mission_master_pkg/CamTrack.h>
 #include <std_msgs/UInt8.h>
-//#include "mission_master_pkg/pidctrl.h"
-
 
 // 任务状态枚举
 enum mission_state
@@ -124,14 +122,14 @@ private:
     double trace_center_x, trace_center_y;   // 跟踪相机中央
     double cam_loc_rate;                     // 相机世界转换率
     double aim_high_trace;                   // 跟踪目标高度
-    double tolerance_pix;                     // 容忍误差
+    double tolerance_pix;                    // 容忍误差
     double step_size_trace;                  // 跟踪降落步长
     double pickup_center_x, pickup_center_y; // 抓取相机中央
     double pickup_aim_high;                  // 抓取目标高度
     double pickup_step_size;                 // 每次降落的步长
 
     //=========航点参数============
-    geometry_msgs::PoseStamped home_pose; // 起飞降落点（home位置）
+    geometry_msgs::PoseStamped home_pose;       // 起飞降落点（home位置）
     geometry_msgs::Quaternion home_orientation; // home位置的偏航角（四元数形式，用于所有定点飞行）
 
     std::vector<double> takeoff_waypoint_v;
@@ -183,11 +181,11 @@ private:
     void takeoffExecute(); // 执行起飞
     void takeoffCheck();   // 起飞成功检查
 
-    void setPoint(const Eigen::Vector3d &set_point);     // 航点飞行（世界坐标系）
-    void setPointBodyFrame(const Eigen::Vector3d &set_point_body); // 航点飞行（机体坐标系）
+    void setPoint(const Eigen::Vector3d &set_point);                     // 航点飞行（世界坐标系）
+    void setPointBodyFrame(const Eigen::Vector3d &set_point_body);       // 航点飞行（机体坐标系）
     Eigen::Vector3d bodyFrameToWorld(const Eigen::Vector3d &point_body); // 机体坐标系转世界坐标系
-    bool reachCheck(const Eigen::Vector3d &check_point); // 到达检查
-    void visionLoop(double aim_x, double aim_y);//视觉伺服
+    bool reachCheck(const Eigen::Vector3d &check_point);                 // 到达检查
+    void visionLoop(double aim_x, double aim_y);                         // 视觉伺服
 
     void pickupStart();   // 开始拾取
     void pickupExecute(); // 抓取执行
