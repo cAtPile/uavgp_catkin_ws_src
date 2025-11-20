@@ -8,17 +8,19 @@
  */
 void MissionMaster::avoidStart()
 {
-    ROS_DEBUG("A start");
+    ROS_INFO("Avoid Start");
 
     setPoint(avoid_start_waypoint_re);
 
     while (ros::ok())
     {
-        ROS_DEBUG("A Loop");
+        ROS_INFO_THROTTLE(1,"Avoid Strart Reach Loop");
+        ROS_DEBUG("Avoid Strart Reach Pluse");
+
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(avoid_start_waypoint_re))
         {
-            ROS_INFO("Arrived at avoid Start Point");
+            ROS_INFO("Arrived at Avoid Start Point");
             current_mission_state = mission_queue[mission_queue_index];
             mission_queue_index++;
             break;
@@ -34,7 +36,7 @@ void MissionMaster::avoidStart()
  */
 void MissionMaster::avoidExecute()
 {
-    ROS_INFO("A exe");
+    ROS_INFO("Avoid Execute");
 
     avoidWaypointsLoad();
     avoidWaypointsLoop();
@@ -49,20 +51,21 @@ void MissionMaster::avoidExecute()
  */
 void MissionMaster::avoidCheck()
 {
-    ROS_DEBUG("A check");
+    ROS_INFO("Avoid End check");
 
     setPoint(avoid_end_waypoint_re);
     while (ros::ok())
     {
-        ROS_DEBUG("Ac Loop");
+        ROS_INFO_THROTTLE(1,"Avoid Check Loop");
+        ROS_DEBUG("Avoid Check Pluse");
 
         setpoint_pub_.publish(temp_pose);
         if (reachCheck(avoid_end_waypoint_re))
         {
+            ROS_INFO("Reach Check Succeed");
             current_mission_state = mission_queue[mission_queue_index];
             mission_queue_index++;
             setpoint_pub_.publish(current_pose);
-
             break;
         }
 
@@ -74,10 +77,10 @@ void MissionMaster::avoidCheck()
 // 避障点压入
 void MissionMaster::avoidWaypointsLoad()
 {
+    ROS_INFO("AvoidWaypoint Load");
     int wap_av_size = waypoints_group_x.size();
     for (int i = 0; i < wap_av_size; i++)
     {
-
         double waypoint_x = waypoints_group_x[i]+home_pose.pose.position.x;
         double waypoint_y = waypoints_group_y[i]+home_pose.pose.position.y;
         double waypoint_z = waypoints_group_z[i]+home_pose.pose.position.z;

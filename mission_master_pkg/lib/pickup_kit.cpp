@@ -89,53 +89,76 @@ void MissionMaster::pickLoop()
     pickupStart_camCmd_msg.data = 1;
     cam_cmd_pub_.publish(pickupStart_camCmd_msg);
 
-    // 降落到检测高度(待修改)
-    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 1 + home_pose.pose.position.z));
+    // 步骤1：降落到检测高度
+    ROS_INFO("Step 1: Descending to detection height (%.2f m)", pickup_detect_height);
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, 
+                              current_pose.pose.position.y, 
+                              pickup_detect_height + home_pose.pose.position.z));
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0, " Rasing Detecting Height ");
-
+        ROS_INFO_THROTTLE(1.0, "Descending to detection height...");
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 1 + home_pose.pose.position.z)))
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, 
+                                        current_pose.pose.position.y, 
+                                        pickup_detect_height + home_pose.pose.position.z)))
         {
-            ROS_INFO(" Reach Detecting Height ");
+            ROS_INFO("Reached detection height");
             break;
         }
         ros::spinOnce();
         rate_.sleep();
     }
 
+    // 步骤2：视觉伺服对准
+    ROS_INFO("Step 2: Vision servoing for alignment");
     visionLoop(pickup_center_x, pickup_center_y);
+    ROS_INFO("Vision alignment completed");
 
-    // 降落到抓取高度(需要修改)
-    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 0.1 + home_pose.pose.position.z));
+    // 步骤3：降落到抓取高度
+    ROS_INFO("Step 3: Descending to grip height (%.2f m)", pickup_grip_height);
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, 
+                              current_pose.pose.position.y, 
+                              pickup_grip_height + home_pose.pose.position.z));
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0, " Rasing Detecting Height ");
-
+        ROS_INFO_THROTTLE(1.0, "Descending to grip height...");
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 0.1 + home_pose.pose.position.z)))
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, 
+                                        current_pose.pose.position.y, 
+                                        pickup_grip_height + home_pose.pose.position.z)))
         {
-            ROS_INFO(" Reach Detecting Height ");
+            ROS_INFO("Reached grip height");
             break;
         }
         ros::spinOnce();
         rate_.sleep();
     }
 
-    // 抓取
-    gripPick();
+    // 步骤4：调用抓取服务
+    ROS_INFO("Step 4: Calling grip service");
+    if (gripPick())
+    {
+        ROS_INFO("Grip service returned success");
+    }
+    else
+    {
+        ROS_WARN("Grip service returned failure");
+    }
 
-    //飞回巡航(修改)
-    setPoint(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 5 + home_pose.pose.position.z));
+    // 步骤5：升高到抓取成功高度
+    ROS_INFO("Step 5: Ascending to success height (%.2f m)", pickup_success_height);
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, 
+                              current_pose.pose.position.y, 
+                              pickup_success_height + home_pose.pose.position.z));
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0, " Rasing Detecting Height ");
-
+        ROS_INFO_THROTTLE(1.0, "Ascending to success height...");
         setpoint_pub_.publish(temp_pose);
-        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, current_pose.pose.position.y, 5 + home_pose.pose.position.z)))
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, 
+                                        current_pose.pose.position.y, 
+                                        pickup_success_height + home_pose.pose.position.z)))
         {
-            ROS_INFO(" Reach Detecting Height ");
+            ROS_INFO("Reached success height");
             break;
         }
         ros::spinOnce();
@@ -146,6 +169,8 @@ void MissionMaster::pickLoop()
     std_msgs::UInt8 pickupEnd_camCmd_msg;
     pickupEnd_camCmd_msg.data = 0;
     cam_cmd_pub_.publish(pickupEnd_camCmd_msg);
+
+    ROS_INFO("PICK LOOP COMPLETED");
 }
 
 bool MissionMaster::gripPick()

@@ -105,6 +105,11 @@ void MissionMaster::loadParams()
     nh_.param("pickup_center_y", pickup_center_y, 320.0);
     nh_.param("pickup_aim_high", pickup_aim_high, 0.1);
     nh_.param("pickup_step_size", pickup_step_size, 0.1);
+    
+    // 抓取高度参数
+    nh_.param("pickup_detect_height", pickup_detect_height, 1.0);    // 检测高度
+    nh_.param("pickup_grip_height", pickup_grip_height, 0.1);        // 抓取高度
+    nh_.param("pickup_success_height", pickup_success_height, 1.5);  // 抓取成功高度
 
     // 航点参数（vector<double>类型）
     nh_.param<std::vector<double>>("takeoff_waypoint_v", takeoff_waypoint_v, {0.0, 0.0, 1.0});
@@ -210,6 +215,9 @@ void MissionMaster::showParams()
     ROS_INFO("  pickup_center_y: %.1f (pix)", pickup_center_y);
     ROS_INFO("  pickup_aim_high: %.2f (m)", pickup_aim_high);
     ROS_INFO("  pickup_step_size: %.2f (m/step)", pickup_step_size);
+    ROS_INFO("  pickup_detect_height: %.2f (m)", pickup_detect_height);
+    ROS_INFO("  pickup_grip_height: %.2f (m)", pickup_grip_height);
+    ROS_INFO("  pickup_success_height: %.2f (m)", pickup_success_height);
 
     // 4. 航点参数（vector<double>类型，假设为三维坐标 x,y,z）
     ROS_INFO("\n waypoint (x, y, z  (m)):");

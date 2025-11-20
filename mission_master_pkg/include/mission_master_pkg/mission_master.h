@@ -127,6 +127,10 @@ private:
     double pickup_center_x, pickup_center_y; // 抓取相机中央
     double pickup_aim_high;                  // 抓取目标高度
     double pickup_step_size;                 // 每次降落的步长
+    
+    double pickup_detect_height;             // 抓取检测高度（视觉伺服对准高度）
+    double pickup_grip_height;               // 抓取高度（调用抓取服务高度）
+    double pickup_success_height;            // 抓取成功高度（抓取后升高）
 
     //=========航点参数============
     geometry_msgs::PoseStamped home_pose;       // 起飞降落点（home位置）
