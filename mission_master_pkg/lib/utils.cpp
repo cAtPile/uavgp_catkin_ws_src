@@ -161,15 +161,25 @@ void MissionMaster::visionLoop(double aim_x, double aim_y)
 
         ROS_INFO("rx = %.2f ;  ry = %.2f ", ball_x_rate, ball_y_rate);
 
-        // 计算控制量
+        // 计算控制量（机体坐标系）
         drone_step_x = drone_cam_rate * ball_x_rate;
         drone_step_y = drone_cam_rate * ball_y_rate;
 
         ROS_INFO("vx = %.2f ;  vy = %.2f ", drone_step_x, drone_step_y);
 
-        // 定点量设置
-        vision_pose.pose.position.x = current_pose.pose.position.x - drone_step_x;
-        vision_pose.pose.position.y = current_pose.pose.position.y - drone_step_y;
+        // 从home_orientation提取yaw角
+        double siny_cosp = 2.0 * (home_orientation.w * home_orientation.z + home_orientation.x * home_orientation.y);
+        double cosy_cosp = 1.0 - 2.0 * (home_orientation.y * home_orientation.y + home_orientation.z * home_orientation.z);
+        double yaw = std::atan2(siny_cosp, cosy_cosp);
+        
+        // 将机体坐标系的控制量转换为世界坐标系
+        // 注意：相机检测的偏差是相对于机体的，需要根据yaw角旋转
+        double drone_step_x_world = std::cos(yaw) * drone_step_x - std::sin(yaw) * drone_step_y;
+        double drone_step_y_world = std::sin(yaw) * drone_step_x + std::cos(yaw) * drone_step_y;
+
+        // 定点量设置（世界坐标系）
+        vision_pose.pose.position.x = current_pose.pose.position.x - drone_step_x_world;
+        vision_pose.pose.position.y = current_pose.pose.position.y - drone_step_y_world;
         vision_pose.pose.position.z = current_pose.pose.position.z; // 临时
 
         ROS_INFO("x = %.2f ;  y = %.2f ; z = %.2f ", vision_pose.pose.position.x, vision_pose.pose.position.y, vision_pose.pose.position.z);

@@ -142,9 +142,18 @@ void MissionMaster::traceLoop()
 
         double cam_loc_rate_h = cam_loc_rate * current_height;
 
-        // 转化为实际坐标
+        // 转化为实际坐标（机体坐标系）
         double real_cam_x = rel_cam_x * cam_loc_rate_h;
         double real_cam_y = rel_cam_y * cam_loc_rate_h;
+        
+        // 从home_orientation提取yaw角
+        double siny_cosp = 2.0 * (home_orientation.w * home_orientation.z + home_orientation.x * home_orientation.y);
+        double cosy_cosp = 1.0 - 2.0 * (home_orientation.y * home_orientation.y + home_orientation.z * home_orientation.z);
+        double yaw = std::atan2(siny_cosp, cosy_cosp);
+        
+        // 将机体坐标系的偏差转换为世界坐标系
+        double real_cam_x_world = std::cos(yaw) * real_cam_x - std::sin(yaw) * real_cam_y;
+        double real_cam_y_world = std::sin(yaw) * real_cam_x + std::cos(yaw) * real_cam_y;
 
         // 计算当前高度，逐步下降
         double target_height = current_height - step_size_trace; // 目标高度逐步降低
@@ -158,9 +167,9 @@ void MissionMaster::traceLoop()
         // 如果目标在容忍范围内，则进行抓取
         if (real_cam_x * real_cam_x + real_cam_y * real_cam_y <= tolerance_pix * tolerance_pix)
         {
-            // 当前飞行路径调整到目标位置
-            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x;
-            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y;
+            // 当前飞行路径调整到目标位置（使用世界坐标系）
+            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x_world;
+            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y_world;
             trace_pose.pose.position.z = target_height; // 高度逐步调整
 
             // 日志
@@ -181,9 +190,9 @@ void MissionMaster::traceLoop()
         }
         else
         {
-            // 如果目标物体不在容忍范围内，继续调整位置
-            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x;
-            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y;
+            // 如果目标物体不在容忍范围内，继续调整位置（使用世界坐标系）
+            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x_world;
+            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y_world;
             trace_pose.pose.position.z = target_height; // 高度保持逐步下降
 
             ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", trace_pose.pose.position.x, trace_pose.pose.position.y, trace_pose.pose.position.z);
