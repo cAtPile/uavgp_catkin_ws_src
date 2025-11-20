@@ -4,7 +4,7 @@
  * @brief 构造函数
  */
 MissionMaster::MissionMaster() : nh_(""), rate_(20.0),
-                                 gripper_ac_("gripper_action", true)
+                                 gripper_ac_("gripper_control", true)
 {
     ROS_INFO("MMC");
     // 初始化home_orientation为单位四元数

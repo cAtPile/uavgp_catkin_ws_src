@@ -89,6 +89,22 @@ target_link_libraries(mission_master_lib
   ${EIGEN3_LIBRARIES}
 )
 
+# 声明grip_test_node可执行文件
+add_executable(grip_test_node
+  node/grip_test_node.cpp
+)
+
+add_dependencies(grip_test_node
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(grip_test_node
+  mission_master_lib
+  ${catkin_LIBRARIES}
+  ${EIGEN3_LIBRARIES}
+)
+
 # 声明可执行文件
 add_executable(uavgp25_mission_node
   node/uavgp25_mission_node.cpp
@@ -108,7 +124,7 @@ target_link_libraries(uavgp25_mission_node
 )
 
 # 安装规则
-install(TARGETS mission_master_lib uavgp25_mission_node
+install(TARGETS mission_master_lib uavgp25_mission_node grip_test_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

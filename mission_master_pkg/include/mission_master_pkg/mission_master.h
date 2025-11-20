@@ -191,7 +191,6 @@ private:
     void pickupExecute(); // 抓取执行
     void pickupCheck();   // 拾取成功检查
     void pickLoop();      // 抓循环
-    bool gripPick();      // 爪子抓
 
     void avoidStart();                                                             // 避障开始
     void avoidExecute();                                                           // 避障执行
@@ -216,6 +215,7 @@ public:
     MissionMaster();  // 构造函数
     ~MissionMaster(); // 析构函数
     void run();       // 主任务
+    bool gripPick();  // 爪子抓
 };
 
 #endif // MISSION_MASTER_H

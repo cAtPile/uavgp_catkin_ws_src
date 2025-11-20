@@ -1,0 +1,10 @@
+<launch>
+  <!-- 启动 gripper controller -->
+  <!-- <node name="gripper_controller" pkg="gripper_controller" type="gripper_controller_node.py" output="screen"/> -->
+  
+  <!-- 等待一段时间后启动测试节点 -->
+  <node name="mission_master_node" pkg="mission_master_pkg" type="grip_test_node" output="screen" launch-prefix="bash -c 'sleep 3; $0 $@' ">
+    <!-- 加载参数配置文件到全局命名空间 -->
+    <rosparam file="$(find mission_master_pkg)/config/param_pick.yaml" command="load" ns="/"/>
+  </node>
+</launch>

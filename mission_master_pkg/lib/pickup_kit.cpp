@@ -151,7 +151,7 @@ void MissionMaster::pickLoop()
 bool MissionMaster::gripPick()
 {
     // 创建抓取的 Action 客户端
-    actionlib::SimpleActionClient<mission_master_pkg::GripAction> ac("gripper_action", true);
+    actionlib::SimpleActionClient<mission_master_pkg::GripAction> ac("gripper_control", true);
 
     // 等待 Action 服务器启动
     if (!ac.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
