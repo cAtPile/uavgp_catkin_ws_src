@@ -81,44 +81,61 @@ void MissionMaster::traceCheck()
         rate_.sleep();
     }
 }
-void MissionMaster::traceLoop()
+void MissionMaster::traceLoop() 
 {
-    ROS_INFO("TR LOOP IN");
+    ROS_INFO("TRACE LOOP IN");
 
-    // 视觉使能（放）
+    // 步骤1：视觉使能（追踪模式）
     std_msgs::UInt8 traceStart_camCmd_msg;
     traceStart_camCmd_msg.data = 2;
     cam_cmd_pub_.publish(traceStart_camCmd_msg);
 
-    // pick_pose 初始化
+    // 步骤2：降落到追踪检测高度
+    ROS_INFO("Step 1: Descending to trace detection height (%.2f m)", trace_detect_height);
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, 
+                              current_pose.pose.position.y, 
+                              trace_detect_height + home_pose.pose.position.z));
+    while (ros::ok())
+    {
+        ROS_INFO_THROTTLE(1.0, "Descending to trace detection height...");
+        setpoint_pub_.publish(temp_pose);
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, 
+                                        current_pose.pose.position.y, 
+                                        trace_detect_height + home_pose.pose.position.z)))
+        {
+            ROS_INFO("Reached trace detection height");
+            break;
+        }
+        ros::spinOnce();
+        rate_.sleep();
+    }
+
+    // 步骤3：动态追踪目标并逐渐下降
+    ROS_INFO("Step 2: Dynamic tracking with gradual descent");
+    
     geometry_msgs::PoseStamped trace_pose;
     trace_pose.header.frame_id = "map";
-    // 使用home位置的偏航角（四元数形式）
     trace_pose.pose.orientation = home_orientation;
 
     double car_x, car_y;
     double rel_cam_x, rel_cam_y;
-
-    // 超时设置
     double last_seen_time = ros::Time::now().toSec();
 
-    // 抓取主循环
+    // 追踪主循环
     while (ros::ok())
     {
-        ROS_INFO_THROTTLE(1.0, "TR LOOP pluse");
-        // 如果目标没有被检测到，进入等待状态
+        ROS_INFO_THROTTLE(1.0, "Tracking target, height: %.2f m", current_pose.pose.position.z);
+        
+        // 检查目标是否丢失
         if (current_camtrack.car_num == 0)
         {
             double current_time = ros::Time::now().toSec();
-            // 如果超时，则跳出循环
             if (current_time - last_seen_time > trace_cam_timeout)
             {
-                ROS_WARN("Target lost for too long, exiting TR loop...");
+                ROS_WARN("Target lost for too long, exiting trace loop...");
                 break;
             }
-            // 如果目标丢失，更新最后一次看到目标的时间
-            // last_seen_time = current_time;
-            ROS_INFO("Waiting for trace target...");
+            ROS_INFO_THROTTLE(1.0, "Waiting for trace target...");
             setpoint_pub_.publish(current_pose);
             ros::spinOnce();
             rate_.sleep();
@@ -126,20 +143,18 @@ void MissionMaster::traceLoop()
         }
         else
         {
-            // 目标重新检测到，重置等待计时器
             last_seen_time = ros::Time::now().toSec();
         }
 
-        // 获取像素坐标
+        // 获取目标像素坐标
         car_x = current_camtrack.car_x[0];
         car_y = current_camtrack.car_y[0];
 
-        // 计算相对坐标，减去图像中心
+        // 计算相对坐标
         rel_cam_x = car_x - trace_center_x;
         rel_cam_y = car_y - trace_center_y;
 
         double current_height = current_pose.pose.position.z;
-
         double cam_loc_rate_h = cam_loc_rate * current_height;
 
         // 转化为实际坐标（机体坐标系）
@@ -155,52 +170,68 @@ void MissionMaster::traceLoop()
         double real_cam_x_world = std::cos(yaw) * real_cam_x - std::sin(yaw) * real_cam_y;
         double real_cam_y_world = std::sin(yaw) * real_cam_x + std::cos(yaw) * real_cam_y;
 
-        // 计算当前高度，逐步下降
-        double target_height = current_height - step_size_trace; // 目标高度逐步降低
+        // 计算目标高度，逐步下降
+        double target_height = current_height - step_size_trace;
 
-        // 如果高度已经降到目标高度以下，就将高度设置为目标高度
-        if (target_height < aim_high_trace)
+        // 限制最低高度为投放高度
+        if (target_height < trace_release_height + home_pose.pose.position.z)
         {
-            target_height = aim_high_trace;
+            target_height = trace_release_height + home_pose.pose.position.z;
         }
 
-        // 如果目标在容忍范围内，则进行抓取
-        if (real_cam_x * real_cam_x + real_cam_y * real_cam_y <= tolerance_pix * tolerance_pix)
+        // 设置追踪目标点（世界坐标系）
+        trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x_world;
+        trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y_world;
+        trace_pose.pose.position.z = target_height;
+
+        ROS_INFO("Target: x=%.2f, y=%.2f, z=%.2f, pixel_err=(%.1f, %.1f)", 
+                 trace_pose.pose.position.x, trace_pose.pose.position.y, trace_pose.pose.position.z,
+                 rel_cam_x, rel_cam_y);
+
+        // 发送飞行指令
+        setpoint_pub_.publish(trace_pose);
+
+        // 检查是否达到投放条件：1.高度达到投放高度  2.目标在容忍范围内
+        if (current_pose.pose.position.z <= (trace_release_height + home_pose.pose.position.z + 0.05) &&
+            real_cam_x * real_cam_x + real_cam_y * real_cam_y <= tolerance_pix * tolerance_pix)
         {
-            // 当前飞行路径调整到目标位置（使用世界坐标系）
-            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x_world;
-            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y_world;
-            trace_pose.pose.position.z = target_height; // 高度逐步调整
-
-            // 日志
-            ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", trace_pose.pose.position.x, trace_pose.pose.position.y, trace_pose.pose.position.z);
-
-            // 发送飞行指令
-            setpoint_pub_.publish(trace_pose);
-
-            // 检查是否到达目标位置并准备抓取
-            if (current_pose.pose.position.z <= aim_high_trace)
-            {
-                if (gripRelease()) // 调用释放函数
-                {
-                    ROS_INFO("TR LOOP out");
-                    break; // 跳出跟踪循环
-                }
-            }
-        }
-        else
-        {
-            // 如果目标物体不在容忍范围内，继续调整位置（使用世界坐标系）
-            trace_pose.pose.position.x = current_pose.pose.position.x - real_cam_x_world;
-            trace_pose.pose.position.y = current_pose.pose.position.y - real_cam_y_world;
-            trace_pose.pose.position.z = target_height; // 高度保持逐步下降
-
-            ROS_INFO("x:%0.2f,y:%0.2f,z:%0.2f", trace_pose.pose.position.x, trace_pose.pose.position.y, trace_pose.pose.position.z);
-
-            // 发送调整后的飞行指令
-            setpoint_pub_.publish(trace_pose);
+            ROS_INFO("Release conditions met: height=%.2f, pixel_error=%.2f", 
+                     current_pose.pose.position.z, 
+                     std::sqrt(real_cam_x * real_cam_x + real_cam_y * real_cam_y));
+            break; // 满足条件，退出追踪循环
         }
 
+        ros::spinOnce();
+        rate_.sleep();
+    }
+
+    // 步骤4：调用投放服务
+    ROS_INFO("Step 3: Calling release service");
+    if (gripRelease())
+    {
+        ROS_INFO("Release service returned success");
+    }
+    else
+    {
+        ROS_WARN("Release service returned failure");
+    }
+
+    // 步骤5：升高到追踪完成高度
+    ROS_INFO("Step 4: Ascending to trace success height (%.2f m)", trace_success_height);
+    setPoint(Eigen::Vector3d(current_pose.pose.position.x, 
+                              current_pose.pose.position.y, 
+                              trace_success_height + home_pose.pose.position.z));
+    while (ros::ok())
+    {
+        ROS_INFO_THROTTLE(1.0, "Ascending to trace success height...");
+        setpoint_pub_.publish(temp_pose);
+        if (reachCheck(Eigen::Vector3d(current_pose.pose.position.x, 
+                                        current_pose.pose.position.y, 
+                                        trace_success_height + home_pose.pose.position.z)))
+        {
+            ROS_INFO("Reached trace success height");
+            break;
+        }
         ros::spinOnce();
         rate_.sleep();
     }
@@ -209,6 +240,8 @@ void MissionMaster::traceLoop()
     std_msgs::UInt8 traceEnd_camCmd_msg;
     traceEnd_camCmd_msg.data = 0;
     cam_cmd_pub_.publish(traceEnd_camCmd_msg);
+    
+    ROS_INFO("TRACE LOOP COMPLETED");
 }
 
 bool MissionMaster::gripRelease()
