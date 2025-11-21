@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 
+    ===================================================================
+    无人机系统总启动 Launch 文件
+    Master Launch File for Drone System
+    
+    启动顺序：
+    1. RealSense 相机节点
+    2. 视觉追踪节点 (cam_tracker)
+    3. 夹爪控制节点 (gripper_controller)
+    4. 任务主控节点 (mission_master)
+    ===================================================================
+  -->
+
+  <!-- ========== 参数配置 ========== -->
+  <!-- RealSense 相机参数 -->
+  <arg name="enable_depth" default="true" />
+  <arg name="enable_color" default="true" />
+  <arg name="color_width" default="640" />
+  <arg name="color_height" default="480" />
+  <arg name="color_fps" default="30" />
+  
+  <!-- 视觉追踪参数 -->
+  <arg name="camera_topic" default="/camera/color/image_raw" />
+  <arg name="confidence_threshold" default="0.5" />
+  <arg name="iou_threshold" default="0.45" />
+  <arg name="max_det" default="100" />
+  <arg name="tracker_type" default="bytetrack.yaml" />
+  <arg name="publish_rate" default="20.0" />
+  
+  <!-- 夹爪控制参数 -->
+  <arg name="serial_port" default="/dev/ttyUSB0" />
+  <arg name="baudrate" default="115200" />
+  
+  <!-- 延迟启动参数（秒） -->
+  <arg name="camera_delay" default="0" />
+  <arg name="tracker_delay" default="3" />
+  <arg name="gripper_delay" default="5" />
+  <arg name="mission_delay" default="7" />
+
+  <!-- ========== 1. RealSense 相机启动 ========== -->
+  <group ns="camera">
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+      <arg name="enable_depth" value="$(arg enable_depth)" />
+      <arg name="enable_color" value="$(arg enable_color)" />
+      <arg name="color_width" value="$(arg color_width)" />
+      <arg name="color_height" value="$(arg color_height)" />
+      <arg name="color_fps" value="$(arg color_fps)" />
+    </include>
+  </group>
+
+  <!-- ========== 2. 视觉追踪节点启动 ========== -->
+  <!-- 延迟启动，等待相机就绪 -->
+  <node name="cam_tracker_node" pkg="cam_tracker" type="cam_tracker_node.py" 
+        output="screen" launch-prefix="bash -c 'sleep $(arg tracker_delay); $0 $@' ">
+    <param name="camera_topic" value="$(arg camera_topic)" />
+    <param name="confidence_threshold" value="$(arg confidence_threshold)" />
+    <param name="iou_threshold" value="$(arg iou_threshold)" />
+    <param name="max_det" value="$(arg max_det)" />
+    <param name="tracker_type" value="$(arg tracker_type)" />
+    <param name="publish_rate" value="$(arg publish_rate)" />
+  </node>
+
+  <node name="cam_tracker_visualizer" pkg="cam_tracker" type="visualizer_node_new.py" 
+        output="screen" launch-prefix="bash -c 'sleep $(arg tracker_delay); $0 $@' ">
+    <param name="camera_topic" value="$(arg camera_topic)" />
+  </node>
+
+  <!-- ========== 3. 夹爪控制节点启动 ========== -->
+  <node name="gripper_controller" pkg="gripper_controller" type="gripper_controller_node.py" 
+        output="screen" launch-prefix="bash -c 'sleep $(arg gripper_delay); $0 $@' ">
+    <param name="serial_port" value="$(arg serial_port)" />
+    <param name="baudrate" value="$(arg baudrate)" />
+  </node>
+
+  <!-- ========== 4. 任务主控节点启动 ========== -->
+  <node name="mission_master_node" pkg="mission_master_pkg" type="uavgp25_mission_node" 
+        output="screen" launch-prefix="bash -c 'sleep $(arg mission_delay); $0 $@' ">
+    <!-- 加载参数配置文件到全局命名空间 -->
+    <rosparam file="$(find mission_master_pkg)/config/param.yaml" command="load" ns="/"/>
+  </node>
+
+  <!-- ========== 启动信息显示 ========== -->
+  <node name="master_launch_info" pkg="rostopic" type="rostopic" 
+        args="list" output="screen" 
+        launch-prefix="bash -c 'sleep $(arg mission_delay); echo ==================================================; echo 无人机系统启动完成 Drone System Launch Completed; echo ==================================================; rosnode list; $0 $@' " />
+
+</launch>
