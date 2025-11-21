@@ -151,10 +151,10 @@ void MissionMaster::pickLoop()
 bool MissionMaster::gripPick()
 {
     // 创建抓取的 Action 客户端
-    actionlib::SimpleActionClient<mission_master_pkg::GripAction> ac("gripper_control", true);
+    // 使用类成员 gripper_ac_ 代替局部变量 ac
 
     // 等待 Action 服务器启动
-    if (!ac.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
+    if (!gripper_ac_.waitForServer(ros::Duration(5.0))) // 等待最多 5 秒
     {
         ROS_ERROR("Unable to connect to gripper action server!");
         return false; // 连接不到服务器，返回失败
@@ -165,16 +165,16 @@ bool MissionMaster::gripPick()
     goal.command = mission_master_pkg::GripGoal::GRIP; // 命令为抓取
 
     // 发送目标
-    ac.sendGoal(goal);
+    gripper_ac_.sendGoal(goal);
 
     // 等待结果，最多等待 10 秒
-    bool finished_before_timeout = ac.waitForResult(ros::Duration(10.0));
+    bool finished_before_timeout = gripper_ac_.waitForResult(ros::Duration(10.0));
 
     // 获取结果
     if (finished_before_timeout)
     {
         // 获取结果
-        const mission_master_pkg::GripResult::ConstPtr &result = ac.getResult();
+        const mission_master_pkg::GripResult::ConstPtr &result = gripper_ac_.getResult();
 
         // 根据 cmd_success 判断抓取是否成功
         if (result->cmd_success)
