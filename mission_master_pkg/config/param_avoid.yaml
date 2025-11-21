@@ -32,8 +32,8 @@ CAM_info: "/cam_tracker/info"
 takeoff_waypoint_v: [0.0, 0.0, 1.0]
 pickup_start_waypoint_v: [1.0, 0.0, 1.0]
 pickup_end_waypoint_v: [0.0, 1.0, 1.0]
-avoid_start_waypoint_v: [1.0, 0.0, 1.0]
-avoid_end_waypoint_v: [0.0, 1.0, 1.0]
+avoid_start_waypoint_v: [10.0, 0.0, 1.0]
+avoid_end_waypoint_v: [0.0, 0.0, 1.0]
 trace_start_waypoint_v: [1.0, 1.0, 1.0]
 trace_end_waypoint_v: [0.0, 1.0, 1.0]
 
@@ -58,6 +58,6 @@ mission_queue: [0, 1, 2, 6,7,8, 12, 13, 14, 16]
 #"MISSION_SUCCEED_STATE"  // 16
 
 #避障航点
-waypoints_group_x: [2.0,2.0,0.0]
-waypoints_group_y: [0.0,2.0,2.0]
+waypoints_group_x: [-4.21888,-6.863326,-2.64039]
+waypoints_group_y: [2.6273,1.64098,-4.2574]
 waypoints_group_z: [1.0,1.0,1.0]
